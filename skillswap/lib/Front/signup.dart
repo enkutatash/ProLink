@@ -1,10 +1,13 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:skillswap/Front/signin.dart';
+import 'package:skillswap/firebase/firebase.dart';
+import 'package:skillswap/homepage/homepage.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -20,6 +23,7 @@ class SignUpPageState extends State<SignUpPage> {
   final _linkedincontroller = TextEditingController();
   final _githubcontroller = TextEditingController();
   final _biocontroller = TextEditingController();
+  late final Firebase_Service _auth;
 
   bool _obscureText = true;
   String? imagePath;
@@ -53,6 +57,12 @@ class SignUpPageState extends State<SignUpPage> {
   }
 
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    _auth = Firebase_Service(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -342,9 +352,7 @@ class SignUpPageState extends State<SignUpPage> {
                 Button("Sign Up", Colors.white, Colors.red, () {
                   if (_formKey.currentState!.validate()) {
                     // form is valid, submit the form
-                    String username = _emailnameController.text;
-                    String password = _passwordController.text;
-                    // TODO: implement form submission logic here
+                    _signUp();
                   }
                 }),
                 SizedBox(height: height * 0.02),
@@ -379,6 +387,52 @@ class SignUpPageState extends State<SignUpPage> {
         ),
       ),
     );
+  }
+
+  void _showSnackBar(String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      action: SnackBarAction(
+        label: 'Close',
+        onPressed: () {
+          // Some action to take when the user presses the action button
+        },
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void _signUp() async {
+    String email = _emailnameController.text;
+    String password = _passwordController.text;
+    String firstName = _firstnameController.text;
+    String lastName = _lastnameController.text;
+    String linkedin = _linkedincontroller.text;
+    String github = _githubcontroller.text;
+    String bio = _biocontroller.text;
+
+    User? user = await _auth.signUpWithEmailAndPassword(firstName, lastName,
+        email, password, downloadUrl!, linkedin, github, bio);
+    if (user != null) {
+      print("User is successfully created");
+      Map<String, dynamic> userdata = {
+        'Email': email,
+        'First': firstName,
+        'Last': lastName,
+        'password': password,
+        'profilePic': downloadUrl,
+        'Bio': bio,
+        'Id': user.uid
+      };
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Homepage(user.uid, userdata)));
+      _showSnackBar("User is successfully created");
+    } else {
+      print("Some error happend on create user");
+      _showSnackBar("Some error happend on create user");
+    }
   }
 }
 
