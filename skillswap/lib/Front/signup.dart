@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:skillswap/Front/signin.dart';
 import 'package:skillswap/firebase/firebase.dart';
+import 'package:skillswap/firebase/skills.dart';
 import 'package:skillswap/homepage/homepage.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -24,6 +25,7 @@ class SignUpPageState extends State<SignUpPage> {
   final _githubcontroller = TextEditingController();
   final _biocontroller = TextEditingController();
   late final Firebase_Service _auth;
+  List<String> _selectedSkills = [];
 
   bool _obscureText = true;
   String? imagePath;
@@ -342,11 +344,18 @@ class SignUpPageState extends State<SignUpPage> {
                     maxLines:
                         null, // Allows the text field to expand to multiple lines
                     keyboardType: TextInputType.multiline,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Enter your Bio here...',
                       border: InputBorder.none,
                     ),
                   ),
+                ),
+                Dropdown(
+                  onItemsSelected: (selectedItems) {
+                    setState(() {
+                      _selectedSkills = selectedItems;
+                    });
+                  },
                 ),
                 SizedBox(height: height * 0.03),
                 Button("Sign Up", Colors.white, Colors.red, () {
@@ -412,7 +421,7 @@ class SignUpPageState extends State<SignUpPage> {
     String bio = _biocontroller.text;
 
     User? user = await _auth.signUpWithEmailAndPassword(firstName, lastName,
-        email, password, downloadUrl!, linkedin, github, bio);
+        email, password, downloadUrl!, linkedin, github, bio,_selectedSkills);
     if (user != null) {
       print("User is successfully created");
       Map<String, dynamic> userdata = {
@@ -422,12 +431,14 @@ class SignUpPageState extends State<SignUpPage> {
         'password': password,
         'profilePic': downloadUrl,
         'Bio': bio,
-        'Id': user.uid
+        'Id': user.uid,
+        'Skills': _selectedSkills
       };
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Homepage(user.uid, userdata)));
+      print(_selectedSkills);
+      // Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //         builder: (context) => Homepage(user.uid, userdata)));
       _showSnackBar("User is successfully created");
     } else {
       print("Some error happend on create user");

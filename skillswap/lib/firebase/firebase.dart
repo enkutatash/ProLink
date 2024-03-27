@@ -25,12 +25,12 @@ class Firebase_Service{
   
 
       Future<User?> signUpWithEmailAndPassword(
-       String firstName,String lastName,String email, String password, String profilePic,String linkedin,String github,String bio) async {
+       String firstName,String lastName,String email, String password, String profilePic,String linkedin,String github,String bio,List<String>skills) async {
     try {
       UserCredential user = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       String? userid = user.user?.uid;
-      adduser(userid!, firstName,lastName,email, password, profilePic,linkedin,github,bio);
+      adduser(userid!, firstName,lastName,email, password, profilePic,linkedin,github,bio,skills);
       return user.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
@@ -45,14 +45,15 @@ class Firebase_Service{
   }
 
 
-  Future adduser(String userid,String firstName,String lastName, String email, String password,String profilePic,String linkedin,String github,String bio) {
+  Future adduser(String userid,String firstName,String lastName, String email, String password,String profilePic,String linkedin,String github,String bio,List<String> skills) {
       return dbrefuser.doc(userid).set({
       'Email': email,
       'First':firstName,
       'Last':lastName,
       'password': password,
       'profilePic': profilePic,
-      'Bio':bio,
+      'Bio': bio,
+      'Skills': skills
     });
   }
 
