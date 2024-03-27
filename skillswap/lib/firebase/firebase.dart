@@ -44,7 +44,7 @@ class Firebase_Service{
 
 
   Future adduser(String userid,String firstName,String lastName, String email,String profilePic,String linkedin,String github,String bio,List<String> skills){
-        List<Map<String, dynamic>> skillsWithLevel = skills.map((skill) => {'skill': skill, 'level': 'Beginner'}).toList();
+        List<Map<String, String>> skillsWithLevel = skills.map((skill) => {'skill': skill, 'level': 'Beginner'}).toList();
       return dbrefuser.doc(userid).set({
       'Email': email,
       'First':firstName,
