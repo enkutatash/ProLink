@@ -2,13 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class Firebase{
+class Firebase_Service{
    FirebaseAuth _auth = FirebaseAuth.instance;
   final CollectionReference dbrefuser =
       FirebaseFirestore.instance.collection('Users');
   late BuildContext _context;
 
-  Firebase(BuildContext context) {
+  Firebase_Service(BuildContext context) {
     _context = context;
   }
 

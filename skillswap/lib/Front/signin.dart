@@ -1,6 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:skillswap/Front/homepage.dart';
 import 'package:skillswap/Front/signup.dart';
+import 'package:skillswap/firebase/firebase.dart';
+import 'package:skillswap/homepage/homepage.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -9,11 +14,19 @@ class SignInPage extends StatefulWidget {
 }
 
 class SignInPageState extends State<SignInPage> {
-  final _usernameController = TextEditingController();
+  late final Firebase_Service _auth;
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  late Map<String, dynamic> userdata;
   bool _obscureText = true;
 
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    _auth = Firebase_Service(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,31 +41,34 @@ class SignInPageState extends State<SignInPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-              Center(
-                child: Lottie.asset('asset/animation.json'),
-              ),
-              const Text(
-                "SkillSwap",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
+                Center(
+                  child: Lottie.asset('asset/animation.json'),
                 ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: height * 0.07,
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Text("Email",style: TextStyle(color: Colors.white,fontSize: 15),),
+                const Text(
+                  "SkillSwap",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-              ),
+                SizedBox(
+                  height: height * 0.07,
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Text(
+                      "Email",
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                    ),
+                  ),
+                ),
                 Container(
-                  width: width*0.9,
-                  height: height*0.06,
+                  width: width * 0.9,
+                  height: height * 0.06,
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
@@ -62,10 +78,9 @@ class SignInPageState extends State<SignInPage> {
                     ),
                   ),
                   child: TextFormField(
-                    controller: _usernameController,
+                    controller: _emailController,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
-                      
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -75,18 +90,20 @@ class SignInPageState extends State<SignInPage> {
                     },
                   ),
                 ),
-
                 const SizedBox(height: 16.0),
-               const  Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Text("Password",style: TextStyle(color: Colors.white,fontSize: 15),),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Text(
+                      "Password",
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                    ),
+                  ),
                 ),
-              ),
                 Container(
-                  width: width*0.9,
-                  height: height*0.06,
+                  width: width * 0.9,
+                  height: height * 0.06,
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
@@ -99,7 +116,7 @@ class SignInPageState extends State<SignInPage> {
                     controller: _passwordController,
                     obscureText: _obscureText,
                     decoration: InputDecoration(
-                       border: InputBorder.none,
+                      border: InputBorder.none,
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.remove_red_eye),
                         onPressed: () {
@@ -122,29 +139,33 @@ class SignInPageState extends State<SignInPage> {
                     },
                   ),
                 ),
-                 SizedBox(height: height*0.03),
-                 Align(
+                SizedBox(height: height * 0.03),
+                Align(
                   alignment: Alignment.centerRight,
-                  child:GestureDetector(
-                    onTap: (){}
-                    ,child: Text("Forget your password?",style: TextStyle(color: Colors.red),)) ,
-                 ),
-                 SizedBox(height: height*0.02),
-                Button("Enter", Colors.white, Colors.red, (){
+                  child: GestureDetector(
+                      onTap: () {},
+                      child: Text(
+                        "Forget your password?",
+                        style: TextStyle(color: Colors.red),
+                      )),
+                ),
+                SizedBox(height: height * 0.02),
+                Button("Enter", Colors.white, Colors.red, () {
                   if (_formKey.currentState!.validate()) {
-                                // form is valid, submit the form
-                                String username = _usernameController.text;
-                                String password = _passwordController.text;
-                                // TODO: implement form submission logic here
-                              }
+                    // form is valid, submit the form
+                    String username = _emailController.text;
+                    String password = _passwordController.text;
+                    // TODO: implement form submission logic here
+                    _signIn();
+                  }
                 }),
-                 SizedBox(height: height*0.02),
+                SizedBox(height: height * 0.02),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
                       'Don\'t have an account? ',
-                      style: TextStyle(fontSize: 16,color: Colors.white),
+                      style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -157,7 +178,8 @@ class SignInPageState extends State<SignInPage> {
                         'Sign up',
                         style: TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.bold,color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
                       ),
                     ),
@@ -169,6 +191,46 @@ class SignInPageState extends State<SignInPage> {
         ),
       ),
     );
+  }
+
+  void _showSnackBar(String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      action: SnackBarAction(
+        label: 'Close',
+        onPressed: () {
+          // Some action to take when the user presses the action button
+        },
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  Future<void> _fetchUserData(String userId) async {
+    try {
+      userdata = await _auth.userData(userId);
+    } catch (e) {
+      // Handle error
+    }
+  }
+
+  void _signIn() async {
+    String Email = _emailController.text;
+    String Password = _passwordController.text;
+
+    User? user = await _auth.signInWithEmailAndPassword(Email, Password);
+
+    if (user != null) {
+      
+      print(user.uid);
+      await _fetchUserData(user.uid);
+
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Homepage(user.uid,userdata)));
+      _showSnackBar("User is successfully Sign in");
+    } else {
+       _showSnackBar("Some error happend on create user");
+    }
   }
 }
 
@@ -192,11 +254,9 @@ Widget textfield(
       ),
       prefixIcon: Icon(icon),
       suffixIcon: suffixIcon != null ? Icon(suffixIcon) : null,
-     
     ),
   );
 }
-
 
 class Button extends StatelessWidget {
   final String text;

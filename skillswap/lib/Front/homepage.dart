@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class FrontPage extends StatelessWidget {
+  const FrontPage({super.key});
 
   @override
   Widget build(BuildContext context) {
