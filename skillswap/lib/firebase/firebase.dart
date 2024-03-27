@@ -30,7 +30,7 @@ class Firebase_Service{
       UserCredential user = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       String? userid = user.user?.uid;
-      adduser(userid!, firstName,lastName,email, password, profilePic,linkedin,github,bio,skills);
+      adduser(userid!, firstName,lastName,email, profilePic,linkedin,github,bio,skills);
       return user.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
@@ -45,15 +45,15 @@ class Firebase_Service{
   }
 
 
-  Future adduser(String userid,String firstName,String lastName, String email, String password,String profilePic,String linkedin,String github,String bio,List<String> skills) {
+  Future adduser(String userid,String firstName,String lastName, String email,String profilePic,String linkedin,String github,String bio,List<String> skills){
+        List<Map<String, dynamic>> skillsWithLevel = skills.map((skill) => {'skill': skill, 'level': 'Beginner'}).toList();
       return dbrefuser.doc(userid).set({
       'Email': email,
       'First':firstName,
       'Last':lastName,
-      'password': password,
       'profilePic': profilePic,
       'Bio': bio,
-      'Skills': skills
+      'Skills': skillsWithLevel
     });
   }
 
