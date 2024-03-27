@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
+import 'package:skillswap/Front/signin.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -13,16 +13,19 @@ class SignUpPage extends StatefulWidget {
 }
 
 class SignUpPageState extends State<SignUpPage> {
-  final _usernameController = TextEditingController();
+  final _emailnameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _firstnameController = TextEditingController();
   final _lastnameController = TextEditingController();
-  
+  final _linkedincontroller = TextEditingController();
+  final _githubcontroller = TextEditingController();
+  final _biocontroller = TextEditingController();
+
   bool _obscureText = true;
   String? imagePath;
   File? _image;
   String? downloadUrl;
-  
+
   Future<void> pickImage() async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (image == null) return;
@@ -80,25 +83,30 @@ class SignUpPageState extends State<SignUpPage> {
                   height: height * 0.03,
                 ),
                 Center(
-                child: Stack(children: [
-                  CircleAvatar(
-                      radius: 40.0, 
-                       backgroundImage: imagePath != null ? FileImage(File(imagePath!)) : NetworkImage("https://images.rawpixel.com/image_png_social_square/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png"),
+                  child: Stack(children: [
+                    CircleAvatar(
+                      radius: 40.0,
+                      backgroundImage: imagePath != null
+                          ? FileImage(File(imagePath!))
+                          : NetworkImage(
+                              "https://images.rawpixel.com/image_png_social_square/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png"),
                       child: imagePath == null ? Icon(Icons.person) : null,
-                      ),
-                  Positioned(
-                      top: 45,
-                      right: -10,
-                      child: IconButton(
-                          onPressed: pickImage,
-                          icon: const Icon(
-                            Icons.camera_alt_outlined,
-                            size: 30,
-                            color: Color(0XFF6055D8),
-                          )))
-                ]),
-              ),
-              SizedBox(height: height*0.02,),
+                    ),
+                    Positioned(
+                        top: 45,
+                        right: -10,
+                        child: IconButton(
+                            onPressed: pickImage,
+                            icon: const Icon(
+                              Icons.camera_alt_outlined,
+                              size: 30,
+                              color: Color(0XFF6055D8),
+                            )))
+                  ]),
+                ),
+                SizedBox(
+                  height: height * 0.02,
+                ),
                 Row(
                   children: [
                     Container(
@@ -181,7 +189,7 @@ class SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                   child: TextFormField(
-                    controller: _usernameController,
+                    controller: _emailnameController,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                     ),
@@ -242,11 +250,99 @@ class SignUpPageState extends State<SignUpPage> {
                     },
                   ),
                 ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Text(
+                      "Github",
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: width * 0.9,
+                  height: height * 0.06,
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    border: Border.all(
+                      color: Colors.white, // Set border color to white
+                      width: 2.0, // Set border width to 2 pixels (optional)
+                    ),
+                  ),
+                  child: TextFormField(
+                    controller: _githubcontroller,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Text(
+                      "Linked In",
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: width * 0.9,
+                  height: height * 0.06,
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    border: Border.all(
+                      color: Colors.white, // Set border color to white
+                      width: 2.0, // Set border width to 2 pixels (optional)
+                    ),
+                  ),
+                  child: TextFormField(
+                    controller: _linkedincontroller,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Text(
+                      "Bio",
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: width * 0.9,
+                  height: height * 0.2, // Adjust the height as needed
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Colors.grey, // Set border color
+                      width: 2.0, // Set border width (optional)
+                    ),
+                  ),
+                  child: TextFormField(
+                    controller: _biocontroller,
+                    maxLines:
+                        null, // Allows the text field to expand to multiple lines
+                    keyboardType: TextInputType.multiline,
+                    decoration: InputDecoration(
+                      hintText: 'Enter your Bio here...',
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
                 SizedBox(height: height * 0.03),
                 Button("Sign Up", Colors.white, Colors.red, () {
                   if (_formKey.currentState!.validate()) {
                     // form is valid, submit the form
-                    String username = _usernameController.text;
+                    String username = _emailnameController.text;
                     String password = _passwordController.text;
                     // TODO: implement form submission logic here
                   }
@@ -261,7 +357,10 @@ class SignUpPageState extends State<SignUpPage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        // navigate to sign-up page
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SignInPage()));
                       },
                       child: const Text(
                         'Sign In',
