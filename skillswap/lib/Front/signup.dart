@@ -434,11 +434,11 @@ class SignUpPageState extends State<SignUpPage> {
         'Id': user.uid,
         'Skills': _selectedSkills
       };
-      print(_selectedSkills);
-      // Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //         builder: (context) => Homepage(user.uid, userdata)));
+    
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Homepage(user.uid, userdata)));
       _showSnackBar("User is successfully created");
     } else {
       print("Some error happend on create user");

@@ -22,8 +22,6 @@ class Firebase_Service{
     );
     ScaffoldMessenger.of(_context).showSnackBar(snackBar);
   }
-  
-
       Future<User?> signUpWithEmailAndPassword(
        String firstName,String lastName,String email, String password, String profilePic,String linkedin,String github,String bio,List<String>skills) async {
     try {
@@ -53,7 +51,9 @@ class Firebase_Service{
       'Last':lastName,
       'profilePic': profilePic,
       'Bio': bio,
-      'Skills': skillsWithLevel
+      'Skills': skillsWithLevel,
+      'Linkedin':linkedin,
+      'Github':github
     });
   }
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:skillswap/Front/signin.dart';
+import 'package:skillswap/Front/signup.dart';
 
 class FrontPage extends StatelessWidget {
   const FrontPage({super.key});
@@ -53,17 +55,34 @@ class FrontPage extends StatelessWidget {
                   Icon(Icons.message)
                 ],
               ),
-              SizedBox(height: height*0.07,),
+              SizedBox(
+                height: height * 0.07,
+              ),
               Row(
                 children: [
-                  Button("Sign in",Colors.black,Colors.white,(){}),
-                  SizedBox(width: width*0.03,),
-                  Button("Sign Up",Colors.white,Colors.red,(){}),
+                  Button("Sign in", Colors.black, Colors.white, () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => SignInPage()));
+                  }),
+                  SizedBox(
+                    width: width * 0.03,
+                  ),
+                  Button("Sign Up", Colors.white, Colors.red, () {
+                     Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => SignUpPage()));
+                  }),
                 ],
               ),
-              SizedBox(height: height*0.02,),
-              GestureDetector(onTap: (){}, 
-             child:const Text("Explore as a guest",style: TextStyle(color: Colors.white,fontSize:17 ),) ,)
+              SizedBox(
+                height: height * 0.02,
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: const Text(
+                  "Explore as a guest",
+                  style: TextStyle(color: Colors.white, fontSize: 17),
+                ),
+              )
             ],
           ),
         ));
@@ -75,7 +94,7 @@ class Button extends StatelessWidget {
   final Color btnclr;
   final Color textclr;
   final void Function() click;
-   Button(this.text,this.textclr,this.btnclr,this.click,{super.key});
+  Button(this.text, this.textclr, this.btnclr, this.click, {super.key});
 
   @override
   Widget build(BuildContext context) {

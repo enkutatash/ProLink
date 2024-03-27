@@ -50,7 +50,7 @@ class _General_ScreenState extends State<Homepage> {
             bottomNavigationBar: BottomNavigationBar(
               onTap: _currentScreen,
               currentIndex: _selectedScreen,
-              selectedItemColor: const Color(0xFF6055D8),
+              selectedItemColor:  Colors.red,
               unselectedItemColor: Colors.grey,
               iconSize: 30,
               items: const <BottomNavigationBarItem>[

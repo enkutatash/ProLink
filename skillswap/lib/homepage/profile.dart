@@ -18,6 +18,15 @@ class ProfilePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: IconButton(onPressed: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SignInPage()),
+                  );
+              },icon: Icon(Icons.logout_rounded,color: Colors.red,size: 30,),),
+            ),
             Stack(children: [
               CircleAvatar(
                   radius: 60.0,
@@ -71,24 +80,7 @@ class ProfilePage extends StatelessWidget {
               icon: Icons.help,
               showArrowIcon: true,
             ),
-            const Spacer(),
-            SizedBox(
-              width: width * 0.4,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SignInPage()),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0XFF6055D8)),
-                child: const Text(
-                  "Sign Out",
-                  style: TextStyle(color: Colors.white),
-                ), // Add your button text here
-              ),
-            ),
+          
           ],
         ),
       ),

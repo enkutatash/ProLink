@@ -17,6 +17,6 @@ void main() async {
         scaffoldBackgroundColor: Colors.black, 
         iconTheme: IconThemeData(color: Colors.white,size: 15),
       ),
-    home: SignUpPage()));
+    home: FrontPage()));
 }
 
