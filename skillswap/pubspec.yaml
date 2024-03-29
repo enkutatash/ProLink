@@ -36,6 +36,12 @@ dependencies:
   firebase_storage: ^11.6.10
   lottie: ^3.1.0
   image_picker: ^1.0.7
+  dash_chat_2: ^0.0.20
+  firebase_analytics: ^10.9.0
+  delightful_toast: ^1.1.0
+  get_it: ^7.6.7
+  path: ^1.9.0
+ 
 
 
   # The following adds the Cupertino Icons font to your application.

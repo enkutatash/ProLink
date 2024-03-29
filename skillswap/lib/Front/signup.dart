@@ -424,6 +424,7 @@ class SignUpPageState extends State<SignUpPage> {
         email, password, downloadUrl!, linkedin, github, bio,_selectedSkills);
     if (user != null) {
       print("User is successfully created");
+       List<Map<String, String>> skillsWithLevel = _selectedSkills.map((skill) => {'skill': skill, 'level': 'Beginner'}).toList();
       Map<String, dynamic> userdata = {
         'Email': email,
         'First': firstName,
@@ -432,7 +433,7 @@ class SignUpPageState extends State<SignUpPage> {
         'profilePic': downloadUrl,
         'Bio': bio,
         'Id': user.uid,
-        'Skills': _selectedSkills
+        'Skills': skillsWithLevel
       };
     
       Navigator.push(
