@@ -8,10 +8,10 @@ class ProjectScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("My Projects"),
+        title:const Text("My Projects"),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
+      body:const SingleChildScrollView(
         child: Column(
           children: [
             Project(),
@@ -22,7 +22,12 @@ class ProjectScreen extends StatelessWidget {
             Project(),
           ],
         ),
+        
       ),
+      floatingActionButton: FloatingActionButton(onPressed: (){},child: Icon(Icons.add,color: Colors.red,size: 30),
+      // mini:true,
+       shape: CircleBorder(),
+      backgroundColor: Colors.white,),
     );
   }
 }
