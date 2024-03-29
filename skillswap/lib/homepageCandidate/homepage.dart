@@ -5,7 +5,7 @@ import 'package:skillswap/homepageCandidate/homescreen.dart';
 import 'package:skillswap/homepageCandidate/message.dart';
 import 'package:skillswap/homepageCandidate/personalproject.dart';
 import 'package:skillswap/homepageCandidate/profile.dart';
-import 'package:skillswap/homepageCandidate/search.dart';
+import 'package:skillswap/homepageCandidate/Search/search.dart';
 
 
 class Homepage extends StatefulWidget {
