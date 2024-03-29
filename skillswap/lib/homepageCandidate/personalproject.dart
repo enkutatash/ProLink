@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:skillswap/homepageCandidate/project.dart';
 
 class ProjectScreen extends StatelessWidget {
   const ProjectScreen({super.key});
@@ -6,7 +7,22 @@ class ProjectScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: Text("project screen"),),
-    );;
+      appBar: AppBar(
+        title: Text("My Projects"),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Project(),
+            Project(),
+            Project(),
+            Project(),
+            Project(),
+            Project(),
+          ],
+        ),
+      ),
+    );
   }
 }
