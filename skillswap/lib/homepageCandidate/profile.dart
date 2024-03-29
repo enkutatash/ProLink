@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:skillswap/Front/signin.dart';
-import 'package:skillswap/homepage/homepage.dart';
+import 'package:skillswap/homepageCandidate/homepage.dart';
 
 class ProfilePage extends StatelessWidget {
   Map<String, dynamic> userdata;

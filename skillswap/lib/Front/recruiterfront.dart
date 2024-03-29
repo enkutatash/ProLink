@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:skillswap/Front/candidatefront.dart';
-import 'package:skillswap/Front/recruiterfront.dart';
 import 'package:skillswap/Front/signin.dart';
 import 'package:skillswap/Front/signup.dart';
+import 'package:skillswap/Front/signup2.dart';
 
-class WelcomePage extends StatelessWidget {
-  const WelcomePage({super.key});
+class FrontPageRec extends StatelessWidget {
+  const FrontPageRec({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,16 +22,16 @@ class WelcomePage extends StatelessWidget {
               SizedBox(
                 height: height * 0.13,
               ),
+              Center(
+                child: Lottie.asset('asset/animation.json'),
+              ),
               const Text(
-                "Welcome to Skill Swap ",
+                "Welcome to skill swap & start exchanging",
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 30,
                     fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
-              ),
-              Center(
-                child: Lottie.asset('asset/animation.json'),
               ),
               SizedBox(
                 height: height * 0.02,
@@ -46,7 +45,7 @@ class WelcomePage extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               SizedBox(
-                height: height * 0.09,
+                height: height * 0.07,
               ),
               const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -62,16 +61,16 @@ class WelcomePage extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Button("Find Talent", Colors.black, Colors.white, () {
+                  Button("Sign in", Colors.black, Colors.white, () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => FrontPageRec()));
+                        MaterialPageRoute(builder: (context) => SignInPage()));
                   }),
                   SizedBox(
                     width: width * 0.03,
                   ),
-                  Button("Find Collaborators", Colors.white, Colors.red, () {
+                  Button("Sign Up", Colors.white, Colors.red, () {
                      Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => FrontPage()));
+                        MaterialPageRoute(builder: (context) => SignUpRecPage()));
                   }),
                 ],
               ),

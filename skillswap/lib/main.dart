@@ -4,7 +4,7 @@ import 'package:skillswap/Front/recruiterORuser.dart';
 import 'package:skillswap/Front/signin.dart';
 import 'package:skillswap/Front/signup.dart';
 import 'package:skillswap/firebase/firebase_options.dart';
-import 'package:skillswap/Front/homepage.dart';
+import 'package:skillswap/Front/candidatefront.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(

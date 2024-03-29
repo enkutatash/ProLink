@@ -9,23 +9,23 @@ import 'package:skillswap/Front/signin.dart';
 import 'package:skillswap/firebase/firebase.dart';
 import 'package:skillswap/firebase/skills.dart';
 import 'package:skillswap/homepageCandidate/homepage.dart';
+import 'package:skillswap/homepageRec/homepagerec.dart';
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+class SignUpRecPage extends StatefulWidget {
+  const SignUpRecPage({Key? key}) : super(key: key);
   @override
-  SignUpPageState createState() => SignUpPageState();
+  SignUpRecPageState createState() => SignUpRecPageState();
 }
 
-class SignUpPageState extends State<SignUpPage> {
+class SignUpRecPageState extends State<SignUpRecPage> {
   final _emailnameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _firstnameController = TextEditingController();
   final _lastnameController = TextEditingController();
   final _linkedincontroller = TextEditingController();
-  final _githubcontroller = TextEditingController();
-  final _biocontroller = TextEditingController();
+  final _companynamecontroller = TextEditingController();
   late final Firebase_Service _auth;
-  List<String> _selectedSkills = [];
+  List<String> _skillsPreference = [];
 
   bool _obscureText = true;
   String? imagePath;
@@ -267,7 +267,7 @@ class SignUpPageState extends State<SignUpPage> {
                   child: Padding(
                     padding: const EdgeInsets.all(5.0),
                     child: Text(
-                      "Github",
+                      "Company Name",
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
                   ),
@@ -284,7 +284,7 @@ class SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                   child: TextFormField(
-                    controller: _githubcontroller,
+                    controller: _companynamecontroller,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                     ),
@@ -318,43 +318,11 @@ class SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                 ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Text(
-                      "Bio",
-                      style: TextStyle(color: Colors.white, fontSize: 15),
-                    ),
-                  ),
-                ),
-                Container(
-                  width: width * 0.9,
-                  height: height * 0.2, // Adjust the height as needed
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: Colors.grey, // Set border color
-                      width: 2.0, // Set border width (optional)
-                    ),
-                  ),
-                  child: TextFormField(
-                    controller: _biocontroller,
-                    maxLines:
-                        null, // Allows the text field to expand to multiple lines
-                    keyboardType: TextInputType.multiline,
-                    decoration: const InputDecoration(
-                      hintText: 'Enter your Bio here...',
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
                 Dropdown(
-                  skill: "Select your Skills",
+                  skill: "Skill Preference",
                   onItemsSelected: (selectedItems) {
                     setState(() {
-                      _selectedSkills = selectedItems;
+                      _skillsPreference = selectedItems;
                     });
                   },
                 ),
@@ -418,21 +386,21 @@ class SignUpPageState extends State<SignUpPage> {
     String firstName = _firstnameController.text;
     String lastName = _lastnameController.text;
     String linkedin = _linkedincontroller.text;
-    String github = _githubcontroller.text;
-    String bio = _biocontroller.text;
+    String companyName = _companynamecontroller.text;
+   
 
-    User? user = await _auth.signUpWithEmailAndPassword(firstName, lastName,
-        email, password, downloadUrl!, linkedin, github, bio,_selectedSkills);
+    User? user = await _auth.signUpWithEmailAndPasswordREC(firstName, lastName,
+        email, password, downloadUrl!, linkedin, companyName,_skillsPreference);
     if (user != null) {
       print("User is successfully created");
-       List<Map<String, String>> skillsWithLevel = _selectedSkills.map((skill) => {'skill': skill, 'level': 'Beginner'}).toList();
+       List<Map<String, String>> skillsWithLevel = _skillsPreference.map((skill) => {'skill': skill, 'level': 'Beginner'}).toList();
       Map<String, dynamic> userdata = {
         'Email': email,
         'First': firstName,
         'Last': lastName,
         'password': password,
         'profilePic': downloadUrl,
-        'Bio': bio,
+        'CompanyName':companyName,
         'Id': user.uid,
         'Skills': skillsWithLevel
       };
@@ -440,7 +408,7 @@ class SignUpPageState extends State<SignUpPage> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => Homepage(user.uid, userdata)));
+              builder: (context) => HomepageREC(user.uid, userdata)));
       _showSnackBar("User is successfully created");
     } else {
       print("Some error happend on create user");

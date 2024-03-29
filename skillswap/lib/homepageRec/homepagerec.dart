@@ -1,23 +1,25 @@
-
-
 import 'package:flutter/material.dart';
-import 'package:skillswap/homepage/homescreen.dart';
-import 'package:skillswap/homepage/message.dart';
-import 'package:skillswap/homepage/personalproject.dart';
-import 'package:skillswap/homepage/profile.dart';
-import 'package:skillswap/homepage/search.dart';
+import 'package:skillswap/homepageCandidate/homescreen.dart';
+import 'package:skillswap/homepageCandidate/message.dart';
+import 'package:skillswap/homepageCandidate/personalproject.dart';
+import 'package:skillswap/homepageCandidate/profile.dart';
+import 'package:skillswap/homepageCandidate/search.dart';
+import 'package:skillswap/homepageRec/HomeRec.dart';
+import 'package:skillswap/homepageRec/message.dart';
+import 'package:skillswap/homepageRec/profile.dart';
+import 'package:skillswap/homepageRec/searchrec.dart';
 
 
-class Homepage extends StatefulWidget {
+class HomepageREC extends StatefulWidget {
   Map<String, dynamic> userdata;
   final String userid;
-  Homepage(this.userid,this.userdata, {Key? key}) : super(key: key);
+  HomepageREC(this.userid,this.userdata, {Key? key}) : super(key: key);
 
   @override
-  State<Homepage> createState() => _General_ScreenState();
+  State<HomepageREC> createState() => _HomepageRECState();
 }
 
-class _General_ScreenState extends State<Homepage> {
+class _HomepageRECState extends State<HomepageREC> {
   late List<Widget> AllScreens;
 
   int _selectedScreen = 0;
@@ -28,11 +30,10 @@ class _General_ScreenState extends State<Homepage> {
     super.initState();
    
     AllScreens = [
-      HomeScreen(),
-      SearchScreen(),
-      Message(),
-      ProjectScreen(),
-      ProfilePage(widget.userdata, widget.userid),
+    HomeRec(),
+    SearchRec(),
+    MessageRec(),
+    ProfileRec(),
       
     ];
   }
@@ -64,10 +65,6 @@ class _General_ScreenState extends State<Homepage> {
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.message_rounded),
-                  label: "",
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.newspaper_rounded),
                   label: "",
                 ),
                 BottomNavigationBarItem(

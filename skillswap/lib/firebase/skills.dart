@@ -66,16 +66,16 @@ class _MultiSelectState extends State<MultiSelect> {
 // Implement a multi select on the Home screen
 
 class Dropdown extends StatefulWidget {
+  String skill;
   final void Function(List<String> selectedItems) onItemsSelected;
-  const Dropdown({ 
-    required this.onItemsSelected,
-    Key? key}) : super(key: key);
+   Dropdown({required this.onItemsSelected, required this.skill, Key? key}) : super(key: key);
 
   @override
   State<Dropdown> createState() => _DropdownState();
 }
+
 class _DropdownState extends State<Dropdown> {
-    List<String> _selectedItems = [];
+  List<String> _selectedItems = [];
 
   void _showMultiSelect() async {
     // a list of selectable items
@@ -126,7 +126,7 @@ class _DropdownState extends State<Dropdown> {
         // use this button to open the multi-select dialog
         ElevatedButton(
           onPressed: _showMultiSelect,
-          child: const Text('Select Your Skills'),
+          child: Text(widget.skill),
         ),
         const Divider(
           height: 30,
@@ -139,7 +139,8 @@ class _DropdownState extends State<Dropdown> {
                     deleteIcon: Icon(Icons.close),
                     deleteIconColor: Colors.red,
                     onDeleted: () {
-                      _removeSelectedItem(e); // Remove item from the selected list
+                      _removeSelectedItem(
+                          e); // Remove item from the selected list
                     },
                   ))
               .toList(),

@@ -2,10 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:skillswap/Front/homepage.dart';
+import 'package:skillswap/Front/candidatefront.dart';
 import 'package:skillswap/Front/signup.dart';
 import 'package:skillswap/firebase/firebase.dart';
-import 'package:skillswap/homepage/homepage.dart';
+import 'package:skillswap/homepageCandidate/homepage.dart';
+import 'package:skillswap/homepageRec/homepagerec.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -233,12 +234,19 @@ class SignInPageState extends State<SignInPage> {
     if (user != null) {
       print(user.uid);
       await _fetchUserData(user.uid);
-
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Homepage(user.uid, userdata)));
-      _showSnackBar("User is successfully Sign in");
+      print(userdata);
+      if (userdata.containsKey('CompanyName')) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => HomepageREC(user.uid, userdata)));
+        print("YES");
+        _showSnackBar("Recruiter is successfully Sign in");
+      } else {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Homepage(user.uid, userdata)));
+        _showSnackBar("User is successfully Sign in");
+      }
     } else {
       _showSnackBar("Some error happend on create user");
     }
