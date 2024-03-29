@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:skillswap/Front/recruiterORuser.dart';
 import 'package:skillswap/Front/signin.dart';
 import 'package:skillswap/Front/signup.dart';
 import 'package:skillswap/firebase/firebase_options.dart';
@@ -17,6 +18,6 @@ void main() async {
         scaffoldBackgroundColor: Colors.black, 
         iconTheme: IconThemeData(color: Colors.white,size: 15),
       ),
-    home: FrontPage()));
+    home: WelcomePage()));
 }
 
