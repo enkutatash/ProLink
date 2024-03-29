@@ -168,6 +168,10 @@ class Firebase_Service {
     }
   }
 
+  Future<void> addNewSkill(String uid) async {
+    
+  }
+
   void signout() {
     FirebaseAuth.instance.signOut();
   }

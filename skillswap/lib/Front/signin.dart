@@ -248,7 +248,7 @@ class SignInPageState extends State<SignInPage> {
         _showSnackBar("User is successfully Sign in");
       }
     } else {
-      _showSnackBar("Some error happend on create user");
+      _showSnackBar("Some error happend on Signing in user");
     }
   }
 }

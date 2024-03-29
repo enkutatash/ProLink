@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:skillswap/Front/signin.dart';
 import 'package:skillswap/homepageCandidate/homepage.dart';
+import 'package:skillswap/homepageCandidate/newskill.dart';
 
 class ProfilePage extends StatelessWidget {
   Map<String, dynamic> userdata;
@@ -60,16 +61,16 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: height * 0.03),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                const Text(
                   "Skills",
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
+                NewSkill(),
+              ]),
               SizedBox(height: height * 0.03),
               Container(
                 decoration: BoxDecoration(
@@ -96,41 +97,47 @@ class ProfilePage extends StatelessWidget {
                           color: Colors.black,
                         ),
                         height: height * 0.3,
-                        child: ListView.builder(
-                          itemCount: userdata['Skills'].length,
-                          itemBuilder: (context, index) {
-                            print(userdata['Skills'][index]);
-                            Map<String, dynamic> skill =
-                                userdata['Skills'][index];
+                        child: RawScrollbar(
+                          thumbVisibility: true,
+                          thumbColor: Colors.redAccent,
+                          radius: Radius.circular(20),
+                          thickness: 5,
+                          child: ListView.builder(
+                            itemCount: userdata['Skills'].length,
+                            itemBuilder: (context, index) {
+                              print(userdata['Skills'][index]);
+                              Map<String, dynamic> skill =
+                                  userdata['Skills'][index];
 
-                            return Container(
-                              padding: const EdgeInsets.all(8.0),
-                              height: height * 0.07,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  // Set the background color of the container
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      offset: Offset(1,
-                                          1), // Move the shadow slightly upwards and left
-                                      blurRadius:
-                                          5.0, // Adjust blur radius for softness
-                                      spreadRadius:
-                                          0.0, // Spread the shadow slightly outwards
-                                    ),
-                                  ]),
-                              child:
-                                  SkillLevel(skill['skill']!, skill['level']!),
-                            );
-                          },
+                              return Container(
+                                padding: const EdgeInsets.all(8.0),
+                                height: height * 0.07,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    // Set the background color of the container
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        offset: Offset(1,
+                                            1), // Move the shadow slightly upwards and left
+                                        blurRadius:
+                                            5.0, // Adjust blur radius for softness
+                                        spreadRadius:
+                                            0.0, // Spread the shadow slightly outwards
+                                      ),
+                                    ]),
+                                child: SkillLevel(
+                                    skill['skill']!, skill['level']!),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-               SizedBox(height: height * 0.03),
+              SizedBox(height: height * 0.03),
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -141,7 +148,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
               ),
-               SizedBox(height: height * 0.03),
+              SizedBox(height: height * 0.03),
               Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
@@ -167,7 +174,7 @@ class ProfilePage extends StatelessWidget {
                     width: width * 0.9,
                     child: Text(userdata['Bio']),
                   )),
-                   SizedBox(height: height * 0.03),
+              SizedBox(height: height * 0.03),
               userdata['Linkedin'] != null && userdata['Linkedin'] != ''
                   ? Align(
                       alignment: Alignment.centerLeft,
@@ -180,7 +187,7 @@ class ProfilePage extends StatelessWidget {
                       ),
                     )
                   : Container(),
-                   SizedBox(height: height * 0.03),
+              SizedBox(height: height * 0.03),
               userdata['Linkedin'] != null && userdata['Linkedin'] != ''
                   ? Container(
                       decoration: BoxDecoration(
@@ -316,5 +323,88 @@ class _SkillLevelState extends State<SkillLevel> {
         ],
       ),
     );
+  }
+}
+
+class NewSkill extends StatefulWidget {
+  NewSkill({Key? key}) : super(key: key);
+
+  @override
+  _NewSkillState createState() => _NewSkillState();
+}
+
+class _NewSkillState extends State<NewSkill> {
+  final TextEditingController newskill = TextEditingController();
+  String level = "Beginner";
+  
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('New Skill'),
+                content: StatefulBuilder(builder: (context, setState) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextField(
+                        controller: newskill,
+                      ),
+                      ListTile(
+                              title: Text('Beginner'),
+                              // Define value property within ListTile
+                              leading: Radio(
+                                value: 'Beginner',
+                                groupValue:
+                                    level, // Group for radio buttons
+                                onChanged: (value) => setState(
+                                    () => level = value as String),
+                              ),
+                            ),
+                            ListTile(
+                              title: Text('Intermediate'),
+                              // Define value property within ListTile
+                              leading: Radio(
+                                value: 'Intermediate',
+                                groupValue: level,
+                                onChanged: (value) => setState(
+                                    () => level = value as String),
+                              ),
+                            ),
+                            ListTile(
+                              title: Text('Advanced'),
+                              // Define value property within ListTile
+                              leading: Radio(
+                                value: 'Advanced',
+                                groupValue: level,
+                                onChanged: (value) => setState(
+                                    () => level = value as String),
+                              ),
+                            ),
+                    ],
+                  );
+                }),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      print(newskill.text);
+                      Navigator.pop(context);
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        icon: Icon(
+          Icons.add_circle_outline_outlined,
+          color: Colors.red,
+          size: 30,
+        ));
   }
 }
