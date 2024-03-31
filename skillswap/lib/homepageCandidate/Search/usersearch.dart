@@ -14,7 +14,7 @@ class UserSearch extends StatelessWidget {
         width: width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: Colors.white
+          color:Color(0XFF393939),
         ),
         child: Row(
           children: [
@@ -37,8 +37,8 @@ class UserSearch extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Ana bob",style: TextStyle(color: Colors.black,fontSize: 20,),),
-                  Text("I am passionate software engineer.I am passionate software engineer",style: TextStyle(color: Colors.black),overflow: TextOverflow.ellipsis,)
+                  Text("Ana bob",style: TextStyle(color: Colors.white,fontSize: 20,),),
+                  Text("I am passionate software engineer.I am passionate software engineer",style: TextStyle(color: Colors.white),overflow: TextOverflow.ellipsis,)
                 ],
               ),
             )

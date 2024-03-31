@@ -5,6 +5,7 @@ import 'package:skillswap/Front/signin.dart';
 import 'package:skillswap/Front/signup.dart';
 import 'package:skillswap/firebase/firebase_options.dart';
 import 'package:skillswap/Front/candidatefront.dart';
+import 'package:skillswap/homepageCandidate/Search/search.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -18,6 +19,6 @@ void main() async {
         scaffoldBackgroundColor: Colors.black, 
         iconTheme: IconThemeData(color: Colors.white,size: 15),
       ),
-    home: WelcomePage()));
+    home: SearchScreen()));
 }
 

@@ -14,7 +14,7 @@ class ProjectSearch extends StatelessWidget {
         width: width,
         height: height*0.21,
         decoration: BoxDecoration(
-        color: Colors.white,
+        color:Color(0XFF393939),
           borderRadius: BorderRadius.circular(15)
         ),
         child: Stack(
@@ -45,13 +45,13 @@ class ProjectSearch extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                          SizedBox(height: height*0.01,),
-                       const Text("Education",style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),),
+                       const Text("Education",style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),),
                       SizedBox(height: height*0.02,),
-                    const  Text("This is the detail of education project you can click the detail button",overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.black),)
+                    const  Text("This is the detail of education project you can click the detail button",overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.white),)
                       ],),
                   ),
                   
-                    Button("Join", Colors.white, Colors.black, (){}),
+                    Button("Join", Colors.black, Colors.white, (){}),
                   ],
                 ),
               )
