@@ -3,12 +3,27 @@ import 'package:skillswap/Front/signin.dart';
 import 'package:skillswap/homepageCandidate/homepage.dart';
 import 'package:skillswap/homepageCandidate/newskill.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:skillswap/firebase/firebase.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   Map<String, dynamic> userdata;
   String userid;
 
   ProfilePage(this.userdata, this.userid, {Key? key}) : super(key: key);
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  late final Firebase_Service _auth;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _auth = Firebase_Service(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,13 +56,14 @@ class ProfilePage extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 60.0,
-                    backgroundImage: NetworkImage(userdata['profilePic']),
+                    backgroundImage:
+                        NetworkImage(widget.userdata['profilePic']),
                   ),
                 ],
               ),
               SizedBox(height: 20.0),
               Text(
-                "${userdata['First']} ${userdata['Last']}",
+                "${widget.userdata['First']} ${widget.userdata['Last']}",
                 style: TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,
@@ -55,7 +71,7 @@ class ProfilePage extends StatelessWidget {
               ),
               SizedBox(height: 5.0),
               Text(
-                userdata['Email'],
+                widget.userdata['Email'],
                 style: TextStyle(
                   fontSize: 16.0,
                   color: Colors.grey,
@@ -70,7 +86,14 @@ class ProfilePage extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                NewSkill(),
+                NewSkill(
+                  onSkillAdded: (newskill, level) {
+                    widget.userdata['Skills']
+                        .add({'skill': newskill, 'level': level});
+                    _auth.addSkill(widget.userid,newskill,level);
+                    setState(() {});
+                  },
+                ),
               ]),
               Container(
                 decoration: BoxDecoration(
@@ -90,11 +113,11 @@ class ProfilePage extends StatelessWidget {
                           radius: Radius.circular(20),
                           thickness: 5,
                           child: ListView.builder(
-                            itemCount: userdata['Skills'].length,
+                            itemCount: widget.userdata['Skills'].length,
                             itemBuilder: (context, index) {
-                              print(userdata['Skills'][index]);
+                              print(widget.userdata['Skills'][index]);
                               Map<String, dynamic> skill =
-                                  userdata['Skills'][index];
+                                  widget.userdata['Skills'][index];
 
                               return Container(
                                 padding: const EdgeInsets.all(8.0),
@@ -138,10 +161,11 @@ class ProfilePage extends StatelessWidget {
                   minHeight: 100.0,
                 ),
                 width: width * 0.9,
-                child: Text(userdata['Bio']),
+                child: Text(widget.userdata['Bio']),
               ),
               SizedBox(height: height * 0.03),
-              userdata['Linkedin'] != null && userdata['Linkedin'] != ''
+              widget.userdata['Linkedin'] != null &&
+                      widget.userdata['Linkedin'] != ''
                   ? const Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -154,9 +178,11 @@ class ProfilePage extends StatelessWidget {
                     )
                   : Container(),
               SizedBox(height: height * 0.03),
-              userdata['Linkedin'] != null && userdata['Linkedin'] != ''
+              widget.userdata['Linkedin'] != null &&
+                      widget.userdata['Linkedin'] != ''
                   ? InkWell(
-                      onTap: () => _launchInBrowser('https://linkedin.com/in/',userdata['Linkedin']),
+                      onTap: () => _launchInBrowser('https://linkedin.com/in/',
+                          widget.userdata['Linkedin']),
                       child: Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
@@ -167,12 +193,13 @@ class ProfilePage extends StatelessWidget {
                           ),
                         ),
                         width: width * 0.9,
-                        child: Text(userdata['Linkedin']),
+                        child: Text(widget.userdata['Linkedin']),
                       ),
                     )
                   : Container(),
               SizedBox(height: height * 0.03),
-              userdata['Github'] != null && userdata['Github'] != ''
+              widget.userdata['Github'] != null &&
+                      widget.userdata['Github'] != ''
                   ? const Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -185,10 +212,12 @@ class ProfilePage extends StatelessWidget {
                     )
                   : Container(),
               SizedBox(height: height * 0.03),
-              userdata['Github'] != null && userdata['Github'] != ''
+              widget.userdata['Github'] != null &&
+                      widget.userdata['Github'] != ''
                   ? InkWell(
-                    onTap: () => _launchInBrowser('https://github.com/',userdata['Github']),
-                    child: Container(
+                      onTap: () => _launchInBrowser(
+                          'https://github.com/', widget.userdata['Github']),
+                      child: Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
@@ -198,9 +227,9 @@ class ProfilePage extends StatelessWidget {
                           ),
                         ),
                         width: width * 0.9,
-                        child: Text(userdata['Github']),
+                        child: Text(widget.userdata['Github']),
                       ),
-                  )
+                    )
                   : Container()
             ],
           ),
@@ -209,9 +238,8 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Future<void> _launchInBrowser(String app,String url) async {
-    final Uri toLaunch =
-        Uri.parse('$app$url');
+  Future<void> _launchInBrowser(String app, String url) async {
+    final Uri toLaunch = Uri.parse('$app$url');
     if (!await launchUrl(
       toLaunch,
       mode: LaunchMode.externalApplication,

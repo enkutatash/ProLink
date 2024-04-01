@@ -267,7 +267,7 @@ class SignUpPageState extends State<SignUpPage> {
                   child: Padding(
                     padding: const EdgeInsets.all(5.0),
                     child: Text(
-                      "Github",
+                      "Github handle",
                       style: TextStyle(fontSize: 15),
                     ),
                   ),
@@ -295,7 +295,7 @@ class SignUpPageState extends State<SignUpPage> {
                   child: Padding(
                     padding: const EdgeInsets.all(5.0),
                     child: Text(
-                      "Linked In",
+                      "Linked In handle",
                       style: TextStyle(fontSize: 15),
                     ),
                   ),

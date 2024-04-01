@@ -168,9 +168,22 @@ class Firebase_Service {
     }
   }
 
-  Future<void> addNewSkill(String uid) async {
-    
+Future<void> addSkill(String userid, String newSkill,String level) async {
+  DocumentSnapshot userSnapshot = await dbrefuser.doc(userid).get();
+
+  if (userSnapshot.exists) {
+    List<dynamic> currentSkills = userSnapshot.get('Skills');
+
+    currentSkills.add({'skill': newSkill, 'level': level});
+
+    await dbrefuser.doc(userid).update({
+      'Skills': currentSkills,
+    });
+  } else {
+    throw Exception('User document not found');
   }
+}
+
 
   void signout() {
     FirebaseAuth.instance.signOut();
