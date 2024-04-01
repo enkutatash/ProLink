@@ -14,78 +14,76 @@ class WelcomePage extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-        backgroundColor: Colors.black,
-        body: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: height * 0.13,
-              ),
-              const Text(
-                "Welcome to Skill Swap ",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              Center(
-                child: Lottie.asset('asset/animation.json'),
-              ),
-              SizedBox(
-                height: height * 0.02,
-              ),
-              const Text(
-                "Discover,Connect,Exchange skills effortlessly",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: height * 0.09,
-              ),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.handshake),
-                  Icon(Icons.people_rounded),
-                  Icon(Icons.speaker_phone_outlined),
-                  Icon(Icons.message)
-                ],
-              ),
-              SizedBox(
-                height: height * 0.07,
-              ),
-              Row(
-                children: [
-                  Button("Find Talent", Colors.black, Colors.white, () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => FrontPageRec()));
-                  }),
-                  SizedBox(
-                    width: width * 0.03,
-                  ),
-                  Button("Find Collaborators", Colors.white, Colors.red, () {
-                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => FrontPage()));
-                  }),
-                ],
-              ),
-              SizedBox(
-                height: height * 0.02,
-              ),
-              GestureDetector(
-                onTap: () {},
-                child: const Text(
-                  "Explore as a guest",
-                  style: TextStyle(color: Colors.white, fontSize: 17),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: height * 0.1,
                 ),
-              )
-            ],
+                const Text(
+                  "Welcome to Skill Swap ",
+                  style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                Center(
+                  child: Lottie.asset('asset/animation.json'),
+                ),
+                
+               SizedBox(height: height*0.08,),
+                const Text(
+                  "Discover,Connect,Exchange skills effortlessly",
+                  style: TextStyle(
+                     
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: height*0.02,),
+
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.handshake),
+                    Icon(Icons.people_rounded),
+                    Icon(Icons.speaker_phone_outlined),
+                    Icon(Icons.message)
+                  ],
+                ),
+                SizedBox(
+                  height: height * 0.07,
+                ),
+                Row(
+                  children: [
+                    Button("Find Talent", Colors.black, Colors.white, () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => FrontPageRec()));
+                    }),
+                    SizedBox(
+                      width: width * 0.03,
+                    ),
+                    Button("Find Collaborators", Colors.white, Colors.black, () {
+                       Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => FrontPage()));
+                    }),
+                  ],
+                ),
+                SizedBox(
+                  height: height * 0.02,
+                ),
+                GestureDetector(
+                  onTap: () {},
+                  child: const Text(
+                    "Explore as a guest",
+                    style: TextStyle(color: Colors.black, fontSize: 17),
+                  ),
+                )
+              ],
+            ),
           ),
         ));
   }

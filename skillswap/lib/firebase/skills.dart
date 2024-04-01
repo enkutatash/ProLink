@@ -36,7 +36,7 @@ class _MultiSelectState extends State<MultiSelect> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Select Topics'),
+      title: const Text('Select'),
       content: SingleChildScrollView(
         child: ListBody(
           children: widget.items
@@ -52,11 +52,11 @@ class _MultiSelectState extends State<MultiSelect> {
       actions: [
         TextButton(
           onPressed: _cancel,
-          child: const Text('Cancel'),
+          child: const Text('Cancel',style: TextStyle(color: Colors.black),),
         ),
         ElevatedButton(
           onPressed: _submit,
-          child: const Text('Submit'),
+          child: const Text('Submit',style: TextStyle(color: Colors.black)),
         ),
       ],
     );
@@ -126,7 +126,7 @@ class _DropdownState extends State<Dropdown> {
         // use this button to open the multi-select dialog
         ElevatedButton(
           onPressed: _showMultiSelect,
-          child: Text(widget.skill),
+          child: Text(widget.skill,style: TextStyle(color: Colors.black),),
         ),
         const Divider(
           height: 30,

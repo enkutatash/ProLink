@@ -50,7 +50,7 @@ class _HomepageState extends State<Homepage> {
             bottomNavigationBar: BottomNavigationBar(
               onTap: _currentScreen,
               currentIndex: _selectedScreen,
-              selectedItemColor:  Colors.red,
+              selectedItemColor:  Colors.black,
               unselectedItemColor: Colors.grey,
               iconSize: 30,
               items: const <BottomNavigationBarItem>[

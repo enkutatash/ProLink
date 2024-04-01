@@ -14,15 +14,19 @@ class UserSearch extends StatelessWidget {
         width: width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color:Color(0XFF393939),
+          color:Colors.white,
+          border: Border.all(
+              width: 1.0, 
+              color: Colors.black, // Set the border color here
+            ),
         ),
         child: Row(
           children: [
             ClipRRect(
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(15.0),
-                topRight: Radius.circular(15.0),
-                bottomLeft: Radius.circular(0.0),
+                topRight: Radius.circular(0.0),
+                bottomLeft: Radius.circular(15.0),
                 bottomRight: Radius.circular(0.0),
               ),
               child: Image.network(
@@ -37,8 +41,8 @@ class UserSearch extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Ana bob",style: TextStyle(color: Colors.white,fontSize: 20,),),
-                  Text("I am passionate software engineer.I am passionate software engineer",style: TextStyle(color: Colors.white),overflow: TextOverflow.ellipsis,)
+                  Text("Ana bob",style: TextStyle(fontSize: 20,),),
+                  Text("I am passionate software engineer.I am passionate software engineer",overflow: TextOverflow.ellipsis,)
                 ],
               ),
             )

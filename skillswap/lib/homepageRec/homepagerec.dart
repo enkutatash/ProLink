@@ -30,10 +30,11 @@ class _HomepageRECState extends State<HomepageREC> {
     super.initState();
    
     AllScreens = [
-    HomeRec(),
+    
+    ProfileRecruiter(),
     SearchRec(),
     MessageRec(),
-    ProfileRec(),
+    ProfileRec()
       
     ];
   }
