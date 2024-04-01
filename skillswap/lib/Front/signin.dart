@@ -56,7 +56,6 @@ class SignInPageState extends State<SignInPage> {
                 const Text(
                   "SkillSwap",
                   style: TextStyle(
-                    color: Colors.white,
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
                   ),
@@ -71,25 +70,25 @@ class SignInPageState extends State<SignInPage> {
                     padding: const EdgeInsets.all(5.0),
                     child: Text(
                       "Email",
-                      style: TextStyle(color: Colors.white, fontSize: 15),
+                      style: TextStyle( fontSize: 15),
                     ),
                   ),
                 ),
                 Container(
                   width: width * 0.9,
                   height: height * 0.06,
-                  padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
                     border: Border.all(
-                      color: Colors.white, // Set border color to red
-                      width: 2.0, // Set border width to 2 pixels (optional)
+                      width: 2.0, 
                     ),
                   ),
                   child: TextFormField(
                     controller: _emailController,
                     decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.all(10),
                       border: InputBorder.none,
+                      hintText: "abc@gmail.com"
                     ),
                     validator: (value) {
                       if (value == null ||
@@ -108,30 +107,28 @@ class SignInPageState extends State<SignInPage> {
                     padding: const EdgeInsets.all(5.0),
                     child: Text(
                       "Password",
-                      style: TextStyle(color: Colors.white, fontSize: 15),
+                      style: TextStyle(fontSize: 15),
                     ),
                   ),
                 ),
                 Container(
                   width: width * 0.9,
                   height: height * 0.06,
-                  padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
                     border: Border.all(
-                      color: Colors.white, // Set border color to red
-                      width: 2.0, // Set border width to 2 pixels (optional)
+                      width: 2.0, 
                     ),
                   ),
                   child: TextFormField(
                     controller: _passwordController,
                     obscureText: _obscureText,
                     decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(15),
                       border: InputBorder.none,
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.remove_red_eye),
                         onPressed: () {
-                          // toggle password visibility
                           setState(() {
                             _passwordController.text =
                                 _passwordController.text.replaceAll('•', '');
@@ -155,18 +152,14 @@ class SignInPageState extends State<SignInPage> {
                   alignment: Alignment.centerRight,
                   child: GestureDetector(
                       onTap: () {},
-                      child: Text(
+                      child:const Text(
                         "Forget your password?",
                         style: TextStyle(color: Colors.red),
                       )),
                 ),
                 SizedBox(height: height * 0.02),
-                Button("Enter", Colors.white, Colors.red, () {
-                  if (_formKey.currentState!.validate()) {
-                    // form is valid, submit the form
-                    String username = _emailController.text;
-                    String password = _passwordController.text;
-                    // TODO: implement form submission logic here
+                Button("Enter", Colors.white, Colors.black, () {
+                  if (_formKey.currentState!.validate()) {                   
                     _signIn();
                   }
                 }),
@@ -176,7 +169,7 @@ class SignInPageState extends State<SignInPage> {
                   children: [
                     const Text(
                       'Don\'t have an account? ',
-                      style: TextStyle(fontSize: 16, color: Colors.white),
+                      style: TextStyle(fontSize: 16,),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -190,7 +183,6 @@ class SignInPageState extends State<SignInPage> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
                         ),
                       ),
                     ),
@@ -210,7 +202,6 @@ class SignInPageState extends State<SignInPage> {
       action: SnackBarAction(
         label: 'Close',
         onPressed: () {
-          // Some action to take when the user presses the action button
         },
       ),
     );
@@ -238,7 +229,6 @@ class SignInPageState extends State<SignInPage> {
       if (userdata.containsKey('CompanyName')) {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => HomepageREC(user.uid, userdata)));
-        print("YES");
         _showSnackBar("Recruiter is successfully Sign in");
       } else {
         Navigator.push(

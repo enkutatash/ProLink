@@ -14,8 +14,12 @@ class ProjectSearch extends StatelessWidget {
         width: width,
         height: height*0.21,
         decoration: BoxDecoration(
-        color:Color(0XFF393939),
-          borderRadius: BorderRadius.circular(15)
+        color:Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(
+              width: 1.0, 
+              color: Colors.black, // Set the border color here
+            ),
         ),
         child: Stack(
           children:[ Column(
@@ -45,13 +49,13 @@ class ProjectSearch extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                          SizedBox(height: height*0.01,),
-                       const Text("Education",style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),),
+                       const Text("Education",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                       SizedBox(height: height*0.02,),
-                    const  Text("This is the detail of education project you can click the detail button",overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.white),)
+                    const  Text("This is the detail of education project you can click the detail button",overflow: TextOverflow.ellipsis,)
                       ],),
                   ),
                   
-                    Button("Join", Colors.black, Colors.white, (){}),
+                    Button("Join", Colors.white, Colors.black, (){}),
                   ],
                 ),
               )

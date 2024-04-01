@@ -12,13 +12,11 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
     theme: ThemeData(
-      brightness: Brightness.dark,
-        primaryColor: Colors.white, 
-        scaffoldBackgroundColor: Colors.black, 
-        iconTheme: IconThemeData(color: Colors.white,size: 15),
+        scaffoldBackgroundColor: Colors.white, // Set scaffold background color
+        // Other theme configurations...
       ),
-    home: SearchScreen()));
+    debugShowCheckedModeBanner: false,
+    home: WelcomePage()));
 }
 

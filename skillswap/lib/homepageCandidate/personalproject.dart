@@ -24,7 +24,7 @@ class ProjectScreen extends StatelessWidget {
         ),
         
       ),
-      floatingActionButton: FloatingActionButton(onPressed: (){},child: Icon(Icons.add,color: Colors.red,size: 30),
+      floatingActionButton: FloatingActionButton(onPressed: (){},child: Icon(Icons.add,color: Colors.black,size: 30),
       // mini:true,
        shape: CircleBorder(),
       backgroundColor: Colors.white,),

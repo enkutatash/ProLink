@@ -15,7 +15,11 @@ class Project extends StatelessWidget {
         height: height*0.23,
         decoration: BoxDecoration(
         color: Colors.white,
-          borderRadius: BorderRadius.circular(15)
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(
+              width: 1.0, 
+              color: Colors.black, // Set the border color here
+            ),
         ),
         child: Column(
           children: [
@@ -50,7 +54,7 @@ class Project extends StatelessWidget {
                     ],),
                 ),
                 
-                  Button("Detail", Colors.white, Colors.red, (){}),
+                  Button("Detail", Colors.white, Colors.black, (){}),
                 ],
               ),
             )
@@ -79,7 +83,7 @@ class Button extends StatelessWidget {
       style: ButtonStyle(
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0), // Set border radius
+            borderRadius: BorderRadius.circular(10.0), // Set border radius
           ),
         ),
         minimumSize: MaterialStateProperty.all(
