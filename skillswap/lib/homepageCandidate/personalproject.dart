@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:skillswap/homepageCandidate/project.dart';
+import 'package:skillswap/homepageCandidate/createProject.dart';
 
 class ProjectScreen extends StatelessWidget {
   const ProjectScreen({super.key});
@@ -8,10 +9,10 @@ class ProjectScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:const Text("My Projects"),
+        title: const Text("My Projects"),
         centerTitle: true,
       ),
-      body:const SingleChildScrollView(
+      body: const SingleChildScrollView(
         child: Column(
           children: [
             Project(),
@@ -22,12 +23,17 @@ class ProjectScreen extends StatelessWidget {
             Project(),
           ],
         ),
-        
       ),
-      floatingActionButton: FloatingActionButton(onPressed: (){},child: Icon(Icons.add,color: Colors.black,size: 30),
-      // mini:true,
-       shape: CircleBorder(),
-      backgroundColor: Colors.white,),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => CreateProjectPage()));
+        },
+        child: Icon(Icons.add, color: Colors.black, size: 30),
+        // mini:true,
+        shape: CircleBorder(),
+        backgroundColor: Colors.white,
+      ),
     );
   }
 }

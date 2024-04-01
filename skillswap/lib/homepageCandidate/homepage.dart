@@ -31,8 +31,8 @@ class _HomepageState extends State<Homepage> {
       HomeScreen(),
       SearchScreen(),
       ProjectScreen(),
-      Message(),
-      ProfilePage(widget.userdata, widget.userid),
+      ChatPage(),
+      ProfilePage(),
       
     ];
   }

@@ -1,33 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:skillswap/homepageCandidate/profile.dart';
+import 'package:skillswap/pages/aboutus.dart';
+import 'package:skillswap/pages/help.dart';
+import 'package:skillswap/pages/privacyPolicy.dart';
 
 class SettingsPage extends StatelessWidget {
   final String userName;
-
+  
   const SettingsPage({
     Key? key,
     required this.userName,
   }) : super(key: key);
 
-  Widget buildSettingItem({IconData? icon, String? title}) {
+  Widget buildSettingItem({IconData? icon, String? title, required VoidCallback navigate,}) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
         color: Colors.grey[200],
       ),
       padding: const EdgeInsets.all(20.0),
-      child: Row(
-        children: [
-          Icon(icon, color: Colors.black),
-          const SizedBox(width: 10.0),
-          Text(
-            title ?? '',
-            style: TextStyle(color: Colors.black),
-          ),
-          const Spacer(),
-          const Text('English', style: TextStyle(color: Colors.black)),
-          const SizedBox(width: 10.0),
-          Icon(Icons.navigate_next, color: Colors.black),
-        ],
+      child: InkWell(
+        onTap: navigate,
+        child: Row(
+          children: [
+            Icon(icon, color: Colors.black),
+            const SizedBox(width: 10.0),
+            Text(
+              title ?? '',
+              style: TextStyle(color: Colors.black),
+            ),
+            const Spacer(),
+            const Text('English', style: TextStyle(color: Colors.black)),
+            const SizedBox(width: 10.0),
+            Icon(Icons.navigate_next, color: Colors.black),
+          ],
+        ),
       ),
     );
   }
@@ -66,10 +73,10 @@ class SettingsPage extends StatelessWidget {
                 width: 390,
                 child: GestureDetector(
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => profilePage()),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ProfilePage()),
+                    );
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -146,26 +153,46 @@ class SettingsPage extends StatelessWidget {
                   buildSettingItem(
                     icon: Icons.notifications,
                     title: 'Notifications',
+                    navigate: (){}
                   ),
                   const SizedBox(height: 20.0),
                   buildSettingItem(
                     icon: Icons.language_rounded,
                     title: 'Language',
+                    navigate: (){}
                   ),
                   const SizedBox(height: 20.0),
                   buildSettingItem(
                     icon: Icons.privacy_tip_sharp,
                     title: 'Privacy',
+                     navigate: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PrivacyPolicyPage()),
+                      );
+                    },
                   ),
                   const SizedBox(height: 20.0),
                   buildSettingItem(
                     icon: Icons.help_center,
                     title: 'Help Center',
-                  ),
+                     navigate: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => HelpPage()),
+                            );
+                          },
+                          ),
                   const SizedBox(height: 20.0),
                   buildSettingItem(
                     icon: Icons.info,
                     title: 'About Us',
+                     navigate: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AboutUsPage()),
+                      );
+                    },
                   ),
                 ],
               ),

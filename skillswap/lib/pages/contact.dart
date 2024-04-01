@@ -2,14 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:lottie/lottie.dart';
 
-void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    title: 'Contact Page',
-    home: ContactPage(),
-  ));
-}
-
 class ContactPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -34,7 +26,7 @@ class ContactPage extends StatelessWidget {
 
 class ContactForm extends StatelessWidget {
   final String email = 'your@email.com';
-  final String linkedinUrl = 'https://www.linkedin.com/in/yourprofile/';
+  final String linkedinUrl = 'https://www.linkedin.com/in/enkutatash-eshetu-07159b240';
   final String githubUrl = 'https://github.com/yourusername';
   final String telegramUsername = 'your_telegram_username';
 
@@ -110,8 +102,8 @@ class ContactForm extends StatelessWidget {
   }
 
   _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
     } else {
       throw 'Could not launch $url';
     }
@@ -123,12 +115,12 @@ class ContactForm extends StatelessWidget {
       path: email,
       query: 'subject=Hello&body=How are you?',
     );
-    final String mailtoUrl = params.toString();
+    
 
-    if (await canLaunch(mailtoUrl)) {
-      await launch(mailtoUrl);
+    if (await canLaunchUrl(params)) {
+      await launchUrl(params);
     } else {
-      throw 'Could not launch $mailtoUrl';
+      throw 'Could not launch $params';
     }
   }
 }
