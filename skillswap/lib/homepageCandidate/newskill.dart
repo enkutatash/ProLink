@@ -75,9 +75,8 @@ class _NewSkillState extends State<NewSkill> {
             },
           );
         },
-        icon: Icon(
+        icon:const Icon(
           Icons.add_circle_outline_outlined,
-          color: Colors.red,
           size: 30,
         ));
   }

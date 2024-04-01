@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:skillswap/Front/signin.dart';
 import 'package:skillswap/homepageCandidate/homepage.dart';
 import 'package:skillswap/homepageCandidate/newskill.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatelessWidget {
   Map<String, dynamic> userdata;
@@ -32,7 +33,7 @@ class ProfilePage extends StatelessWidget {
                   icon: Icon(
                     Icons.logout_rounded,
                     color: Colors.red,
-                    size: 30,
+                    size: 25,
                   ),
                 ),
               ),
@@ -71,35 +72,21 @@ class ProfilePage extends StatelessWidget {
                 ),
                 NewSkill(),
               ]),
-              SizedBox(height: height * 0.03),
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  // Set the background color of the container
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey
-                          .withOpacity(0.3), // Set shadow color and opacity
-                      offset: Offset(
-                          -5, -5), // Move the shadow slightly upwards and left
-                      blurRadius: 10.0, // Adjust blur radius for softness
-                      spreadRadius: 2.0, // Spread the shadow slightly outwards
-                    ),
-                  ],
                 ),
                 child: Expanded(
                   child: Column(
                     children: [
-                      // SizedBox(height: height * 0.002),
                       Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: Colors.black,
                         ),
                         height: height * 0.3,
                         child: RawScrollbar(
                           thumbVisibility: true,
-                          thumbColor: Colors.redAccent,
+                          thumbColor: Colors.black,
                           radius: Radius.circular(20),
                           thickness: 5,
                           child: ListView.builder(
@@ -113,19 +100,9 @@ class ProfilePage extends StatelessWidget {
                                 padding: const EdgeInsets.all(8.0),
                                 height: height * 0.07,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    // Set the background color of the container
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        offset: Offset(1,
-                                            1), // Move the shadow slightly upwards and left
-                                        blurRadius:
-                                            5.0, // Adjust blur radius for softness
-                                        spreadRadius:
-                                            0.0, // Spread the shadow slightly outwards
-                                      ),
-                                    ]),
+                                  borderRadius: BorderRadius.circular(20),
+                                  // Set the background color of the container
+                                ),
                                 child: SkillLevel(
                                     skill['skill']!, skill['level']!),
                               );
@@ -137,7 +114,6 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: height * 0.03),
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -150,37 +126,27 @@ class ProfilePage extends StatelessWidget {
               ),
               SizedBox(height: height * 0.03),
               Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    // Set the background color of the container
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey
-                            .withOpacity(0.3), // Set shadow color and opacity
-                        offset: Offset(-5,
-                            -5), // Move the shadow slightly upwards and left
-                        blurRadius: 10.0, // Adjust blur radius for softness
-                        spreadRadius:
-                            2.0, // Spread the shadow slightly outwards
-                      ),
-                    ],
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    width: 1.0,
+                    color: Colors.black, // Set the border color here
                   ),
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.black,
-                    ),
-                    width: width * 0.9,
-                    child: Text(userdata['Bio']),
-                  )),
+                ),
+                constraints: const BoxConstraints(
+                  minHeight: 100.0,
+                ),
+                width: width * 0.9,
+                child: Text(userdata['Bio']),
+              ),
               SizedBox(height: height * 0.03),
               userdata['Linkedin'] != null && userdata['Linkedin'] != ''
-                  ? Align(
+                  ? const Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         'Linkedin',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                         ),
@@ -189,37 +155,69 @@ class ProfilePage extends StatelessWidget {
                   : Container(),
               SizedBox(height: height * 0.03),
               userdata['Linkedin'] != null && userdata['Linkedin'] != ''
-                  ? Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        // Set the background color of the container
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(
-                                0.3), // Set shadow color and opacity
-                            offset: Offset(-5,
-                                -5), // Move the shadow slightly upwards and left
-                            blurRadius: 10.0, // Adjust blur radius for softness
-                            spreadRadius:
-                                2.0, // Spread the shadow slightly outwards
-                          ),
-                        ],
-                      ),
+                  ? InkWell(
+                      onTap: () => _launchInBrowser('https://linkedin.com/in/',userdata['Linkedin']),
                       child: Container(
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: Colors.black,
+                          border: Border.all(
+                            width: 1.0,
+                            color: Colors.black, // Set the border color here
+                          ),
                         ),
                         width: width * 0.9,
                         child: Text(userdata['Linkedin']),
-                      ))
+                      ),
+                    )
+                  : Container(),
+              SizedBox(height: height * 0.03),
+              userdata['Github'] != null && userdata['Github'] != ''
+                  ? const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Github',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+                  : Container(),
+              SizedBox(height: height * 0.03),
+              userdata['Github'] != null && userdata['Github'] != ''
+                  ? InkWell(
+                    onTap: () => _launchInBrowser('https://github.com/',userdata['Github']),
+                    child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            width: 1.0,
+                            color: Colors.black, // Set the border color here
+                          ),
+                        ),
+                        width: width * 0.9,
+                        child: Text(userdata['Github']),
+                      ),
+                  )
                   : Container()
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future<void> _launchInBrowser(String app,String url) async {
+    final Uri toLaunch =
+        Uri.parse('$app$url');
+    if (!await launchUrl(
+      toLaunch,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
   }
 }
 
@@ -242,7 +240,10 @@ class _SkillLevelState extends State<SkillLevel> {
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Colors.black,
+        border: Border.all(
+          width: 1.0,
+          color: Colors.black, // Set the border color here
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -325,4 +326,3 @@ class _SkillLevelState extends State<SkillLevel> {
     );
   }
 }
-

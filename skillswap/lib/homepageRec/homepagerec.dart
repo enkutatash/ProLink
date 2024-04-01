@@ -52,7 +52,7 @@ class _HomepageRECState extends State<HomepageREC> {
             bottomNavigationBar: BottomNavigationBar(
               onTap: _currentScreen,
               currentIndex: _selectedScreen,
-              selectedItemColor:  Colors.red,
+              selectedItemColor:  Colors.black,
               unselectedItemColor: Colors.grey,
               iconSize: 30,
               items: const <BottomNavigationBarItem>[
