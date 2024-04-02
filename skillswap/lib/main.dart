@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:skillswap/Front/recruiterORuser.dart';
 import 'package:skillswap/firebase/firebase_options.dart';
+import 'package:skillswap/homepageRec/profile.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,6 +14,6 @@ void main() async {
         scaffoldBackgroundColor: Colors.white,
       ),
     debugShowCheckedModeBanner: false,
-    home: WelcomePage()));
+    home:WelcomePage()));
 }
 

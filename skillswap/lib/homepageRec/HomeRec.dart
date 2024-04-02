@@ -1,146 +1,104 @@
-
 import 'package:flutter/material.dart';
 
-class ProfileRecruiter extends StatelessWidget {
-  const ProfileRecruiter({super.key});
+class HomeRecruiter extends StatelessWidget {
+  const HomeRecruiter({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: Icon(
-          Icons.menu,
-          size: 20,
+       appBar: AppBar(
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: const Icon(Icons.menu), // Hamburger icon
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              );
+            },
+          ),
+          title: const Text(''), // Empty title
         ),
-        actions: [
-          Icon(
-                Icons.notifications,
-              size: 20,
-            )
-        ],
-      ),
-      body: Column(
-        children: [
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Row(children: [
-              CircleAvatar(
-                radius: 60,
-                backgroundImage:
-                    AssetImage('asset/profile_img.jpg'),
-              ),
-              SizedBox(
-                width: 20,
-              ),
-              Text(
-                "Hello , Recruiter",
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
-              )
-            ]),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          const Text(
-            "Users with specific skills",
-            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
-          ),
-          Expanded(
-            child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                children: const [
-                  UsersListing(
-                    username: 'user 1',
-                    skilldescription: 'skill description 1',
-                    imageUrl: 'asset/profile_img.jpg',
-                  ),
-                  UsersListing(
-                    username: 'user 2',
-                    skilldescription: 'skill description 2',
-                    imageUrl: 'asset/profile_img.jpg',
-                  ),
-                  UsersListing(
-                    username: 'user 3',
-                    skilldescription: 'skill description 3',
-                    imageUrl: 'asset/profile_img.jpg',
-                  ),
-                ]),
-          ),
-        ],
-      ),
-      // bottomNavigationBar: const BottomNavigation(),
-    );
-  }
-}
-
-class UsersListing extends StatelessWidget {
-  final String username;
-  final String skilldescription;
-  final String imageUrl;
-  const UsersListing(
-      {required this.username,
-      required this.skilldescription,
-      required this.imageUrl,
-      super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            offset: const Offset(0, 2),
-            blurRadius: 4,
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CircleAvatar(
-            radius: 20,
-            backgroundImage: AssetImage(imageUrl),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20),
+            const Row(
               children: [
-                Text(
-                  username,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+                CircleAvatar(
+                  backgroundImage: AssetImage(
+                      'asset/profile_img.jpg'), // Add your profile picture asset here
+                  radius: 30,
                 ),
-                const SizedBox(height: 4),
+                SizedBox(width: 10),
                 Text(
-                  skilldescription,
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                ElevatedButton(
-                  onPressed: () {
-                  const ButtonStyle(
-                      foregroundColor:MaterialStatePropertyAll(
-                          Color.fromARGB(255, 249, 248, 245)),
-                      backgroundColor:MaterialStatePropertyAll(
-                          Color.fromARGB(255, 24, 21, 12)),
-                    );
-                    // Add your code for contacting
-                  },
-                  child: const Text('contact'),
+                  'Hello, recruiter',
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
+            const SizedBox(height: 20),
+            const Text(
+              'Users with Specific Skills',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: 18), // Bold text style
+            ),
+            const SizedBox(height: 10),
+            _buildUserRow('asset/image 1.png', 'Username 1',
+                'Skill Description 1', context),
+            _buildUserRow('asset/image 2.png', 'Username 2',
+                'Skill Description 2', context),
+            _buildUserRow('asset/image 3.png', 'Username 3',
+                'Skill Description 3', context),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+Widget _buildUserRow(String profileImage, String username, String skillDescription, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              CircleAvatar(
+                backgroundImage: AssetImage(profileImage),
+                radius: 25,
+              ),
+              const SizedBox(width: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    username,
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  Text(
+                    skillDescription,
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          ElevatedButton(
+            onPressed: () {
+              // Add onPressed functionality for contact button here
+            },
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+            ),
+            child: const Text('Contact'),
           ),
         ],
       ),
     );
   }
-}
+

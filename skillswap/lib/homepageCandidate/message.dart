@@ -37,7 +37,8 @@ class _ChatPageState extends State<ChatPage> {
     int incomingMessagesCount = messages.length;
 
     int totalNotifications = collaborationRequestsCount + incomingMessagesCount;
-
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -218,8 +219,9 @@ class _ChatPageState extends State<ChatPage> {
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 16.0),
                       child: Container(
+                        width: width*0.9,
                         padding: EdgeInsets.all(16.0),
-                        height: 100,
+                        height: height*0.12,
                         decoration: BoxDecoration(
                           color: Colors.grey[200],
                           borderRadius: BorderRadius.circular(10.0),
@@ -276,15 +278,21 @@ class _ChatPageState extends State<ChatPage> {
                                   style: TextStyle(
                                     fontSize: 16,
                                     color: Colors.black,
+                                    
                                   ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ],
                             ),
-                            Text(
-                              messages[index]['timestamp'] ?? '12:00 PM',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black,
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: Text(
+                                messages[index]['timestamp'] ?? '12:00 PM',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ],
