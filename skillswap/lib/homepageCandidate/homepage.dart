@@ -29,9 +29,10 @@ class _HomepageState extends State<Homepage> {
    
     AllScreens = [
       HomeScreen(),
-      SearchScreen(),
+      Search_Screen(),
       ProjectScreen(),
       Message(),
+     
       ProfilePage(widget.userdata, widget.userid),
       
     ];
