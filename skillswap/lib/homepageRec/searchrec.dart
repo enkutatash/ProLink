@@ -36,7 +36,7 @@ class _SearchRecState extends State<SearchRec> {
                   children: [
                     GestureDetector(
                       onTap: () {},
-                      child: Text(
+                      child:const Text(
                         "User",
                         style: TextStyle(fontSize: 20),
                       ),
