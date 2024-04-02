@@ -28,8 +28,8 @@ class _HomepageState extends State<Homepage> {
     super.initState();
    
     AllScreens = [
-      HomeScreen(),
-      SearchScreen(),
+      HomeScreen(widget.userdata,widget.userid),
+      Search_Screen(),
       ProjectScreen(),
       ChatPage(),
       ProfilePage(),

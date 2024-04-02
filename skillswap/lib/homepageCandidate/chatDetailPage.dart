@@ -9,7 +9,7 @@ class ChatDetailPage extends StatelessWidget {
   final bool isMessageSeen;
 
   ChatDetailPage({
-    this.avatar = 'assets/avatar1.png',
+    this.avatar = 'asset/image 1.png',
     this.name = 'John Doe',
     this.message = 'Hello, how are you doing?',
     this.timestamp = '12:00 PM',

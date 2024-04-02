@@ -3,14 +3,14 @@ import 'chatDetailPage.dart';
 
 List<Map<String, dynamic>> messages = [
   {
-    'avatar': 'assets/avatar.png',
+    'avatar': 'asset/image 1.png',
     'name': 'John Doe',
     'message': 'Hello, how are you doing?',
     'timestamp': '12:00 PM',
     'online': true,
   },
   {
-    'avatar': 'assets/avatar2.png',
+    'avatar': 'asset/image 2.png',
     'name': 'Jane Smith',
     'message': 'Can we meet tomorrow?',
     'timestamp': '10:00 AM',

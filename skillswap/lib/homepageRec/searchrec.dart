@@ -47,8 +47,7 @@ class _SearchRecState extends State<SearchRec> {
                     )
                   ],
                 ),
-                UserSearch(),
-                UserSearch(),
+                
                 ProjectSearch(),
                 ProjectSearch()
               ],

@@ -2,7 +2,9 @@
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  Map<String, dynamic> userdata;
+  final String userid;
+   HomeScreen(this.userdata,this.userid,{super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,16 +28,17 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Row(
+              Row(
                 children: [
                   // Profile picture on the left side of "Hello, user"
-                  CircleAvatar(
-                    radius: 50, // Adjust the size of the CircleAvatar
-                    backgroundImage: AssetImage('asset/profile_img.jpg'),
+                 CircleAvatar(
+                    radius: 30.0,
+                    backgroundImage:
+                        NetworkImage(userdata['profilePic']),
                   ),
                   SizedBox(width: 10.0),
                   Text(
-                    'Hello, user',
+                    "${userdata['First']} ${userdata['Last']}",
                     style: TextStyle(fontSize: 24.0),
                   ),
                 ],
@@ -70,7 +73,7 @@ class HomeScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
                         image: const DecorationImage(
-                          image: NetworkImage('asset/image 1.png'),
+                          image: AssetImage('asset/image 1.png'),
                           fit: BoxFit.cover,
                         ),
                       ),
