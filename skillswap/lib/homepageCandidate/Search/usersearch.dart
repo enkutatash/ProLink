@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:skillswap/homepageCandidate/Search/persondetail.dart';
 
 class UserSearch extends StatelessWidget {
   Map<String, dynamic> userdata;
   String userid;
 
-   UserSearch(  this.userdata,this.userid,
-{super.key});
+  UserSearch(this.userdata, this.userid, {super.key});
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return InkWell(
-      onTap: (){},
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PersonalDetail(userdata, userid)));
+      },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
@@ -20,11 +25,11 @@ class UserSearch extends StatelessWidget {
           width: width,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color:Colors.white,
+            color: Colors.white,
             border: Border.all(
-                width: 1.0, 
-                color: Colors.black, // Set the border color here
-              ),
+              width: 1.0,
+              color: Colors.black, // Set the border color here
+            ),
           ),
           child: Row(
             children: [
@@ -41,15 +46,31 @@ class UserSearch extends StatelessWidget {
                     fit: BoxFit.cover,
                     userdata['profilePic']),
               ),
-              SizedBox(width: width*0.02,),
+              SizedBox(
+                width: width * 0.02,
+              ),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('${userdata['First']} ${userdata['Last']}',style: TextStyle(fontSize: 20,),),
-                    Text('${userdata['Bio']}',overflow: TextOverflow.ellipsis,)
-                  ],
+                child: InkWell(
+                  onTap: () {
+                    print(userdata['Skills']);
+                    _dialogBuilder(context, userdata);
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '${userdata['First']} ${userdata['Last']}',
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
+                      Text(
+                        '${userdata['Bio']}',
+                        overflow: TextOverflow.ellipsis,
+                      )
+                    ],
+                  ),
                 ),
               )
             ],
@@ -58,4 +79,29 @@ class UserSearch extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> _dialogBuilder(BuildContext context, userdata) {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+          title: Text('${userdata['First']} ${userdata['Last']}'),
+          content: Container(
+            width: double.maxFinite,
+            child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: userdata['Skills'].length,
+                itemBuilder: (context, index) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('${userdata['Skills'][index]['skill']}'),
+                      Text('${userdata['Skills'][index]['level']}')
+                    ],
+                  );
+                }),
+          ));
+    },
+  );
 }

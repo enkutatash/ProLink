@@ -15,7 +15,6 @@ class Search_Screen extends StatefulWidget {
 class _Search_ScreenState extends State<Search_Screen> {
   final TextEditingController _search = TextEditingController();
   late final Firebase_Service _auth;
-
   List _allUser = [];
   List _searchResult = [];
   allUser() async {
@@ -30,24 +29,25 @@ class _Search_ScreenState extends State<Search_Screen> {
   }
 
   searchResult() {
-    var showResult = [];
-    if (_search.text != "") {
-      for (var u in _allUser) {
-        var skill = u['Skills'];
-        print(skill);
-        bool skillInclude = skill.any((string) =>
-            string.toLowerCase().contains(_search.text.toLowerCase()));
-        if (skillInclude) {
+  var showResult = [];
+  if (_search.text.isNotEmpty) {
+    for (var u in _allUser) {
+      List<Map<String, dynamic>> skills = List<Map<String, dynamic>>.from(u['Skills']);
+      for (var skill in skills) {
+        if (skill['skill'].toLowerCase().contains(_search.text.toLowerCase())) {
           showResult.add(u);
+          break; // Exit the loop once a match is found for efficiency
         }
       }
-    } else {
-      showResult = List.from(_allUser);
     }
-    setState(() {
-      _searchResult = showResult;
-    });
+  } else {
+    showResult = List.from(_allUser);
   }
+  setState(() {
+    _searchResult = showResult;
+  });
+}
+
 
   @override
   void initState() {
