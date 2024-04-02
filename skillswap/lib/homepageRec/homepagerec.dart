@@ -32,7 +32,7 @@ class _HomepageRECState extends State<HomepageREC> {
     AllScreens = [
     
     HomeRecruiter(),
-    SearchRec(),
+    // SearchRec(),
     MessageRec(),
     ProfileRec()
       

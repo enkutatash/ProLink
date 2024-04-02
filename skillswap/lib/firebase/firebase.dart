@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Firebase_Service {
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -8,6 +9,8 @@ class Firebase_Service {
       FirebaseFirestore.instance.collection('Users');
   final CollectionReference dbrefREC =
       FirebaseFirestore.instance.collection('Recruiter');
+  final CollectionReference dbrefproject =
+      FirebaseFirestore.instance.collection('Project');
   late BuildContext _context;
 
   Firebase_Service(BuildContext context) {
@@ -124,8 +127,33 @@ class Firebase_Service {
       'Bio': bio,
       'Skills': skillsWithLevel,
       'Linkedin': linkedin,
-      'Github': github
+      'Github': github,
+      'MyProjects': [],
+      'WorkingOnPro': []
     });
+  }
+
+  Future createProject(
+      String projectimg,
+      String projectTitle,
+      String projectDescription,
+      String userid,
+      List<String> skillReq,
+      List<String> teams) async {
+    var now = new DateTime.now();
+    var formatter = new DateFormat('yyyy-MM-dd');
+    String formattedDate = formatter.format(now);
+    DocumentReference docref = await dbrefproject.add({
+      'Projectimg': projectimg,
+      'ProjectTitle': projectTitle,
+      'ProjectDes': projectDescription,
+      'Owner': userid,
+      'SkillReq': skillReq,
+      'Teams': teams,
+      'TimeStamp': formattedDate
+    });
+    addProjectToUser(userid, docref.id);
+    _showSnackBar("Project successfully created");
   }
 
   Future<User?> signInWithEmailAndPassword(
@@ -168,8 +196,44 @@ class Firebase_Service {
     }
   }
 
-  Future<void> addNewSkill(String uid) async {
-    
+    Future<Map<String, dynamic>> ProjectData(String docid) async {
+    try {
+      DocumentSnapshot snapshot = await dbrefproject.doc(docid).get();
+      if (snapshot.exists) {
+        Map<String, dynamic> userdata = snapshot.data() as Map<String, dynamic>;
+        return userdata;
+      } else {
+        snapshot = await dbrefREC.doc(docid).get();
+        if (snapshot.exists) {
+          Map<String, dynamic> userdata =
+              snapshot.data() as Map<String, dynamic>;
+          return userdata;
+        }
+
+        return {}; // Return empty map if the document doesn't exist
+      }
+    } catch (e) {
+      print("Error fetching user data: $e");
+      return {}; // Return empty map if there's an error
+    }
+  }
+
+  Future<void> addProjectToUser(String userid, String projectid) async {
+    DocumentSnapshot userSnapshot = await dbrefuser.doc(userid).get();
+
+    if (userSnapshot.exists) {
+      print("start");
+      List currentPProj = userSnapshot.get('MyProjects');
+
+      currentPProj.add(projectid);
+
+      await dbrefuser.doc(userid).update({
+        'MyProjects': currentPProj,
+      });
+      print("project added");
+    } else {
+      throw Exception('User document not found');
+    }
   }
 
   void signout() {

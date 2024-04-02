@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:skillswap/homepageCandidate/createProject.dart';
 import 'package:skillswap/homepageCandidate/homescreen.dart';
 import 'package:skillswap/homepageCandidate/message.dart';
 import 'package:skillswap/homepageCandidate/personalproject.dart';
@@ -30,8 +31,9 @@ class _HomepageState extends State<Homepage> {
     AllScreens = [
       HomeScreen(widget.userdata,widget.userid),
       Search_Screen(),
-      ProjectScreen(),
+      ProjectScreen(widget.userdata,widget.userid),
       ChatPage(),
+      
       ProfilePage(),
       
     ];

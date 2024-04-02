@@ -1,23 +1,36 @@
 import 'dart:io';
-
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:skillswap/firebase/firebase.dart';
+import 'package:skillswap/homepageCandidate/personalproject.dart';
 
 class CreateProjectPage extends StatefulWidget {
+  Map<String, dynamic> userdata;
+  final String userid;
+  CreateProjectPage(this.userdata, this.userid,
+      {Key? key})
+      : super(key: key);
+
   @override
-  _CreateProjectPageState createState() => _CreateProjectPageState();
+  State<CreateProjectPage> createState() => _CreateProjectPageState();
 }
 
 class _CreateProjectPageState extends State<CreateProjectPage> {
   late TextEditingController _titleController;
   late TextEditingController _descriptionController;
   late TextEditingController _itemsNeededController;
-  String? _backgroundImagePath;
+  late final Firebase_Service _auth;
+  String? imagePath;
+  File? _image;
+  String? downloadUrl;
 
   @override
   void initState() {
     super.initState();
+    _auth = Firebase_Service(context);
     _titleController = TextEditingController();
     _descriptionController = TextEditingController();
     _itemsNeededController = TextEditingController();
@@ -31,6 +44,32 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
     super.dispose();
   }
 
+  Future<void> pickImage() async {
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (image == null) return;
+    // For mobile platforms, set the image directly
+    final imageTemp = File(image.path);
+    setState(() {
+      imagePath = imageTemp.path;
+      _image = imageTemp;
+    });
+    final Reference storageReference = FirebaseStorage.instance
+        .ref()
+        .child('images')
+        .child('${DateTime.now()}.jpg');
+
+    try {
+      // Upload the image to Firebase Storage
+      await storageReference.putFile(_image!);
+
+      // Retrieve the download URL of the uploaded image
+      downloadUrl = await storageReference.getDownloadURL();
+    } catch (e) {
+      // Handle any errors that occur during the upload process
+      print('Error uploading image: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,114 +77,64 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
         title: Text('Create Project'),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: GestureDetector(
-                onTap: () async {
-                  PermissionStatus status = await Permission.photos.request();
-                  if (status.isGranted) {
-                    final pickedFile = await ImagePicker()
-                        .pickImage(source: ImageSource.gallery);
-                    if (pickedFile != null) {
-                      setState(() {
-                        _backgroundImagePath = pickedFile.path;
-                        print("Background Image Path: $_backgroundImagePath");
-                      });
-                    }
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Permission denied'),
-                      ),
-                    );
-                  }
-                },
-                child: Stack(
-                  children: [
-                    Container(
-                      width: 150,
-                      height: 150,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: _backgroundImagePath != null
-                            ? null
-                            : Colors.grey[300],
-                        image: _backgroundImagePath != null
-                            ? DecorationImage(
-                                image: FileImage(File(_backgroundImagePath!)),
-                                fit: BoxFit.cover,
-                              )
-                            : null,
-                      ),
-                      child: _backgroundImagePath == null
-                          ? Center(
-                              child: Icon(
-                                Icons.camera_alt,
-                                size: 50,
-                                color: Colors.grey[600],
-                              ),
-                            )
-                          : null,
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.camera_alt,
-                          color: Colors.grey[600],
-                        ),
-                        onPressed: () async {
-                          final pickedFile = await ImagePicker()
-                              .pickImage(source: ImageSource.gallery);
-                          if (pickedFile != null) {
-                            setState(() {
-                              _backgroundImagePath = pickedFile.path;
-                              print(
-                                  "Background Image Path: $_backgroundImagePath");
-                            });
-                          }
-                        },
-                      ),
-                    ),
-                  ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                  child: Stack(children: [
+                CircleAvatar(
+                  radius: 40.0,
+                  backgroundImage: imagePath != null
+                      ? FileImage(File(imagePath!))
+                      : NetworkImage(
+                          "https://images.rawpixel.com/image_png_social_square/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png"),
+                  child: imagePath == null ? Icon(Icons.person) : null,
+                ),
+                Positioned(
+                    top: 45,
+                    right: -10,
+                    child: IconButton(
+                        onPressed: pickImage,
+                        icon: const Icon(
+                          Icons.camera_alt_outlined,
+                          size: 30,
+                          color: Colors.black,
+                        )))
+              ])),
+              SizedBox(height: 20),
+              Text(
+                'Project Title',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              TextFormField(
+                controller: _titleController,
+                decoration: InputDecoration(
+                  hintText: 'Enter project title',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Project Title',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            TextFormField(
-              controller: _titleController,
-              decoration: InputDecoration(
-                hintText: 'Enter project title',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
+              SizedBox(height: 20),
+              Text(
+                'Project Description',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Project Description',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            TextFormField(
-              controller: _descriptionController,
-              decoration: InputDecoration(
-                hintText: 'Enter project description',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
+              TextFormField(
+                controller: _descriptionController,
+                decoration: InputDecoration(
+                  hintText: 'Enter project description',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
                 ),
+                maxLines: 3,
               ),
-              maxLines: 3,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: Container(
@@ -154,7 +143,17 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
           width: double.infinity,
           height: 50,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+            _auth.createProject(
+                downloadUrl!,
+                _titleController.text,
+                _descriptionController.text,
+                widget.userid,
+                [],
+                [],
+              );
+              Navigator.pop(context);
+            },
             style: ButtonStyle(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
@@ -176,10 +175,4 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: CreateProjectPage(),
-  ));
 }

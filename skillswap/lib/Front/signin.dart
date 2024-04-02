@@ -227,11 +227,13 @@ class SignInPageState extends State<SignInPage> {
       await _fetchUserData(user.uid);
       print(userdata);
       if (userdata.containsKey('CompanyName')) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomepageREC(user.uid, userdata)));
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomepageREC(user.uid, userdata)),
+);
         _showSnackBar("Recruiter is successfully Sign in");
       } else {
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => Homepage(user.uid, userdata)));

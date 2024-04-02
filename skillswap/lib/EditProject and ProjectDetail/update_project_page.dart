@@ -18,7 +18,7 @@ class UpdateProjectPage extends StatelessWidget {
             const Center(
               child: CircleAvatar(
                 radius: 50,
-                backgroundImage: AssetImage('assets/personal_picture.png'),
+                backgroundImage: NetworkImage('https://edukitapp.com/img/blog/blog-23.jpg'),
               ),
             ),
             const SizedBox(height: 40),

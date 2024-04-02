@@ -1,7 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:skillswap/firebase/firebase.dart';
 
-class Project extends StatelessWidget {
-  const Project({super.key});
+class Project extends StatefulWidget {
+  String projectid;
+ Project(this.projectid,{super.key});
+
+  @override
+  State<Project> createState() => _ProjectState();
+}
+
+class _ProjectState extends State<Project> {
+  late final  Map<String, dynamic> projectdetail;
+  late final Firebase_Service _auth;
+
+ @override
+void initState() {
+  super.initState();
+  _fetchProjectData();
+}
+
+Future<void> _fetchProjectData() async {
+  _auth = Firebase_Service(context);
+  projectdetail = await _auth.ProjectData(widget.projectid);
+  setState(() {}); // Update the UI after fetching data
+}
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +56,7 @@ class Project extends StatelessWidget {
                   height: height * 0.13,
                   width: width ,
                   fit: BoxFit.cover,
-                  "https://edukitapp.com/img/blog/blog-23.jpg"),
+                  projectdetail['Projectimg']),
             ),
             Padding(
               padding: const EdgeInsets.only(left:8.0,right: 8),
@@ -48,9 +70,9 @@ class Project extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                        SizedBox(height: height*0.01,),
-                     const Text("Education",style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),),
+                      Text('${projectdetail['ProjectTitle']}',style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),),
                     SizedBox(height: height*0.02,),
-                  const  Text("This is the detail of education project you can click the detail button",overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.black),)
+                  Text('${projectdetail['ProjectDes']}',overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.black),)
                     ],),
                 ),
                 

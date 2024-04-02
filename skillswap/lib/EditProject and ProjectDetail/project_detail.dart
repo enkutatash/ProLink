@@ -11,6 +11,8 @@ class ProjectDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Fetch project details based on the profileId here
+     double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
@@ -18,17 +20,24 @@ class ProjectDetailPage extends StatelessWidget {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
+        padding: EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 80),
-            const Center(
-              child: CircleAvatar(
-                radius: 50,
-                backgroundImage: AssetImage('assets/personal_picture.png'),
+              ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(15.0),
+                  topRight: Radius.circular(15.0),
+                  bottomLeft: Radius.circular(0.0),
+                  bottomRight: Radius.circular(0.0),
+                ),
+                child: Image.network(
+                    height: height * 0.2,
+                    width: width ,
+                    fit: BoxFit.cover,
+                    "https://edukitapp.com/img/blog/blog-23.jpg"),
               ),
-            ),
-
             const SizedBox(height: 40),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
