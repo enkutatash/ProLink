@@ -27,6 +27,7 @@ class _HelpPageState extends State<HelpPage> {
       appBar: AppBar(
         title: const Text('Help Center'),
         centerTitle: true,
+        backgroundColor: Colors.white,
       ),
       body: ListView.builder(
         itemCount: _helpItems.length,

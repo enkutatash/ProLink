@@ -83,6 +83,7 @@ class _Search_ScreenState extends State<Search_Screen> {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: CupertinoSearchTextField(
           controller: _search,
         ),

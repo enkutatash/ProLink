@@ -85,7 +85,7 @@ class SignUpPageState extends State<SignUpPage> {
                 const Text(
                   "SkillSwap",
                   style: TextStyle(
-                    fontSize: 40,
+                    fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
@@ -111,7 +111,7 @@ class SignUpPageState extends State<SignUpPage> {
                             icon: const Icon(
                               Icons.camera_alt_outlined,
                               size: 30,
-                              color: Colors.black,
+                              color: Color(0XFF2E307A),
                             )))
                   ]),
                 ),
@@ -125,10 +125,8 @@ class SignUpPageState extends State<SignUpPage> {
                       height: height * 0.06,
                       padding: EdgeInsets.all(5),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(
-                          width: 2.0,
-                        ),
+                      borderRadius: BorderRadius.circular(10),
+                       color: Color(0XFF7980C2),
                       ),
                       child: TextFormField(
                         controller: _firstnameController,
@@ -153,16 +151,15 @@ class SignUpPageState extends State<SignUpPage> {
                       height: height * 0.06,
                       padding: EdgeInsets.all(5),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(
-                          width: 2.0,
-                        ),
+                        borderRadius: BorderRadius.circular(10),
+                        color: Color(0XFF7980C2),
                       ),
                       child: TextFormField(
                         controller: _lastnameController,
                         decoration: const InputDecoration(
                           contentPadding: EdgeInsets.all(10),
                           border: InputBorder.none,
+
                           hintText: 'Last name',
                         ),
                         validator: (value) {
@@ -193,10 +190,8 @@ class SignUpPageState extends State<SignUpPage> {
                   height: height * 0.06,
                   padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                      width: 2.0, 
-                    ),
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color(0XFF7980C2),
                   ),
                   child: TextFormField(
                     controller: _emailnameController,
@@ -229,17 +224,16 @@ class SignUpPageState extends State<SignUpPage> {
                   height: height * 0.06,
                   padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                      width: 2.0, // Set border width to 2 pixels (optional)
-                    ),
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color(0XFF7980C2),
                   ),
                   child: TextFormField(
                     controller: _passwordController,
                     obscureText: _obscureText,
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(15),
+                      contentPadding: EdgeInsets.all(10),
                       border: InputBorder.none,
+                      hintText: "*********",
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.remove_red_eye),
                         onPressed: () {
@@ -277,16 +271,15 @@ class SignUpPageState extends State<SignUpPage> {
                   height: height * 0.06,
                   padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                      width: 2.0, 
-                    ),
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color(0XFF7980C2),
                   ),
                   child: TextFormField(
                     controller: _githubcontroller,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.all(15),
                       border: InputBorder.none,
+                      hintText: "alicebob"
                     ),
                   ),
                 ),
@@ -305,16 +298,15 @@ class SignUpPageState extends State<SignUpPage> {
                   height: height * 0.06,
                   padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                      width: 2.0, 
-                    ),
+                    borderRadius: BorderRadius.circular(10),
+                   color: Color(0XFF7980C2),
                   ),
                   child: TextFormField(
                     controller: _linkedincontroller,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.all(15),
                       border: InputBorder.none,
+                      hintText: "alicebob"
                     ),
                   ),
                 ),
@@ -334,10 +326,7 @@ class SignUpPageState extends State<SignUpPage> {
                   padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: Colors.grey, // Set border color
-                      width: 2.0, // Set border width (optional)
-                    ),
+                    color: Color(0XFF7980C2),
                   ),
                   child: TextFormField(
                     controller: _biocontroller,
@@ -360,7 +349,7 @@ class SignUpPageState extends State<SignUpPage> {
                   },
                 ),
                 SizedBox(height: height * 0.03),
-                Button("Sign Up", Colors.white, Colors.black, () {
+                Button("Sign Up", Colors.white, Color(0XFF2E307A), () {
                   if (_formKey.currentState!.validate()) {
                     // form is valid, submit the form
                     _signUp();
@@ -372,7 +361,7 @@ class SignUpPageState extends State<SignUpPage> {
                   children: [
                     const Text(
                       'already have an account? ',
-                      style: TextStyle(fontSize: 16, ),
+                      style: TextStyle(fontSize: 16,color: Color(0XFF7980C2), ),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -386,6 +375,7 @@ class SignUpPageState extends State<SignUpPage> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
+                          color: Color(0XFF2E307A)
                         ),
                       ),
                     ),

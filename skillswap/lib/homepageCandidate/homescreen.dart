@@ -1,27 +1,17 @@
 // Import required libraries
 import 'package:flutter/material.dart';
+import 'package:skillswap/homepageCandidate/Search/search.dart';
 
 class HomeScreen extends StatelessWidget {
   Map<String, dynamic> userdata;
   final String userid;
-   HomeScreen(this.userdata,this.userid,{super.key});
+  HomeScreen(this.userdata, this.userid, {super.key});
 
   @override
   Widget build(BuildContext context) {
-     double width = MediaQuery.of(context).size.width;
+    double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(
-        // Three-line button icon at the top of the page
-        leading: IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () {
-            // Add your menu button onPressed logic here
-          },
-        ),
-        // Remove title from the app bar
-        title: null,
-      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -31,16 +21,28 @@ class HomeScreen extends StatelessWidget {
               Row(
                 children: [
                   // Profile picture on the left side of "Hello, user"
-                 CircleAvatar(
+                  CircleAvatar(
                     radius: 30.0,
-                    backgroundImage:
-                        NetworkImage(userdata['profilePic']),
+                    backgroundImage: NetworkImage(userdata['profilePic']),
                   ),
                   SizedBox(width: 10.0),
                   Text(
                     "${userdata['First']} ${userdata['Last']}",
                     style: TextStyle(fontSize: 24.0),
                   ),
+                  Spacer(),
+
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Search_Screen()));
+                        },
+                        icon: Icon(Icons.search,color:Color(0XFF2E307A),size: 35,)),
+                  )
                 ],
               ),
               const SizedBox(height: 20.0),
@@ -51,7 +53,8 @@ class HomeScreen extends StatelessWidget {
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
-                      const Color.fromARGB(255, 12, 12, 12)),
+                    Color(0XFF7980C2),
+                  ),
                   shape: MaterialStateProperty.all<OutlinedBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
@@ -59,17 +62,16 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
                       'Connect with peers for growth',
-                      style: TextStyle(fontSize: 18.0, color: Colors.white),
+                      style: TextStyle(fontSize: 14.0, color: Colors.white),
                     ),
-                    const SizedBox(width: 10.0),
-                    // Picture on the right side with larger size
                     Container(
-                      width:width*0.1 , // Adjust the width of the container
-                      height: height*0.1, // Adjust the height of the container
+                      width: width * 0.12, // Adjust the width of the container
+                      height:
+                          height * 0.1, // Adjust the height of the container
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
                         image: const DecorationImage(
@@ -113,6 +115,7 @@ class HomeScreen extends StatelessWidget {
                             const Text(
                               'Join a global community', // Text in normal font
                               style: TextStyle(fontSize: 16.0),
+                              overflow: TextOverflow.ellipsis,
                             ),
                             const SizedBox(height: 10.0),
                             // Connect button
@@ -123,7 +126,7 @@ class HomeScreen extends StatelessWidget {
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
-                                        Colors.black),
+                                        Color(0XFF2E307A)),
                               ),
                               child: const Text(
                                 'Join now',
@@ -143,7 +146,8 @@ class HomeScreen extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.0),
                           image: const DecorationImage(
-                            image: NetworkImage('https://edukitapp.com/img/blog/blog-23.jpg'),
+                            image: NetworkImage(
+                                'https://edukitapp.com/img/blog/blog-23.jpg'),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -167,7 +171,8 @@ class HomeScreen extends StatelessWidget {
                     // Profile picture
                     CircleAvatar(
                       radius: 30, // Adjust the size of the CircleAvatar
-                      backgroundImage: NetworkImage('https://edukitapp.com/img/blog/blog-23.jpg'),
+                      backgroundImage: NetworkImage(
+                          'https://edukitapp.com/img/blog/blog-23.jpg'),
                     ),
                     SizedBox(width: 10.0),
                     // Project name and online icon

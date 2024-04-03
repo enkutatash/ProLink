@@ -5,11 +5,13 @@ import 'package:skillswap/pages/help.dart';
 import 'package:skillswap/pages/privacyPolicy.dart';
 
 class SettingsPage extends StatelessWidget {
-  final String userName;
+  Map<String, dynamic> userdata;
+  final String userid;
   
-  const SettingsPage({
+  SettingsPage({
     Key? key,
-    required this.userName,
+    required this.userdata,
+    required this.userid
   }) : super(key: key);
 
   Widget buildSettingItem({IconData? icon, String? title, required VoidCallback navigate,}) {
@@ -45,6 +47,7 @@ class SettingsPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Settings'),
         centerTitle: true,
+        backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -75,13 +78,13 @@ class SettingsPage extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ProfilePage()),
+                      MaterialPageRoute(builder: (context) => ProfilePage(userdata,userid)),
                     );
                   },
-                  child: Container(
+                  child: Container(  
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20.0),
-                      color: const Color.fromARGB(255, 29, 58, 84),
+                     color: Color(0XFF7980C2),
                     ),
                     padding: const EdgeInsets.symmetric(
                       horizontal: 40.0,
@@ -89,20 +92,16 @@ class SettingsPage extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        Container(
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.black,
-                          ),
-                          padding: const EdgeInsets.all(8.0),
-                          child: const CircleAvatar(),
+                        CircleAvatar(
+                          radius: 30.0,
+                          backgroundImage: NetworkImage(userdata['profilePic']),
                         ),
                         const SizedBox(width: 16.0),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              userName,
+                               "${userdata['First']} ${userdata['Last']}",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
@@ -110,7 +109,7 @@ class SettingsPage extends StatelessWidget {
                             ),
                             SizedBox(height: 4.0),
                             Text(
-                              '$userName@gmail.com',
+                              '${userdata['Email']}',
                               style: TextStyle(
                                 color: Colors.white,
                               ),

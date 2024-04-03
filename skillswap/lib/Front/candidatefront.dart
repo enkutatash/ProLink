@@ -26,15 +26,17 @@ class FrontPage extends StatelessWidget {
                 const Text(
                   "Welcome to skill swap & start exchanging",
                   style: TextStyle(
-                      fontSize: 30,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
-               
+                SizedBox(
+              height: height * 0.07,
+            ),
                 const Text(
                   "Discover,Connect,Exchange skills effortlessly",
                   style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 14,
                       fontWeight: FontWeight.w400),
                   textAlign: TextAlign.center,
                 ),
@@ -44,10 +46,22 @@ class FrontPage extends StatelessWidget {
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.handshake),
-                    Icon(Icons.people_rounded),
-                    Icon(Icons.speaker_phone_outlined),
-                    Icon(Icons.message)
+                   Icon(
+                  Icons.handshake,
+                  color: Color(0XFF2E307A),
+                ),
+                Icon(
+                  Icons.people_rounded,
+                  color: Color(0XFF2E307A),
+                ),
+                Icon(
+                  Icons.speaker_phone_outlined,
+                  color: Color(0XFF2E307A),
+                ),
+                Icon(
+                  Icons.message,
+                  color: Color(0XFF2E307A),
+                )
                   ],
                 ),
                 SizedBox(
@@ -55,14 +69,14 @@ class FrontPage extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    Button("Sign in", Colors.black, Colors.white, () {
+                    Button("Sign in",Color(0XFF2E307A), Colors.white, () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => SignInPage()));
                     }),
                     SizedBox(
                       width: width * 0.03,
                     ),
-                    Button("Sign Up", Colors.white, Colors.black, () {
+                    Button("Sign Up", Colors.white, Color(0XFF2E307A), () {
                        Navigator.push(context,
                           MaterialPageRoute(builder: (context) => SignUpPage()));
                     }),
@@ -75,7 +89,7 @@ class FrontPage extends StatelessWidget {
                   onTap: () {},
                   child: const Text(
                     "Explore as a guest",
-                    style: TextStyle( fontSize: 17),
+                    style: TextStyle( color: Color(0XFF2E307A),fontSize: 17),
                   ),
                 )
               ],
@@ -101,7 +115,7 @@ class Button extends StatelessWidget {
       style: ButtonStyle(
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0), // Set border radius
+            borderRadius: BorderRadius.circular(10.0), // Set border radius
           ),
         ),
         minimumSize: MaterialStateProperty.all(

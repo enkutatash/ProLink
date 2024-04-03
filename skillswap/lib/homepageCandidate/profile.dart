@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:skillswap/pages/contact.dart';
 import 'package:skillswap/pages/setting.dart';
 
+
+
 class ProfilePage extends StatelessWidget {
+  Map<String, dynamic> userdata;
+  final String userid;
+  ProfilePage(this.userdata, this.userid,{super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.menu),
         title: Text('Profile'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {},
-          ),
-        ],
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -31,24 +32,23 @@ class ProfilePage extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image.asset(
-                      'asset/image 1.png',
-                      width: 60,
-                      height: 60,
-                      fit: BoxFit.cover,
-                    ),
+                   CircleAvatar(
+                    radius: 30.0,
+                    backgroundImage: NetworkImage(userdata['profilePic']),
+                  ),
                     SizedBox(width: 16),
-                    const Column(
+                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Name',
+                          "${userdata['First']} ${userdata['Last']}",
                           style: TextStyle(
                               fontSize: 24, fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          'Passionate developer exploring new \n skills',
+                          '${userdata['Bio']}',
                           style: TextStyle(fontSize: 16),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
@@ -71,7 +71,7 @@ class ProfilePage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                SettingsPage(userName: "Enku")));
+                                SettingsPage(userdata: userdata,userid: userid,)));
                   },
                   child: Text('Settings')),
             ),

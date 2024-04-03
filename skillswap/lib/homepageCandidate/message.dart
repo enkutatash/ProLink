@@ -39,12 +39,11 @@ class _ChatPageState extends State<ChatPage> {
     int totalNotifications = collaborationRequestsCount + incomingMessagesCount;
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return 
+      
+    Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
-          elevation: 10,
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back,
@@ -55,18 +54,9 @@ class _ChatPageState extends State<ChatPage> {
               Navigator.pop(context);
             },
           ),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                'Messages',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                ),
-              ),
+          title: Text("Messages"),
+          centerTitle: true,
+          actions: <Widget>[
               Stack(
                 children: [
                   IconButton(
@@ -98,7 +88,6 @@ class _ChatPageState extends State<ChatPage> {
               ),
             ],
           ),
-        ),
         body: Container(
           padding: EdgeInsets.all(16.0),
           color: Colors.white,
@@ -108,20 +97,25 @@ class _ChatPageState extends State<ChatPage> {
               Text(
                 'Collaboration Requests',
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color:Color(0XFF2E307A),
                 ),
               ),
               SizedBox(height: 16.0),
               Container(
                 padding: EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
-                  color: Colors.grey[200],
+                color: Color.fromARGB(255, 207, 210, 236),
                   borderRadius: BorderRadius.circular(10.0),
                   boxShadow: [
-                    BoxShadow(color: Colors.black, offset: Offset(1.0, 1.0))
-                  ],
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.5), // Shadow color (with opacity)
+        spreadRadius: 1, // Extends the shadow beyond the box
+        blurRadius: 1,
+        offset: Offset(0, 3), // Shifts the shadow (x, y)
+      ),
+    ],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,7 +130,7 @@ class _ChatPageState extends State<ChatPage> {
                               'John Doe',
                               textAlign: TextAlign.start,
                               style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
                               ),
@@ -145,7 +139,7 @@ class _ChatPageState extends State<ChatPage> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 MaterialButton(
-                                  color: Colors.black,
+                                  color: Colors.green.shade500,
                                   onPressed: () {},
                                   child: Text(
                                     'Accept',
@@ -157,7 +151,7 @@ class _ChatPageState extends State<ChatPage> {
                                 ),
                                 SizedBox(width: 8.0),
                                 MaterialButton(
-                                  color: Colors.black,
+                                  color: Colors.red.shade500,
                                   onPressed: () {},
                                   child: Text(
                                     'Decline',
@@ -188,7 +182,7 @@ class _ChatPageState extends State<ChatPage> {
               Text(
                 'Incoming Messages',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
@@ -223,22 +217,23 @@ class _ChatPageState extends State<ChatPage> {
                         padding: EdgeInsets.all(16.0),
                         height: height*0.12,
                         decoration: BoxDecoration(
-                          color: Colors.grey[200],
+                            color: Color.fromARGB(255, 207, 210, 236),
                           borderRadius: BorderRadius.circular(10.0),
                           boxShadow: [
-                            BoxShadow(
-                              color: Color.fromARGB(255, 71, 67, 67),
-                              offset: Offset(1.0, 1.0),
-                            ),
-                          ],
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.5), // Shadow color (with opacity)
+        spreadRadius: 1, // Extends the shadow beyond the box
+        blurRadius: 1,
+        offset: Offset(0, 3), // Shifts the shadow (x, y)
+      ),
+    ],
                         ),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Stack(
                               children: [
                                 CircleAvatar(
-                                  radius: 32.0,
+                                  radius: 30.0,
                                   // image: AssetImage('assets/avatar1.png'),
                                 ),
                                 Positioned(
@@ -261,26 +256,30 @@ class _ChatPageState extends State<ChatPage> {
                                 ),
                               ],
                             ),
+                            SizedBox(width: width*0.01,),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   messages[index]['name'] ?? 'Unknown',
                                   style: TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
                                   ),
                                 ),
                                 SizedBox(height: 4.0),
-                                Text(
-                                  messages[index]['message'] ?? '',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                    
+                                Container(
+                                  width: width*0.5,
+                                  child: Text(
+                                    messages[index]['message'] ?? '',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                      
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ],
                             ),
@@ -305,7 +304,7 @@ class _ChatPageState extends State<ChatPage> {
             ],
           ),
         ),
-      ),
-    );
+      )
+    ;
   }
 }

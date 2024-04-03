@@ -56,7 +56,7 @@ class SignInPageState extends State<SignInPage> {
                 const Text(
                   "SkillSwap",
                   style: TextStyle(
-                    fontSize: 30,
+                    fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
@@ -78,10 +78,8 @@ class SignInPageState extends State<SignInPage> {
                   width: width * 0.9,
                   height: height * 0.06,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                      width: 2.0, 
-                    ),
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color(0XFF7980C2),
                   ),
                   child: TextFormField(
                     controller: _emailController,
@@ -115,10 +113,9 @@ class SignInPageState extends State<SignInPage> {
                   width: width * 0.9,
                   height: height * 0.06,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                      width: 2.0, 
-                    ),
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color(0XFF7980C2),
+                  
                   ),
                   child: TextFormField(
                     controller: _passwordController,
@@ -126,6 +123,7 @@ class SignInPageState extends State<SignInPage> {
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.all(15),
                       border: InputBorder.none,
+                      hintText: "********",
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.remove_red_eye),
                         onPressed: () {
@@ -158,7 +156,7 @@ class SignInPageState extends State<SignInPage> {
                       )),
                 ),
                 SizedBox(height: height * 0.02),
-                Button("Enter", Colors.white, Colors.black, () {
+                Button("Enter", Colors.white, Color(0XFF2E307A), () {
                   if (_formKey.currentState!.validate()) {                   
                     _signIn();
                   }
@@ -169,7 +167,7 @@ class SignInPageState extends State<SignInPage> {
                   children: [
                     const Text(
                       'Don\'t have an account? ',
-                      style: TextStyle(fontSize: 16,),
+                      style: TextStyle(fontSize: 16,color: Color(0XFF7980C2)),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -183,6 +181,7 @@ class SignInPageState extends State<SignInPage> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
+                          color: Color(0XFF2E307A)
                         ),
                       ),
                     ),
@@ -285,7 +284,7 @@ class Button extends StatelessWidget {
       style: ButtonStyle(
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0), // Set border radius
+            borderRadius: BorderRadius.circular(10.0), // Set border radius
           ),
         ),
         minimumSize: MaterialStateProperty.all(

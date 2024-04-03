@@ -18,6 +18,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: const Text("My Projects"),
         centerTitle: true,
       ),
@@ -34,7 +35,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
               MaterialPageRoute(
                   builder: (context) => CreateProjectPage(widget.userdata, widget.userid)));
         },
-        child: Icon(Icons.add, color: Colors.black, size: 30),
+        child: Icon(Icons.add, color:Color(0XFF2E307A), size: 30),
         // mini:true,
         shape: CircleBorder(),
         backgroundColor: Colors.white,

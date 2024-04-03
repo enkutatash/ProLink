@@ -30,11 +30,9 @@ class _HomepageState extends State<Homepage> {
    
     AllScreens = [
       HomeScreen(widget.userdata,widget.userid),
-      Search_Screen(),
       ProjectScreen(widget.userdata,widget.userid),
       ChatPage(),
-      
-      ProfilePage(),
+      ProfilePage(widget.userdata,widget.userid),
       
     ];
   }
@@ -58,10 +56,6 @@ class _HomepageState extends State<Homepage> {
               items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
                   icon: Icon(Icons.home),
-                  label: "",
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.search),
                   label: "",
                 ),
                 BottomNavigationBarItem(

@@ -25,11 +25,15 @@ class UserSearch extends StatelessWidget {
           width: width,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: Colors.white,
-            border: Border.all(
-              width: 1.0,
-              color: Colors.black, // Set the border color here
-            ),
+            color: Color.fromARGB(255, 207, 210, 236),
+            boxShadow: [
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.5), // Shadow color (with opacity)
+        spreadRadius: 2, // Extends the shadow beyond the box
+        blurRadius: 5, // Blurs the edges of the shadow
+        offset: Offset(0, 3), // Shifts the shadow (x, y)
+      ),
+    ],
           ),
           child: Row(
             children: [

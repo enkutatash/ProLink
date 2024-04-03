@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:skillswap/EditProject%20and%20ProjectDetail/project_detail.dart';
+import 'package:path/path.dart';
 import 'package:skillswap/Front/recruiterORuser.dart';
 import 'package:skillswap/firebase/firebase_options.dart';
-import 'package:skillswap/homepageCandidate/createProject.dart';
-import 'package:skillswap/homepageRec/profile.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MaterialApp(
-    theme: ThemeData(
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
+        fontFamily: "RobotoMono"
       ),
-    debugShowCheckedModeBanner: false,
-    home:WelcomePage() ));
+      debugShowCheckedModeBanner: false,
+      home: WelcomePage(),
+    );
+  }
 }
 

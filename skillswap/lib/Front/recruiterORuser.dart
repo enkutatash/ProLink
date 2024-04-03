@@ -26,7 +26,7 @@ class WelcomePage extends StatelessWidget {
                 const Text(
                   "Welcome to Skill Swap ",
                   style: TextStyle(
-                      fontSize: 30,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
@@ -39,7 +39,7 @@ class WelcomePage extends StatelessWidget {
                   "Discover,Connect,Exchange skills effortlessly",
                   style: TextStyle(
                      
-                      fontSize: 15,
+                      fontSize: 14,
                       fontWeight: FontWeight.w400),
                   textAlign: TextAlign.center,
                 ),
@@ -48,10 +48,10 @@ class WelcomePage extends StatelessWidget {
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.handshake),
-                    Icon(Icons.people_rounded),
-                    Icon(Icons.speaker_phone_outlined),
-                    Icon(Icons.message)
+                    Icon(Icons.handshake,color:  Color(0XFF2E307A),),
+                    Icon(Icons.people_rounded,color:  Color(0XFF2E307A),),
+                    Icon(Icons.speaker_phone_outlined,color:  Color(0XFF2E307A),),
+                    Icon(Icons.message,color:  Color(0XFF2E307A),)
                   ],
                 ),
                 SizedBox(
@@ -59,14 +59,14 @@ class WelcomePage extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    Button("Find Talent", Colors.black, Colors.white, () {
+                    Button("Find Talent",  Color(0XFF2E307A), Colors.white, () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => FrontPageRec()));
                     }),
                     SizedBox(
                       width: width * 0.03,
                     ),
-                    Button("Find Collaborators", Colors.white, Colors.black, () {
+                    Button("Collaborators", Colors.white, Color(0XFF2E307A), () {
                        Navigator.push(context,
                           MaterialPageRoute(builder: (context) => FrontPage()));
                     }),
@@ -79,7 +79,7 @@ class WelcomePage extends StatelessWidget {
                   onTap: () {},
                   child: const Text(
                     "Explore as a guest",
-                    style: TextStyle(color: Colors.black, fontSize: 17),
+                    style: TextStyle(color: Color(0XFF2E307A), fontSize: 16),
                   ),
                 )
               ],
@@ -105,7 +105,7 @@ class Button extends StatelessWidget {
       style: ButtonStyle(
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0), // Set border radius
+            borderRadius: BorderRadius.circular(10.0), // Set border radius
           ),
         ),
         minimumSize: MaterialStateProperty.all(

@@ -8,7 +8,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:skillswap/Front/signin.dart';
 import 'package:skillswap/firebase/firebase.dart';
 import 'package:skillswap/firebase/skills.dart';
-import 'package:skillswap/homepageCandidate/homepage.dart';
 import 'package:skillswap/homepageRec/homepagerec.dart';
 
 class SignUpRecPage extends StatefulWidget {
@@ -85,7 +84,7 @@ class SignUpRecPageState extends State<SignUpRecPage> {
                 const Text(
                   "SkillSwap",
                   style: TextStyle(
-                    fontSize: 40,
+                    fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
@@ -111,7 +110,7 @@ class SignUpRecPageState extends State<SignUpRecPage> {
                             icon: const Icon(
                               Icons.camera_alt_outlined,
                               size: 30,
-                              color: Colors.black,
+                              color:Color(0XFF2E307A),
                             )))
                   ]),
                 ),
@@ -125,10 +124,8 @@ class SignUpRecPageState extends State<SignUpRecPage> {
                       height: height * 0.06,
                       padding: EdgeInsets.all(5),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(
-                          width: 2.0,
-                        ),
+                        borderRadius: BorderRadius.circular(10),
+                        color: Color(0XFF7980C2),
                       ),
                       child: TextFormField(
                         controller: _firstnameController,
@@ -153,10 +150,8 @@ class SignUpRecPageState extends State<SignUpRecPage> {
                       height: height * 0.06,
                       padding: EdgeInsets.all(5),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(
-                          width: 2.0, 
-                        ),
+                        borderRadius: BorderRadius.circular(10),
+                        color: Color(0XFF7980C2),
                       ),
                       child: TextFormField(
                         controller: _lastnameController,
@@ -184,7 +179,7 @@ class SignUpRecPageState extends State<SignUpRecPage> {
                     padding: const EdgeInsets.all(5.0),
                     child: Text(
                       "Email",
-                      style: TextStyle( fontSize: 15),
+                      style: TextStyle( fontSize: 16),
                     ),
                   ),
                 ),
@@ -193,10 +188,8 @@ class SignUpRecPageState extends State<SignUpRecPage> {
                   height: height * 0.06,
                   padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                      width: 2.0, 
-                    ),
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color(0XFF7980C2),
                   ),
                   child: TextFormField(
                     controller: _emailnameController,
@@ -220,7 +213,7 @@ class SignUpRecPageState extends State<SignUpRecPage> {
                     padding: const EdgeInsets.all(5.0),
                     child: Text(
                       "Password",
-                      style: TextStyle(fontSize: 15),
+                      style: TextStyle(fontSize: 16),
                     ),
                   ),
                 ),
@@ -229,17 +222,16 @@ class SignUpRecPageState extends State<SignUpRecPage> {
                   height: height * 0.06,
                   padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                      width: 2.0, 
-                    ),
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color(0XFF7980C2),
                   ),
                   child: TextFormField(
                     controller: _passwordController,
                     obscureText: _obscureText,
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(15),
+                      contentPadding: EdgeInsets.all(10),
                       border: InputBorder.none,
+                      hintText: '********',
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.remove_red_eye),
                         onPressed: () {
@@ -268,7 +260,7 @@ class SignUpRecPageState extends State<SignUpRecPage> {
                     padding: const EdgeInsets.all(5.0),
                     child: Text(
                       "Company Name",
-                      style: TextStyle(fontSize: 15),
+                      style: TextStyle(fontSize: 16),
                     ),
                   ),
                 ),
@@ -277,16 +269,15 @@ class SignUpRecPageState extends State<SignUpRecPage> {
                   height: height * 0.06,
                   padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                      width: 2.0, 
-                    ),
+                    borderRadius: BorderRadius.circular(10),
+                   color: Color(0XFF7980C2),
                   ),
                   child: TextFormField(
                     controller: _companynamecontroller,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.all(15),
                       border: InputBorder.none,
+                       hintText: 'Name',
                     ),
                   ),
                 ),
@@ -296,7 +287,7 @@ class SignUpRecPageState extends State<SignUpRecPage> {
                     padding: const EdgeInsets.all(5.0),
                     child: Text(
                       "Linked In",
-                      style: TextStyle(fontSize: 15),
+                      style: TextStyle(fontSize: 16),
                     ),
                   ),
                 ),
@@ -305,16 +296,15 @@ class SignUpRecPageState extends State<SignUpRecPage> {
                   height: height * 0.06,
                   padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                      width: 2.0, 
-                    ),
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color(0XFF7980C2),
                   ),
                   child: TextFormField(
                     controller: _linkedincontroller,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.all(15),
                       border: InputBorder.none,
+                       hintText: 'alicebob',
                     ),
                   ),
                 ),
@@ -328,7 +318,7 @@ class SignUpRecPageState extends State<SignUpRecPage> {
                   },
                 ),
                 SizedBox(height: height * 0.03),
-                Button("Sign Up", Colors.white, Colors.black, () {
+                Button("Sign Up", Colors.white, Color(0XFF2E307A), () {
                   if (_formKey.currentState!.validate()) {
                     // form is valid, submit the form
                     _signUp();
@@ -340,7 +330,7 @@ class SignUpRecPageState extends State<SignUpRecPage> {
                   children: [
                     const Text(
                       'already have an account? ',
-                      style: TextStyle(fontSize: 16,),
+                      style: TextStyle(fontSize: 16,color: Color(0XFF7980C2),),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -354,7 +344,7 @@ class SignUpRecPageState extends State<SignUpRecPage> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          
+                          color: Color(0XFF2E307A)
                         ),
                       ),
                     ),
@@ -458,7 +448,7 @@ class Button extends StatelessWidget {
       style: ButtonStyle(
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0), // Set border radius
+            borderRadius: BorderRadius.circular(10.0), // Set border radius
           ),
         ),
         minimumSize: MaterialStateProperty.all(

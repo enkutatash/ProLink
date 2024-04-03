@@ -120,14 +120,31 @@ class _DropdownState extends State<Dropdown> {
 
   @override
   Widget build(BuildContext context) {
+     final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // use this button to open the multi-select dialog
         ElevatedButton(
-          onPressed: _showMultiSelect,
-          child: Text(widget.skill,style: TextStyle(color: Colors.black),),
+      onPressed:  _showMultiSelect,
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0), // Set border radius
+          ),
         ),
+        minimumSize: MaterialStateProperty.all(
+            Size(width * 0.4, height * 0.05)), // Set width and height
+        backgroundColor:
+            MaterialStateProperty.all<Color>(Color(0XFF7980C2),), // Set color to red
+      ),
+      child: Text(
+      widget.skill,
+        style: TextStyle(color: Color(0XFF2E307A)),
+      ),
+    ),
+        
         const Divider(
           height: 30,
         ),

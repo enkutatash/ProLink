@@ -16,12 +16,16 @@ class ProjectSearch extends StatelessWidget {
         width: width,
         height: height * 0.21,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Color.fromARGB(255, 207, 210, 236),
           borderRadius: BorderRadius.circular(15),
-          border: Border.all(
-            width: 1.0,
-            color: Colors.black, // Set the border color here
-          ),
+           boxShadow: [
+         BoxShadow(
+        color: Colors.grey.withOpacity(0.5), // Shadow color (with opacity)
+        spreadRadius: 2, // Extends the shadow beyond the box
+        blurRadius: 5, // Blurs the edges of the shadow
+        offset: Offset(0, 3), // Shifts the shadow (x, y)
+      ),
+    ],
         ),
         child: Stack(children: [
           Column(

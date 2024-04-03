@@ -35,6 +35,7 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
       appBar: AppBar(
         title: const Text('Privacy Policy'),
         centerTitle: true,
+        backgroundColor: Colors.white,
       ),
       body: ListView.builder(
         itemCount: _policyItems.length,
