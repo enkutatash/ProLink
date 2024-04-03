@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:path/path.dart';
+import 'package:skillswap/Project/projectcontroller.dart';
 import 'package:skillswap/firebase/firebase.dart';
 import 'package:skillswap/homepageCandidate/project.dart';
 import 'package:skillswap/homepageCandidate/createProject.dart';
@@ -16,26 +18,36 @@ class ProjectScreen extends StatefulWidget {
 class _ProjectScreenState extends State<ProjectScreen> {
   @override
   Widget build(BuildContext context) {
+    final ProjectController projectController = Get.find();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: const Text("My Projects"),
         centerTitle: true,
       ),
-      body: ListView.builder(
-        itemCount: widget.userdata['MyProjects'].length,
-        itemBuilder: (context, index) {
-          return Project(widget.userdata['MyProjects'][index]);
-        },
-      ),
+      body: Obx(() {
+        if (projectController.Project.isEmpty) {
+          return const Center(
+            child: Text("No project"),
+          );
+        } else {
+          return ListView.builder(
+            itemCount: projectController.Project.length,
+            itemBuilder: (context, index) {
+              return Project(projectController.Project[index]);
+            },
+          );
+        }
+      }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => CreateProjectPage(widget.userdata, widget.userid)));
+                  builder: (context) =>
+                      CreateProjectPage(widget.userdata, widget.userid)));
         },
-        child: Icon(Icons.add, color:Color(0XFF2E307A), size: 30),
+        child: Icon(Icons.add, color: Color(0XFF2E307A), size: 30),
         // mini:true,
         shape: CircleBorder(),
         backgroundColor: Colors.white,

@@ -1,29 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:skillswap/firebase/firebase.dart';
 
-class Project extends StatefulWidget {
-  String projectid;
- Project(this.projectid,{super.key});
-
-  @override
-  State<Project> createState() => _ProjectState();
-}
-
-class _ProjectState extends State<Project> {
-  late final  Map<String, dynamic> projectdetail;
-  late final Firebase_Service _auth;
-
- @override
-void initState() {
-  super.initState();
-  _fetchProjectData();
-}
-
-Future<void> _fetchProjectData() async {
-  _auth = Firebase_Service(context);
-  projectdetail = await _auth.ProjectData(widget.projectid);
-  setState(() {}); // Update the UI after fetching data
-}
+class Project extends StatelessWidget {
+  Map<String, dynamic> projectdata;
+  Project(this.projectdata, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,18 +13,19 @@ Future<void> _fetchProjectData() async {
       padding: const EdgeInsets.all(20.0),
       child: Container(
         width: width,
-        height: height*0.23,
+        height: height * 0.23,
         decoration: BoxDecoration(
           color: Color.fromARGB(255, 207, 210, 236),
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
-         BoxShadow(
-        color: Colors.grey.withOpacity(0.5), // Shadow color (with opacity)
-        spreadRadius: 2, // Extends the shadow beyond the box
-        blurRadius: 5, // Blurs the edges of the shadow
-        offset: Offset(0, 3), // Shifts the shadow (x, y)
-      ),
-    ],
+            BoxShadow(
+              color:
+                  Colors.grey.withOpacity(0.5), // Shadow color (with opacity)
+              spreadRadius: 2, // Extends the shadow beyond the box
+              blurRadius: 5, // Blurs the edges of the shadow
+              offset: Offset(0, 3), // Shifts the shadow (x, y)
+            ),
+          ],
         ),
         child: Column(
           children: [
@@ -58,40 +38,52 @@ Future<void> _fetchProjectData() async {
               ),
               child: Image.network(
                   height: height * 0.13,
-                  width: width ,
+                  width: width,
                   fit: BoxFit.cover,
-                  projectdetail['Projectimg']),
+                  projectdata['Projectimg']),
             ),
             Padding(
-              padding: const EdgeInsets.only(left:8.0,right: 8),
+              padding: const EdgeInsets.only(left: 8.0, right: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                Expanded(
-                  child:   Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                       SizedBox(height: height*0.01,),
-                      Text('${projectdetail['ProjectTitle']}',style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),),
-                    SizedBox(height: height*0.02,),
-                  Text('${projectdetail['ProjectDes']}',overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.black),)
-                    ],),
-                ),
-                
-                  Button("Detail", Colors.white, Color(0XFF2E307A), (){}),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: height * 0.01,
+                        ),
+                        Text(
+                          '${projectdata['ProjectTitle']}',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: height * 0.02,
+                        ),
+                        Text(
+                          '${projectdata['ProjectDes']}',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: Colors.black),
+                        )
+                      ],
+                    ),
+                  ),
+                  Button("Detail", Colors.white, Color(0XFF2E307A), () {}),
                 ],
               ),
             )
-      
           ],
         ),
       ),
     );
   }
 }
-
 
 class Button extends StatelessWidget {
   final String text;
@@ -124,4 +116,3 @@ class Button extends StatelessWidget {
     );
   }
 }
-
