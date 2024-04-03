@@ -2,17 +2,17 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:skillswap/Project/projectcontroller.dart';
 import 'package:skillswap/firebase/firebase.dart';
 import 'package:skillswap/homepageCandidate/personalproject.dart';
 
 class CreateProjectPage extends StatefulWidget {
   Map<String, dynamic> userdata;
   final String userid;
-  CreateProjectPage(this.userdata, this.userid,
-      {Key? key})
-      : super(key: key);
+  CreateProjectPage(this.userdata, this.userid, {Key? key}) : super(key: key);
 
   @override
   State<CreateProjectPage> createState() => _CreateProjectPageState();
@@ -23,6 +23,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
   late TextEditingController _descriptionController;
   late TextEditingController _itemsNeededController;
   late final Firebase_Service _auth;
+  ProjectController projectController = Get.put(ProjectController.empty());
   String? imagePath;
   File? _image;
   String? downloadUrl;
@@ -76,6 +77,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
       appBar: AppBar(
         title: Text('Create Project'),
         centerTitle: true,
+        backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -144,7 +146,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
           height: 50,
           child: ElevatedButton(
             onPressed: () {
-            _auth.createProject(
+              _auth.createProject(
                 downloadUrl!,
                 _titleController.text,
                 _descriptionController.text,
@@ -152,6 +154,13 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                 [],
                 [],
               );
+              projectController.addProject(
+                  downloadUrl!,
+                  _titleController.text,
+                  _descriptionController.text,
+                  widget.userid,
+                  [],
+                  []);
               Navigator.pop(context);
             },
             style: ButtonStyle(
@@ -161,7 +170,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                 ),
               ),
               backgroundColor: MaterialStateProperty.all<Color>(
-                const Color.fromARGB(255, 29, 58, 84),
+                const Color(0XFF2E307A),
               ),
             ),
             child: Text(

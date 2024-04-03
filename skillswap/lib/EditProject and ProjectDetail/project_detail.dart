@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ProjectDetailPage extends StatelessWidget {
-  final String profileId;
+    Map<String, dynamic> projectdata;
+   ProjectDetailPage({ super.key,  required this.projectdata});
 
-  
-  const ProjectDetailPage({ super.key,  required this.profileId});
 
-  // Fetch project details based on the profileId here
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +16,13 @@ class ProjectDetailPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Project Details'),
         centerTitle: true,
+        backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 80),
               ClipRRect(
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(15.0),
@@ -36,7 +34,8 @@ class ProjectDetailPage extends StatelessWidget {
                     height: height * 0.2,
                     width: width ,
                     fit: BoxFit.cover,
-                    "https://edukitapp.com/img/blog/blog-23.jpg"),
+                    projectdata['Projectimg']
+                    ),
               ),
             const SizedBox(height: 40),
             Container(
@@ -49,10 +48,8 @@ class ProjectDetailPage extends StatelessWidget {
                     height: 2,
                   //  color: Colors.black,
                   ),
-
-
                   const SizedBox(height: 20),
-                  const Text(
+                   Text(
                     'Project Title',
                     style: TextStyle(fontSize: 16),
                   ),
@@ -60,12 +57,13 @@ class ProjectDetailPage extends StatelessWidget {
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                         color: const Color.fromARGB(255, 250, 248, 244),
+                         color: Color.fromARGB(255, 207, 210, 236),
                     ),
                   child:  SizedBox(
                     height: 40,
                     child: TextFormField(
                      // initialValue: 'Project Title', // Replace with fetched data
+                     initialValue: '${projectdata['ProjectTitle']}',
                       readOnly: true,
                       decoration: const InputDecoration(
                         border: InputBorder.none,
@@ -82,19 +80,20 @@ class ProjectDetailPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   const Text(
-                    'Project Duration',
+                    'Time Stamp',
                     style: TextStyle(fontSize: 16),
                   ),
                   const SizedBox(height: 8),
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: const Color.fromARGB(255, 250, 248, 244),
+                      color: Color.fromARGB(255, 207, 210, 236),
                     ),
                   child: SizedBox(
                     height: 40,
                     child: TextFormField(
                      // initialValue: 'Project Duration', // Replace with fetched data
+                     initialValue: '${projectdata['TimeStamp']}',
                       readOnly: true,
                       decoration: const InputDecoration(
                         border: InputBorder.none,
@@ -116,12 +115,13 @@ class ProjectDetailPage extends StatelessWidget {
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                       color: const Color.fromARGB(255, 250, 248, 244),
+                      color: Color.fromARGB(255, 207, 210, 236),
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: TextFormField(
                       //  initialValue: 'Project Description', // Replace with fetched data
+                      initialValue: '${projectdata['ProjectDes']}',
                         readOnly: true,
                         maxLines: null,
                         decoration: const InputDecoration(

@@ -24,8 +24,16 @@ class _HomepageState extends State<Homepage> {
 
   @override
   void initState() {
-    Get.put(ProjectController(widget.userdata['MyProjects']));
+    
     super.initState();
+    List<dynamic>? myProjects = widget.userdata['MyProjects'];
+
+  if (myProjects != null) {
+    Get.put(ProjectController(myProjects));
+  } else {
+    Get.put(ProjectController.empty());
+  }
+
 
     AllScreens = [
       HomeScreen(widget.userdata, widget.userid),

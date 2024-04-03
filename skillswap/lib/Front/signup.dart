@@ -277,7 +277,7 @@ class SignUpPageState extends State<SignUpPage> {
                   child: TextFormField(
                     controller: _githubcontroller,
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(15),
+                      contentPadding: EdgeInsets.all(10),
                       border: InputBorder.none,
                       hintText: "alicebob"
                     ),
@@ -304,7 +304,7 @@ class SignUpPageState extends State<SignUpPage> {
                   child: TextFormField(
                     controller: _linkedincontroller,
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(15),
+                      contentPadding: EdgeInsets.all(10),
                       border: InputBorder.none,
                       hintText: "alicebob"
                     ),

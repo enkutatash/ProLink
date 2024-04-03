@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:skillswap/EditProject%20and%20ProjectDetail/project_detail.dart';
 
 class Project extends StatelessWidget {
   Map<String, dynamic> projectdata;
@@ -74,7 +75,13 @@ class Project extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Button("Detail", Colors.white, Color(0XFF2E307A), () {}),
+                  Button("Detail", Colors.white, Color(0XFF2E307A), () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ProjectDetailPage(projectdata: projectdata)));
+                  }),
                 ],
               ),
             )
