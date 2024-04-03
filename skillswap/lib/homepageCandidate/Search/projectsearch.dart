@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:skillswap/firebase/firebase.dart';
+import 'package:skillswap/homepageCandidate/Search/projectdetailtojoin.dart';
 
 class ProjectSearch extends StatelessWidget {
-  String projectid;
-  ProjectSearch(this.projectid, {super.key});
+  Map<String, dynamic> projectdata;
+  ProjectSearch(this.projectdata, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,87 +13,97 @@ class ProjectSearch extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(8),
-      child: Container(
-        width: width,
-        height: height * 0.21,
-        decoration: BoxDecoration(
-          color: Color.fromARGB(255, 207, 210, 236),
-          borderRadius: BorderRadius.circular(15),
-           boxShadow: [
-         BoxShadow(
-        color: Colors.grey.withOpacity(0.5), // Shadow color (with opacity)
-        spreadRadius: 2, // Extends the shadow beyond the box
-        blurRadius: 5, // Blurs the edges of the shadow
-        offset: Offset(0, 3), // Shifts the shadow (x, y)
-      ),
-    ],
-        ),
-        child: Stack(children: [
-          Column(
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(15.0),
-                  topRight: Radius.circular(15.0),
-                  bottomLeft: Radius.circular(0.0),
-                  bottomRight: Radius.circular(0.0),
-                ),
-                child: Image.network(
-                    height: height * 0.11,
-                    width: width,
-                    fit: BoxFit.cover,
-                    "https://edukitapp.com/img/blog/blog-23.jpg"),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      ProjectDetailJoin(projectdata: projectdata)));
+        },
+        child: Container(
+          width: width,
+          height: height * 0.21,
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 207, 210, 236),
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                color:
+                    Colors.grey.withOpacity(0.5), // Shadow color (with opacity)
+                spreadRadius: 2, // Extends the shadow beyond the box
+                blurRadius: 5, // Blurs the edges of the shadow
+                offset: Offset(0, 3), // Shifts the shadow (x, y)
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: height * 0.01,
-                          ),
-                          const Text(
-                            "Education",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: height * 0.02,
-                          ),
-                          const Text(
-                            "This is the detail of education project you can click the detail button",
-                            overflow: TextOverflow.ellipsis,
-                          )
-                        ],
-                      ),
-                    ),
-                    Button("Join", Colors.white, Colors.black, () {}),
-                  ],
-                ),
-              )
             ],
           ),
-          Positioned(
-              top: height * 0.09,
-              left: width * 0.04,
-              child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(5.0), // Adjust the border radius
+          child: Stack(children: [
+            Column(
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(15.0),
+                    topRight: Radius.circular(15.0),
+                    bottomLeft: Radius.circular(0.0),
+                    bottomRight: Radius.circular(0.0),
                   ),
-                  color: Colors.white,
-                  child: Text("Alice Bob",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                      )))),
-        ]),
+                  child: Image.network(
+                      height: height * 0.11,
+                      width: width,
+                      fit: BoxFit.cover,
+                      projectdata['Projectimg']),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: height * 0.01,
+                            ),
+                            Text(
+                              '${projectdata['ProjectTitle']}',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: height * 0.02,
+                            ),
+                            Text(
+                              '${projectdata['ProjectDes']}',
+                              overflow: TextOverflow.ellipsis,
+                            )
+                          ],
+                        ),
+                      ),
+                      Button("Join", Colors.white, Color(0XFF2E307A), () {}),
+                    ],
+                  ),
+                )
+              ],
+            ),
+            Positioned(
+                top: height * 0.09,
+                left: width * 0.04,
+                child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          5.0), // Adjust the border radius
+                    ),
+                    color: Colors.white,
+                    child: Text("Alice Bob",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        )))),
+          ]),
+        ),
       ),
     );
   }

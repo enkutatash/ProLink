@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:skillswap/Project/projectcontroller.dart';
 import 'package:skillswap/firebase/firebase.dart';
+import 'package:skillswap/firebase/skills.dart';
 import 'package:skillswap/homepageCandidate/personalproject.dart';
 
 class CreateProjectPage extends StatefulWidget {
@@ -27,6 +28,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
   String? imagePath;
   File? _image;
   String? downloadUrl;
+  List<String> _requiredSkills = [];
 
   @override
   void initState() {
@@ -133,8 +135,14 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                 ),
-                maxLines: 3,
+                maxLines: 10,
               ),
+              SizedBox(height:5,),
+              Dropdown(onItemsSelected:  (selectedItems) {
+                    setState(() {
+                      _requiredSkills = selectedItems;
+                    });
+                  }, skill: "Required Skills")
             ],
           ),
         ),
@@ -151,7 +159,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                 _titleController.text,
                 _descriptionController.text,
                 widget.userid,
-                [],
+                _requiredSkills,
                 [],
               );
               projectController.addProject(
@@ -159,7 +167,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                   _titleController.text,
                   _descriptionController.text,
                   widget.userid,
-                  [],
+                  _requiredSkills,
                   []);
               Navigator.pop(context);
             },

@@ -69,7 +69,7 @@ class PersonalDetail extends StatelessWidget {
                         height: height * 0.3,
                         child: RawScrollbar(
                           thumbVisibility: true,
-                          thumbColor: Colors.black,
+                          thumbColor:Color(0XFF2E307A),
                           radius: Radius.circular(20),
                           thickness: 5,
                           child: ListView.builder(
@@ -111,10 +111,7 @@ class PersonalDetail extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    width: 1.0,
-                    color: Colors.black, // Set the border color here
-                  ),
+                  color: Color.fromARGB(255, 207, 210, 236),
                 ),
                 constraints: const BoxConstraints(
                   minHeight: 100.0,
@@ -146,10 +143,7 @@ class PersonalDetail extends StatelessWidget {
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            width: 1.0,
-                            color: Colors.black, // Set the border color here
-                          ),
+                         color: Color.fromARGB(255, 207, 210, 236),
                         ),
                         width: width * 0.9,
                         child: Text(userdata['Linkedin']),
@@ -180,10 +174,7 @@ class PersonalDetail extends StatelessWidget {
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            width: 1.0,
-                            color: Colors.black, // Set the border color here
-                          ),
+                         color: Color.fromARGB(255, 207, 210, 236),
                         ),
                         width: width * 0.9,
                         child: Text(userdata['Github']),
@@ -227,11 +218,7 @@ class _SkillLevelState extends State<SkillLevel> {
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          width: 1.0,
-          color: Colors.black, // Set the border color here
-        ),
-      ),
+color: Color.fromARGB(255, 207, 210, 236),      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

@@ -39,7 +39,7 @@ class HomeScreen extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Search_Screen()));
+                                  builder: (context) => Search_Screen(userdata, userid)));
                         },
                         icon: Icon(Icons.search,color:Color(0XFF2E307A),size: 35,)),
                   )

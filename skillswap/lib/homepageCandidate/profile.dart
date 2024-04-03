@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:skillswap/pages/contact.dart';
 import 'package:skillswap/pages/setting.dart';
 
-
-
 class ProfilePage extends StatelessWidget {
   Map<String, dynamic> userdata;
   final String userid;
@@ -45,10 +43,14 @@ class ProfilePage extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 24, fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          '${userdata['Bio']}',
-                          style: TextStyle(fontSize: 16),
-                          overflow: TextOverflow.ellipsis,
+                        
+                        Container(
+                          width: MediaQuery.of(context).size.width*0.7,
+                          child: Text(
+                            '${userdata['Bio']}',
+                            style: TextStyle(fontSize: 16),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ],
                     ),
@@ -89,18 +91,47 @@ class ProfilePage extends StatelessWidget {
               title: Text('Create Project'),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(5.0, 170, 5.0, 40.0),
-              child: ElevatedButton(
-                  onPressed: () {},
-                  child: Text(
-                    'Sign Out',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  style:
-                      ElevatedButton.styleFrom(backgroundColor: Colors.black)),
-            ),
+              padding: const EdgeInsets.only(top: 250.0),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Button("Sign Out", Colors.white, Colors.red, (){})),
+            )
           ],
         ),
+      ),
+      
+    );
+  }
+}
+
+
+class Button extends StatelessWidget {
+  final String text;
+  final Color btnclr;
+  final Color textclr;
+  final void Function() click;
+  Button(this.text, this.textclr, this.btnclr, this.click, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    return ElevatedButton(
+      onPressed: click,
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0), // Set border radius
+          ),
+        ),
+        minimumSize: MaterialStateProperty.all(
+            Size(width * 0.45, height * 0.06)), // Set width and height
+        backgroundColor:
+            MaterialStateProperty.all<Color>(btnclr), // Set color to red
+      ),
+      child: Text(
+        text,
+        style: TextStyle(color: textclr),
       ),
     );
   }
