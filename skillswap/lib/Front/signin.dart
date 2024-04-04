@@ -7,6 +7,8 @@ import 'package:skillswap/Front/signup.dart';
 import 'package:skillswap/firebase/firebase.dart';
 import 'package:skillswap/homepageCandidate/homepage.dart';
 import 'package:skillswap/homepageRec/homepagerec.dart';
+import 'package:skillswap/widgets/buttons.dart';
+
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -20,20 +22,12 @@ class SignInPageState extends State<SignInPage> {
   final _passwordController = TextEditingController();
   late Map<String, dynamic> userdata;
   bool _obscureText = true;
-  final pattern = r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'"
-      r'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-'
-      r'\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*'
-      r'[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4]'
-      r'[0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9]'
-      r'[0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\'
-      r'x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])';
   late RegExp emailValidation;
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     _auth = Firebase_Service(context);
-    emailValidation = RegExp(pattern);
     super.initState();
   }
 
@@ -50,8 +44,9 @@ class SignInPageState extends State<SignInPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Center(
-                  child: Lottie.asset('asset/animation.json'),
+
+                SizedBox(
+                  height: height * 0.2,
                 ),
                 const Text(
                   "SkillSwap",
@@ -64,100 +59,52 @@ class SignInPageState extends State<SignInPage> {
                 SizedBox(
                   height: height * 0.07,
                 ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Text(
-                      "Email",
-                      style: TextStyle( fontSize: 15),
-                    ),
-                  ),
-                ),
-                Container(
-                  width: width * 0.9,
-                  height: height * 0.06,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(0XFF7980C2),
-                  ),
-                  child: TextFormField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.all(10),
-                      border: InputBorder.none,
-                      hintText: "abc@gmail.com"
-                    ),
-                    validator: (value) {
-                      if (value == null ||
-                          value.isEmpty ||
-                          !emailValidation.hasMatch((value))) {
-                        return 'Please enter your Email';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                const SizedBox(height: 16.0),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Text(
-                      "Password",
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ),
-                ),
-                Container(
-                  width: width * 0.9,
-                  height: height * 0.06,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(0XFF7980C2),
-                  
-                  ),
-                  child: TextFormField(
+                const FormText(text: "Email", alignment: Alignment.centerLeft),
+                  CustomTextFormField(width: width*0.9, height: height*0.06, hintText: "abc@gmail.com", controller: _emailController,keyboardType: TextInputType.emailAddress,validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your email';
+                            }
+                            return null;
+                          } ,),
+                 
+                  const FormText(text: "Password", alignment: Alignment.centerLeft),
+          
+                  CustomTextFormField(
+                    width: width * 0.9,
+                    height: height * 0.06,
+                    hintText: "********",
                     controller: _passwordController,
                     obscureText: _obscureText,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(15),
-                      border: InputBorder.none,
-                      hintText: "********",
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.remove_red_eye),
-                        onPressed: () {
-                          setState(() {
-                            _passwordController.text =
-                                _passwordController.text.replaceAll('•', '');
-                            _obscureText = !_obscureText;
-                          });
-                        },
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
-                      } else if (value.length < 8 || value.length > 16) {
-                        return 'Password must be between 8 and 16 characters long';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                SizedBox(height: height * 0.03),
+                    suffixIcon:  IconButton(
+                          icon: const Icon(Icons.remove_red_eye),
+                          onPressed: () {
+                            // toggle password visibility
+                            setState(() {
+                              _passwordController.text =
+                                  _passwordController.text.replaceAll('•', '');
+                              _obscureText = !_obscureText;
+                            });
+                          },
+                        ),
+                    validator:(value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your password';
+                        } else if (value.length < 8 || value.length > 16) {
+                          return 'Password must be between 8 and 16 characters long';
+                        }
+                        return null;
+                      }, ),
                 Align(
                   alignment: Alignment.centerRight,
                   child: GestureDetector(
                       onTap: () {},
-                      child:const Text(
+                      child: const Text(
                         "Forget your password?",
-                        style: TextStyle(color: Colors.red),
                       )),
                 ),
-                SizedBox(height: height * 0.02),
-                Button("Enter", Colors.white, Color(0XFF2E307A), () {
-                  if (_formKey.currentState!.validate()) {                   
+                SizedBox(height: height * 0.04),
+                ButtonTwo("Log In", Colors.white, Color(0XFF2E307A),width*0.8, height*0.07, 16, () {
+                  if (_formKey.currentState!.validate()) {
                     _signIn();
                   }
                 }),
@@ -167,7 +114,7 @@ class SignInPageState extends State<SignInPage> {
                   children: [
                     const Text(
                       'Don\'t have an account? ',
-                      style: TextStyle(fontSize: 16,color: Color(0XFF7980C2)),
+                      style: TextStyle(fontSize: 16, color: Color(0XFF7980C2)),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -179,10 +126,9 @@ class SignInPageState extends State<SignInPage> {
                       child: const Text(
                         'Sign up',
                         style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0XFF2E307A)
-                        ),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0XFF2E307A)),
                       ),
                     ),
                   ],
@@ -200,8 +146,7 @@ class SignInPageState extends State<SignInPage> {
       content: Text(message),
       action: SnackBarAction(
         label: 'Close',
-        onPressed: () {
-        },
+        onPressed: () {},
       ),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -227,17 +172,18 @@ class SignInPageState extends State<SignInPage> {
       print(userdata);
       if (userdata.containsKey('CompanyName')) {
         Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => HomepageREC(user.uid, userdata)),
-        (route) => false, 
-      );
+          context,
+          MaterialPageRoute(
+              builder: (context) => HomepageREC(user.uid, userdata)),
+          (route) => false,
+        );
         _showSnackBar("Recruiter is successfully Sign in");
       } else {
-       Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => Homepage(user.uid, userdata)),
-        (route) => false,
-      );
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => Homepage(user.uid, userdata)),
+          (route) => false,
+        );
         _showSnackBar("User is successfully Sign in");
       }
     } else {
@@ -246,58 +192,3 @@ class SignInPageState extends State<SignInPage> {
   }
 }
 
-Widget textfield(
-  String hint,
-  IconData icon,
-  TextEditingController controller,
-  TextInputType keyboardType, {
-  IconData? suffixIcon,
-  double? width,
-  double? height,
-}) {
-  return TextFormField(
-    controller: controller,
-    keyboardType: keyboardType,
-    decoration: InputDecoration(
-      hintText: hint,
-      hintStyle: const TextStyle(
-        fontStyle: FontStyle.italic,
-        color: Colors.white,
-      ),
-      prefixIcon: Icon(icon),
-      suffixIcon: suffixIcon != null ? Icon(suffixIcon) : null,
-    ),
-  );
-}
-
-class Button extends StatelessWidget {
-  final String text;
-  final Color btnclr;
-  final Color textclr;
-  final void Function() click;
-  Button(this.text, this.textclr, this.btnclr, this.click, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-    return ElevatedButton(
-      onPressed: click,
-      style: ButtonStyle(
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0), // Set border radius
-          ),
-        ),
-        minimumSize: MaterialStateProperty.all(
-            Size(width * 0.8, height * 0.07)), // Set width and height
-        backgroundColor:
-            MaterialStateProperty.all<Color>(btnclr), // Set color to red
-      ),
-      child: Text(
-        text,
-        style: TextStyle(color: textclr),
-      ),
-    );
-  }
-}

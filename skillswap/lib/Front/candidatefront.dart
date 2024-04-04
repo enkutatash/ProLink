@@ -43,27 +43,7 @@ class FrontPage extends StatelessWidget {
                 SizedBox(
                   height: height * 0.07,
                 ),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                   Icon(
-                  Icons.handshake,
-                  color: Color(0XFF2E307A),
-                ),
-                Icon(
-                  Icons.people_rounded,
-                  color: Color(0XFF2E307A),
-                ),
-                Icon(
-                  Icons.speaker_phone_outlined,
-                  color: Color(0XFF2E307A),
-                ),
-                Icon(
-                  Icons.message,
-                  color: Color(0XFF2E307A),
-                )
-                  ],
-                ),
+                
                 SizedBox(
                   height: height * 0.07,
                 ),

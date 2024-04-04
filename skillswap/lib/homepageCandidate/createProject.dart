@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:skillswap/Project/projectcontroller.dart';
 import 'package:skillswap/firebase/firebase.dart';
-import 'package:skillswap/firebase/skills.dart';
+import 'package:skillswap/widgets/skillsdropdown.dart';
 import 'package:skillswap/homepageCandidate/personalproject.dart';
 
 class CreateProjectPage extends StatefulWidget {

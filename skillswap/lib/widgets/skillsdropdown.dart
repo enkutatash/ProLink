@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:skillswap/widgets/buttons.dart';
 
 class MultiSelect extends StatefulWidget {
   final List<String> items;
@@ -126,25 +127,7 @@ class _DropdownState extends State<Dropdown> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // use this button to open the multi-select dialog
-        ElevatedButton(
-      onPressed:  _showMultiSelect,
-      style: ButtonStyle(
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0), // Set border radius
-          ),
-        ),
-        minimumSize: MaterialStateProperty.all(
-            Size(width * 0.4, height * 0.05)), // Set width and height
-        backgroundColor:
-            MaterialStateProperty.all<Color>(Color(0XFF7980C2),), // Set color to red
-      ),
-      child: Text(
-      widget.skill,
-        style: TextStyle(color: Color(0XFF2E307A)),
-      ),
-    ),
-        
+       ButtonThree(widget.skill,Color(0XFF2E307A), Color.fromARGB(255, 237, 241, 245), width*0.9, height*0.06,_showMultiSelect),
         const Divider(
           height: 30,
         ),

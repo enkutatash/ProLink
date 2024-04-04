@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:skillswap/Front/signin.dart';
 import 'package:skillswap/firebase/firebase.dart';
-import 'package:skillswap/firebase/skills.dart';
+import 'package:skillswap/widgets/skillsdropdown.dart';
 import 'package:skillswap/homepageRec/homepagerec.dart';
 
 class SignUpRecPage extends StatefulWidget {
