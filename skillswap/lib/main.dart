@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           scaffoldBackgroundColor: Colors.white, ),
       debugShowCheckedModeBanner: false,
-      home: WelcomePage(),
+      home:WelcomePage(),
     );
   }
 }

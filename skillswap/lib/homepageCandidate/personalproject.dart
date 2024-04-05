@@ -39,19 +39,6 @@ class _ProjectScreenState extends State<ProjectScreen> {
           );
         }
       }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      CreateProjectPage(widget.userdata, widget.userid)));
-        },
-        child: Icon(Icons.add, color: Color(0XFF2E307A), size: 30),
-        // mini:true,
-        shape: CircleBorder(),
-        backgroundColor: Colors.white,
-      ),
     );
   }
 }
