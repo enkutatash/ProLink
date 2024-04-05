@@ -1,7 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:skillswap/firebase/firebase.dart';
 import 'package:skillswap/homepageCandidate/Search/projectdetailtojoin.dart';
+import 'package:skillswap/widgets/buttons.dart';
 
+//   late Firebase_Service _auth;
+//   late Map<String, dynamic> ownerdata;
+
+//   @override
+// void initState() {
+//   super.initState();
+//   _auth = Firebase_Service(context);
+//   _auth.userdataTwo(widget.projectdata['Owner']).then((userData) {
+//     setState(() {
+//       ownerdata = userData;
+//     });
+//   }).catchError((error) {
+//     print("Error fetching owner data: $error");
+//   });
+// }
 class ProjectSearch extends StatelessWidget {
   Map<String, dynamic> projectdata;
   ProjectSearch(this.projectdata, {super.key});
@@ -25,15 +41,15 @@ class ProjectSearch extends StatelessWidget {
           width: width,
           height: height * 0.21,
           decoration: BoxDecoration(
-            color: Color.fromARGB(255, 207, 210, 236),
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(20),
+            color: Color.fromARGB(255, 237, 241, 245),
             boxShadow: [
               BoxShadow(
                 color:
                     Colors.grey.withOpacity(0.5), // Shadow color (with opacity)
-                spreadRadius: 2, // Extends the shadow beyond the box
-                blurRadius: 5, // Blurs the edges of the shadow
-                offset: Offset(0, 3), // Shifts the shadow (x, y)
+                spreadRadius: 1, // Extends the shadow beyond the box
+                blurRadius: 1, // Blurs the edges of the shadow
+                offset: Offset(0, 1), // Shifts the shadow (x, y)
               ),
             ],
           ),
@@ -82,60 +98,57 @@ class ProjectSearch extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Button("Join", Colors.white, Color(0XFF2E307A), () {}),
+                      ButtonTwo("Join", Colors.white, Color(0XFF2E307A),
+                          width * 0.08, height * 0.05, 12, () {}),
                     ],
                   ),
                 )
               ],
             ),
             Positioned(
-                top: height * 0.09,
-                left: width * 0.04,
-                child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                          5.0), // Adjust the border radius
+              top: height * 0.07,
+              left: width * 0.04,
+              child: Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 237, 241, 245),
+                    borderRadius: BorderRadius.circular(10),
+                    shape: BoxShape.rectangle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.1),
+                        blurRadius: 3,
+                        offset: Offset(0, -2),
+                      ),
+                    ]),
+                child: Row(
+                  children: [
+                    ClipOval(
+                      child: Image.asset(
+                        // ownerdata['profilePic'],
+                        "asset/image 1.png",
+                        width: 30,
+                        height: 30,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                    color: Colors.white,
-                    child: Text("Alice Bob",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                        )))),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      // '${ownerdata['First']} ${ownerdata['Last']}',
+                      "Alice Bob",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ]),
         ),
-      ),
-    );
-  }
-}
-
-class Button extends StatelessWidget {
-  final String text;
-  final Color btnclr;
-  final Color textclr;
-  final void Function() click;
-  Button(this.text, this.textclr, this.btnclr, this.click, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-    return ElevatedButton(
-      onPressed: click,
-      style: ButtonStyle(
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0), // Set border radius
-          ),
-        ),
-        minimumSize: MaterialStateProperty.all(
-            Size(width * 0.2, height * 0.04)), // Set width and height
-        backgroundColor:
-            MaterialStateProperty.all<Color>(btnclr), // Set color to red
-      ),
-      child: Text(
-        text,
-        style: TextStyle(color: textclr),
       ),
     );
   }

@@ -196,6 +196,27 @@ class Firebase_Service {
     }
   }
 
+  
+ Future<Map<String, dynamic>> userdataTwo(String docid) async {
+  try {
+    DocumentSnapshot snapshot = await dbrefuser.doc(docid).get();
+    if (snapshot.exists) {
+      Map<String, dynamic> userData = {
+        'First': snapshot.get('First'),
+        'Last': snapshot.get('Last'),
+        'profilePic': snapshot.get('profilePic'),
+      };
+      return userData;
+    } else {
+      return {}; // Return empty map if the document doesn't exist
+    }
+  } catch (e) {
+    print("Error fetching user data: $e");
+    return {}; // Return empty map if there's an error
+  }
+}
+
+
     Future<Map<String, dynamic>> ProjectData(String docid) async {
     try {
       DocumentSnapshot snapshot = await dbrefproject.doc(docid).get();
@@ -235,6 +256,8 @@ class Firebase_Service {
       throw Exception('User document not found');
     }
   }
+
+  
 
   void signout() {
     FirebaseAuth.instance.signOut();

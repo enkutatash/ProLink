@@ -235,7 +235,7 @@ class CustomTextFormFieldTwo extends StatelessWidget {
       height: height + 20,
       child: TextFormField(
         controller: controller,
-        minLines: 4,
+        minLines: 8,
         maxLines: maxLine,
         decoration: InputDecoration(
           labelText: labelText,

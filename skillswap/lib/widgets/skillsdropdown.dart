@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:skillswap/widgets/buttons.dart';
-
+import 'package:skillswap/widgets/skillimg.dart';
 class MultiSelect extends StatefulWidget {
   final List<String> items;
   const MultiSelect({Key? key, required this.items}) : super(key: key);
@@ -133,16 +133,24 @@ class _DropdownState extends State<Dropdown> {
         ),
         // display selected items
         Wrap(
+          spacing: 8,
+          
           children: _selectedItems
               .map((e) => Chip(
-                    label: Text(e),
-                    deleteIcon: Icon(Icons.close),
-                    deleteIconColor: Colors.red,
-                    onDeleted: () {
-                      _removeSelectedItem(
-                          e); // Remove item from the selected list
-                    },
-                  ))
+                backgroundColor: Colors.white,
+                label: Text(""),
+                  avatar: CircleAvatar(
+                    radius: 50,
+                    backgroundImage: AssetImage(logomap[e]!), // Replace with your image URL
+                  ),
+                  deleteIcon: Icon(Icons.close),
+                  deleteIconColor: Colors.red,
+                  onDeleted: () {
+                    _removeSelectedItem(e); // Remove item from the selected list
+                  },
+                )
+
+                  )
               .toList(),
         )
       ],

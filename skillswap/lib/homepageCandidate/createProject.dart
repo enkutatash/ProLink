@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:skillswap/Project/projectcontroller.dart';
 import 'package:skillswap/firebase/firebase.dart';
+import 'package:skillswap/widgets/buttons.dart';
 import 'package:skillswap/widgets/skillsdropdown.dart';
 import 'package:skillswap/homepageCandidate/personalproject.dart';
 
@@ -75,6 +76,8 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: Text('Create Project'),
@@ -93,50 +96,30 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                   radius: 40.0,
                   backgroundImage: imagePath != null
                       ? FileImage(File(imagePath!))
-                      : NetworkImage(
-                          "https://images.rawpixel.com/image_png_social_square/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png"),
+                      :null,
                   child: imagePath == null ? Icon(Icons.person) : null,
                 ),
                 Positioned(
                     top: 45,
                     right: -10,
-                    child: IconButton(
-                        onPressed: pickImage,
-                        icon: const Icon(
-                          Icons.camera_alt_outlined,
-                          size: 30,
-                          color: Colors.black,
-                        )))
+                    child:IconButton(
+                              onPressed: pickImage,
+                              icon: Image.asset(
+                                width: 30,
+                                height: 30
+                                ,"asset/camera.png")
+                              )
+                        )
               ])),
               SizedBox(height: 20),
-              Text(
-                'Project Title',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              TextFormField(
-                controller: _titleController,
-                decoration: InputDecoration(
-                  hintText: 'Enter project title',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                ),
-              ),
+
+              FormText(text: "Project Title", alignment: Alignment.centerLeft),
+              CustomTextFormField(width: width*0.9, height: height*0.06, hintText: 'Enter project title', controller: _titleController ),
+              
               SizedBox(height: 20),
-              Text(
-                'Project Description',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              TextFormField(
-                controller: _descriptionController,
-                decoration: InputDecoration(
-                  hintText: 'Enter project description',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                ),
-                maxLines: 10,
-              ),
+              FormText(text: "Project Description", alignment: Alignment.centerLeft),
+              CustomTextFormFieldTwo(width: width*0.9, height: height*0.06, hintText: "Enter Project Description", controller: _descriptionController,keyboardType: TextInputType.emailAddress,maxLine: null,),
+              
               SizedBox(height:5,),
               Dropdown(onItemsSelected:  (selectedItems) {
                     setState(() {
@@ -152,8 +135,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
         child: SizedBox(
           width: double.infinity,
           height: 50,
-          child: ElevatedButton(
-            onPressed: () {
+          child: ButtonTwo("Create Project", Colors.white, Color(0XFF2E307A), width*0.9, height*0.06, 15,  () {
               _auth.createProject(
                 downloadUrl!,
                 _titleController.text,
@@ -170,24 +152,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                   _requiredSkills,
                   []);
               Navigator.pop(context);
-            },
-            style: ButtonStyle(
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50.0),
-                ),
-              ),
-              backgroundColor: MaterialStateProperty.all<Color>(
-                const Color(0XFF2E307A),
-              ),
-            ),
-            child: Text(
-              'Create Project',
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          ),
+            },)
         ),
       ),
     );

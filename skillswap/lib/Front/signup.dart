@@ -112,7 +112,8 @@ class SignUpPageState extends State<SignUpPage> {
                                 width: 30,
                                 height: 30
                                 ,"asset/camera.png")
-                              ))
+                              )
+                              )
                     ]),
                   ),
                   SizedBox(

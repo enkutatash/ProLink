@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:skillswap/widgets/buttons.dart';
 
 class ProjectDetailPage extends StatelessWidget {
   Map<String, dynamic> projectdata;
@@ -37,97 +38,22 @@ class ProjectDetailPage extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(
                       width: 80,
                       height: 2,
                       //  color: Colors.black,
                     ),
-                    const SizedBox(height: 20),
-                    Text(
-                      'Project Title',
-                      style: TextStyle(fontSize: 16),
-                    ),
                     const SizedBox(height: 8),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Color.fromARGB(255, 207, 210, 236),
-                      ),
-                      child: SizedBox(
-                        height: 40,
-                        child: TextFormField(
-                          // initialValue: 'Project Title', // Replace with fetched data
-                          initialValue: '${projectdata['ProjectTitle']}',
-                          readOnly: true,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 8),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 2,
-                      //  color: Colors.black,
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'Time Stamp',
-                      style: TextStyle(fontSize: 16),
-                    ),
+                    Text("${projectdata['ProjectTitle']}",style: TextStyle(fontSize: 30),),
+                   
                     const SizedBox(height: 8),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Color.fromARGB(255, 207, 210, 236),
-                      ),
-                      child: SizedBox(
-                        height: 40,
-                        child: TextFormField(
-                          // initialValue: 'Project Duration', // Replace with fetched data
-                          initialValue: '${projectdata['TimeStamp']}',
-                          readOnly: true,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 8),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 2,
-                      //   color: Colors.black,
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'Project Description',
-                      style: TextStyle(fontSize: 16),
-                    ),
+                 Text('${projectdata['TimeStamp']}',style: TextStyle(fontSize: 13),),
+                 const SizedBox(height: 8),
+                 Text('${projectdata['ProjectDes']}',style: TextStyle(fontSize: 15),),
                     const SizedBox(height: 8),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Color.fromARGB(255, 207, 210, 236),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: TextFormField(
-                          //  initialValue: 'Project Description', // Replace with fetched data
-                          initialValue: '${projectdata['ProjectDes']}',
-                          readOnly: true,
-                          maxLines: null,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 8),
-                          ),
-                        ),
-                      ),
-                    ),
+                  
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Column(
@@ -139,20 +65,22 @@ class ProjectDetailPage extends StatelessWidget {
                             //  color: Colors.black,
                           ),
                           const SizedBox(height: 20),
-                          Text(
-                            'Required Skill',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          const SizedBox(height: 8),
-                        ],
-                      ),
-                    ),
+                    Align(
+      alignment: Alignment.centerLeft,
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Text(
+          "Required Skills",
+          style: TextStyle(fontSize: 20),
+        ),
+      ),
+    ),
                     Container(
                       padding: EdgeInsets.all(10),
                         height: 100,
                           decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: Color.fromARGB(255, 207, 210, 236),
+                          
                         ),
                         child: ListView.builder(
                           itemCount: projectdata['SkillReq'].length,
@@ -162,6 +90,11 @@ class ProjectDetailPage extends StatelessWidget {
                   ],
                 ),
               ),
-            ])));
+            ]
+            )
+            )
+                ]
+            )
+            ));
   }
 }

@@ -7,6 +7,7 @@ class ContactPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -34,69 +35,71 @@ class ContactForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(20.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Lottie.network(
-            'https://lottie.host/5064ead5-9e7e-4edd-893c-af3d833abee6/54EmMthFTf.json',
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(10),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Lottie.network(
+              'https://lottie.host/5064ead5-9e7e-4edd-893c-af3d833abee6/54EmMthFTf.json',
             ),
-            child: ListTile(
-              leading: Icon(Icons.person),
-              title: Text('LinkedIn'),
-              subtitle: Text('linkedin.com/in/yourprofile'),
-              onTap: () => _launchURL(linkedinUrl),
-              trailing: Icon(Icons.navigate_next),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: ListTile(
+                leading: Icon(Icons.person),
+                title: Text('LinkedIn'),
+                subtitle: Text('linkedin.com/in/yourprofile'),
+                onTap: () => _launchURL(linkedinUrl),
+                trailing: Icon(Icons.navigate_next),
+              ),
             ),
-          ),
-          SizedBox(height: 20.0),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(10),
+            SizedBox(height: 20.0),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: ListTile(
+                leading: Icon(Icons.email),
+                title: Text('Send Email'),
+                subtitle: Text(email),
+                onTap: () => _sendEmail(email),
+                trailing: Icon(Icons.navigate_next),
+              ),
             ),
-            child: ListTile(
-              leading: Icon(Icons.email),
-              title: Text('Send Email'),
-              subtitle: Text(email),
-              onTap: () => _sendEmail(email),
-              trailing: Icon(Icons.navigate_next),
+            SizedBox(height: 20.0),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: ListTile(
+                leading: Icon(Icons.code),
+                title: Text('GitHub'),
+                subtitle: Text('github.com/yourusername'),
+                onTap: () => _launchURL(githubUrl),
+                trailing: Icon(Icons.navigate_next),
+              ),
             ),
-          ),
-          SizedBox(height: 20.0),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(10),
+            SizedBox(height: 20.0),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: ListTile(
+                leading: Icon(Icons.message),
+                title: Text('Telegram'),
+                subtitle: Text('@$telegramUsername'),
+                onTap: () => _launchURL('https://t.me/$telegramUsername'),
+                trailing: Icon(Icons.navigate_next),
+              ),
             ),
-            child: ListTile(
-              leading: Icon(Icons.code),
-              title: Text('GitHub'),
-              subtitle: Text('github.com/yourusername'),
-              onTap: () => _launchURL(githubUrl),
-              trailing: Icon(Icons.navigate_next),
-            ),
-          ),
-          SizedBox(height: 20.0),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: ListTile(
-              leading: Icon(Icons.message),
-              title: Text('Telegram'),
-              subtitle: Text('@$telegramUsername'),
-              onTap: () => _launchURL('https://t.me/$telegramUsername'),
-              trailing: Icon(Icons.navigate_next),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

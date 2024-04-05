@@ -25,29 +25,22 @@ class UserSearch extends StatelessWidget {
           width: width,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: Color.fromARGB(255, 207, 210, 236),
+            color: Color.fromARGB(255, 237, 241, 245),
             boxShadow: [
-      BoxShadow(
-        color: Colors.grey.withOpacity(0.5), // Shadow color (with opacity)
-        spreadRadius: 2, // Extends the shadow beyond the box
-        blurRadius: 5, // Blurs the edges of the shadow
-        offset: Offset(0, 3), // Shifts the shadow (x, y)
-      ),
+     BoxShadow(
+                color:
+                    Colors.grey.withOpacity(0.5), // Shadow color (with opacity)
+                spreadRadius: 1, // Extends the shadow beyond the box
+                blurRadius: 1, // Blurs the edges of the shadow
+                offset: Offset(0, 1), // Shifts the shadow (x, y)
+              ),
     ],
           ),
           child: Row(
             children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(15.0),
-                  topRight: Radius.circular(0.0),
-                  bottomLeft: Radius.circular(15.0),
-                  bottomRight: Radius.circular(0.0),
-                ),
-                child: Image.network(
-                    height: height * 0.1,
-                    width: width * 0.2,
-                    fit: BoxFit.cover,
+              CircleAvatar(
+                radius: 30,
+                backgroundImage: NetworkImage(
                     userdata['profilePic']),
               ),
               SizedBox(
@@ -55,10 +48,9 @@ class UserSearch extends StatelessWidget {
               ),
               Expanded(
                 child: InkWell(
-                  onTap: () {
-                    print(userdata['Skills']);
-                    _dialogBuilder(context, userdata);
-                  },
+                  // onTap: () {
+                  //  _dialogBuilder(context, userdata);
+                  // },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,

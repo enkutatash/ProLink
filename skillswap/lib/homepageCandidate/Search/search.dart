@@ -9,7 +9,7 @@ import 'package:skillswap/homepageCandidate/Search/usersearch.dart';
 class Search_Screen extends StatefulWidget {
   Map<String, dynamic> userdata;
   String userid;
-  Search_Screen(this.userdata,this.userid,{super.key});
+  Search_Screen(this.userdata, this.userid, {super.key});
 
   @override
   State<Search_Screen> createState() => _Search_ScreenState();
@@ -18,6 +18,7 @@ class Search_Screen extends StatefulWidget {
 class _Search_ScreenState extends State<Search_Screen> {
   final TextEditingController _search = TextEditingController();
   late final Firebase_Service _auth;
+  final FocusNode _searchFocusNode = FocusNode();
   bool _searchInProjects = false;
   List _allUser = [];
   List _allProject = [];
@@ -32,7 +33,7 @@ class _Search_ScreenState extends State<Search_Screen> {
       _allUser = data.docs;
     });
     _allUser.removeWhere((doc) => doc.id == widget.userid);
-    searchResult(); 
+    searchResult();
   }
 
   allproject() async {
@@ -43,9 +44,10 @@ class _Search_ScreenState extends State<Search_Screen> {
     setState(() {
       _allProject = data.docs;
     });
-       _allProject = data.docs;
+    _allProject = data.docs;
     // Remove unwanted elements from _allProject
-    _allProject.removeWhere((doc) => widget.userdata['MyProjects'].contains(doc.id));
+    _allProject
+        .removeWhere((doc) => widget.userdata['MyProjects'].contains(doc.id));
     searchResult(); // Move this inside setState
   }
 
@@ -70,8 +72,13 @@ class _Search_ScreenState extends State<Search_Screen> {
         // Search in projects
         for (var project in _allProject) {
           var name = project['ProjectTitle'].toString().toLowerCase();
-          if (name.contains(_search.text.toLowerCase())) {
+          List<String>skills =
+              List<String>.from(project['SkillReq']);
+          print(skills);
+          for(var skill in skills){
+          if (skill.toLowerCase().contains(_search.text.toLowerCase())) {
             showResult.add(project);
+          }
           }
         }
       }
@@ -89,6 +96,7 @@ class _Search_ScreenState extends State<Search_Screen> {
   void initState() {
     super.initState();
     _search.addListener(_onSearch);
+    _searchFocusNode.requestFocus();
     allUser();
     _auth = Firebase_Service(context);
   }
@@ -101,6 +109,7 @@ class _Search_ScreenState extends State<Search_Screen> {
   void dispose() {
     _search.removeListener(_onSearch);
     _search.dispose();
+    _searchFocusNode.dispose();
     super.dispose();
   }
 
@@ -111,8 +120,10 @@ class _Search_ScreenState extends State<Search_Screen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: CupertinoSearchTextField(
-          controller: _search,
+        title: SizedBox(
+          height: height * 0.06,
+          child: CupertinoSearchTextField(
+              controller: _search, focusNode: _searchFocusNode),
         ),
       ),
       body: Padding(

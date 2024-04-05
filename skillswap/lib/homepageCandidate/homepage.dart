@@ -7,10 +7,14 @@ import 'package:skillswap/homepageCandidate/message.dart';
 import 'package:skillswap/homepageCandidate/personalproject.dart';
 import 'package:skillswap/homepageCandidate/profile.dart';
 import 'package:skillswap/homepageCandidate/Search/search.dart';
+import 'package:skillswap/homepageCandidate/recentproject.dart';
+import 'package:skillswap/homepageCandidate/sidebar.dart';
+
 
 class Homepage extends StatefulWidget {
   Map<String, dynamic> userdata;
   final String userid;
+ 
   Homepage(this.userid, this.userdata, {Key? key}) : super(key: key);
 
   @override
@@ -44,7 +48,9 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
+      drawer: SideBar(widget.userdata,widget.userid),
       body: SafeArea(
         bottom: false,
         child: PageView(
