@@ -35,6 +35,13 @@ class _HomepageState extends State<Homepage> {
     super.dispose();
   }
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _currentPageIndex = index;
+      _pageController.jumpToPage(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,32 +66,36 @@ class _HomepageState extends State<Homepage> {
         color: Color.fromARGB(255, 237, 241, 245),
         shape: CircularNotchedRectangle(),
         notchMargin: 8.0, // Adjust the margin as needed
-        child: BottomNavigationBar(
-          currentIndex: _currentPageIndex,
-          onTap: (index) {
-            setState(() {
-              _currentPageIndex = index;
-              _pageController.jumpToPage(index);
-            });
-          },
-          selectedItemColor: Color(0XFF2E307A),
-          unselectedItemColor: Colors.grey,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            IconButton(
               icon: Icon(Icons.home),
-              label: "",
+              onPressed: () {
+                _onItemTapped(0);
+              },
+              color: _currentPageIndex == 0 ? Color(0XFF2E307A) : Colors.grey,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.newspaper_rounded),
-              label: "",
+            IconButton(
+              icon: Icon(Icons.task),
+              onPressed: () {
+                _onItemTapped(1);
+              },
+              color: _currentPageIndex == 1 ? Color(0XFF2E307A) : Colors.grey,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.message_rounded),
-              label: "",
+            IconButton(
+              icon: Icon(Icons.message),
+              onPressed: () {
+                _onItemTapped(2);
+              },
+              color: _currentPageIndex == 2 ? Color(0XFF2E307A) : Colors.grey,
             ),
-            BottomNavigationBarItem(
+            IconButton(
               icon: Icon(Icons.person),
-              label: "",
+              onPressed: () {
+                _onItemTapped(3);
+              },
+              color: _currentPageIndex == 3 ? Color(0XFF2E307A) : Colors.grey,
             ),
           ],
         ),
@@ -94,8 +105,7 @@ class _HomepageState extends State<Homepage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  CreateProjectPage(widget.userdata, widget.userid),
+              builder: (context) => CreateProjectPage(widget.userdata, widget.userid),
             ),
           );
         },
