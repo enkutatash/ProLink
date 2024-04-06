@@ -58,32 +58,63 @@ class _Search_ScreenState extends State<Search_Screen> {
     });
     var showResult = [];
     if (_search.text.isNotEmpty) {
+      List<String> searchthis = _search.text.split(" ").where((word) => word.isNotEmpty).map((word) => word.trim()).toList();
+
+      print("skills");
+      print(searchthis);
       if (_searchInProjects == false) {
         // Search in users
         for (var u in _allUser) {
           List<Map<String, dynamic>> skills =
               List<Map<String, dynamic>>.from(u['Skills'] ?? []);
+          List<String> skillNames = [];
+
           for (var skill in skills) {
-            if (skill['skill']
-                .toLowerCase()
-                .contains(_search.text.toLowerCase())) {
-              showResult.add(u);
-              break;
-            }
+            skillNames.add(skill['skill'].toLowerCase());
+          }
+
+          if (searchthis
+              .every((skill) => skillNames.contains(skill.toLowerCase()))) {
+            showResult.add(u);
+            break;
           }
         }
-      } else {
+      }
+      // search one by one skill
+
+      // for (var skill in skills) {
+      //   if (skill['skill']
+      //       .toLowerCase()
+      //       .contains(_search.text.toLowerCase())) {
+      //     showResult.add(u);
+      //     break;
+      //   }
+      // }
+
+      else {
         // Search in projects
         for (var project in _allProject) {
-          var name = project['ProjectTitle'].toString().toLowerCase();
+          // var name = project['ProjectTitle'].toString().toLowerCase();
 
           List<String> skills = List<String>.from(project['SkillReq'] ?? []);
 
-          print(skills);
+          // search one by one skill
+
+          // for (var skill in skills) {
+          //   if (skill.toLowerCase().contains(_search.text.toLowerCase())) {
+          //     showResult.add(project);
+          //   }
+          // }
+          List<String> skillNames = [];
+
           for (var skill in skills) {
-            if (skill.toLowerCase().contains(_search.text.toLowerCase())) {
-              showResult.add(project);
-            }
+            skillNames.add(skill.toLowerCase());
+          }
+
+          if (searchthis
+              .every((skill) => skillNames.contains(skill.toLowerCase()))) {
+            showResult.add(project);
+            break;
           }
         }
       }
@@ -108,7 +139,9 @@ class _Search_ScreenState extends State<Search_Screen> {
   }
 
   _onSearch() {
-    searchResult();
+    if (_search.text.isNotEmpty && _search.text.trim() != "") {
+      searchResult();
+    }
   }
 
   @override
@@ -222,7 +255,7 @@ class _Search_ScreenState extends State<Search_Screen> {
                               Map<String, dynamic> projectdata =
                                   _searchResult[index].data()
                                       as Map<String, dynamic>;
-                               if (projectdata['ProjectTitle'] == null) {
+                              if (projectdata['ProjectTitle'] == null) {
                                 // Show a loading indicator
                                 if (_isLoading == true) {
                                   return Container();
