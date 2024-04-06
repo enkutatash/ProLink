@@ -8,4 +8,5 @@ Map<String, String> logomap = {
   "Java":"asset/java.png",
   "Node.js":"asset/nodejs.png",
   "github":"asset/github.png", 
+  "email":"asset/gmail.png"
 };

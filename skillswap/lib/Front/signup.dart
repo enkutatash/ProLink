@@ -82,15 +82,15 @@ class SignUpPageState extends State<SignUpPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                 
-                  const Text(
-                    "SkillSwap",
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
+               
+               const Text(
+                  "SkillSwap",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
                   ),
+                  textAlign: TextAlign.center,
+                ),
                   SizedBox(
                     height: height * 0.03,
                   ),

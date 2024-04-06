@@ -23,6 +23,7 @@ class _Search_ScreenState extends State<Search_Screen> {
   List _allUser = [];
   List _allProject = [];
   List _searchResult = [];
+  bool _isLoading = false;
 
   allUser() async {
     var data = await FirebaseFirestore.instance
@@ -52,13 +53,16 @@ class _Search_ScreenState extends State<Search_Screen> {
   }
 
   searchResult() {
+    setState(() {
+      _isLoading = true; // Set isLoading to true before performing search
+    });
     var showResult = [];
     if (_search.text.isNotEmpty) {
       if (_searchInProjects == false) {
         // Search in users
         for (var u in _allUser) {
           List<Map<String, dynamic>> skills =
-              List<Map<String, dynamic>>.from(u['Skills']);
+              List<Map<String, dynamic>>.from(u['Skills'] ?? []);
           for (var skill in skills) {
             if (skill['skill']
                 .toLowerCase()
@@ -72,13 +76,14 @@ class _Search_ScreenState extends State<Search_Screen> {
         // Search in projects
         for (var project in _allProject) {
           var name = project['ProjectTitle'].toString().toLowerCase();
-          List<String>skills =
-              List<String>.from(project['SkillReq']);
+
+          List<String> skills = List<String>.from(project['SkillReq'] ?? []);
+
           print(skills);
-          for(var skill in skills){
-          if (skill.toLowerCase().contains(_search.text.toLowerCase())) {
-            showResult.add(project);
-          }
+          for (var skill in skills) {
+            if (skill.toLowerCase().contains(_search.text.toLowerCase())) {
+              showResult.add(project);
+            }
           }
         }
       }
@@ -89,6 +94,7 @@ class _Search_ScreenState extends State<Search_Screen> {
     }
     setState(() {
       _searchResult = showResult;
+      _isLoading = false;
     });
   }
 
@@ -117,6 +123,7 @@ class _Search_ScreenState extends State<Search_Screen> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -142,7 +149,17 @@ class _Search_ScreenState extends State<Search_Screen> {
                       });
                       allUser();
                     },
-                    child: Text("Users"),
+                    child: Text(
+                      "Users",
+                      style: TextStyle(
+                        color: _searchInProjects
+                            ? Colors.black
+                            : Color(0XFF2E307A),
+                        fontWeight: _searchInProjects
+                            ? FontWeight.normal
+                            : FontWeight.bold,
+                      ),
+                    ),
                   ),
                   InkWell(
                     onTap: () {
@@ -151,27 +168,80 @@ class _Search_ScreenState extends State<Search_Screen> {
                       });
                       allproject();
                     },
-                    child: Text("Projects"),
+                    child: Text(
+                      "Projects",
+                      style: TextStyle(
+                        color: _searchInProjects
+                            ? Color(0XFF2E307A)
+                            : Colors.black,
+                        fontWeight: _searchInProjects
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                      ),
+                    ),
                   )
                 ],
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: _searchResult.length,
-                itemBuilder: (context, index) {
-                  if (_searchInProjects == false) {
-                    Map<String, dynamic> userdata =
-                        _searchResult[index].data() as Map<String, dynamic>;
-                    String userid = _allUser[index].id;
-                    return UserSearch(userdata, userid);
-                  } else {
-                    Map<String, dynamic> projectdata =
-                        _searchResult[index].data() as Map<String, dynamic>;
-                    return ProjectSearch(projectdata);
-                  }
-                },
-              ),
+              child: _isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : _searchResult.isEmpty
+                      ? Center(
+                          child: Text("No results found"),
+                        )
+                      : ListView.builder(
+                          itemCount: _searchResult.length,
+                          itemBuilder: (context, index) {
+                            if (_searchInProjects == false) {
+                              Map<String, dynamic> userdata =
+                                  _searchResult[index].data()
+                                      as Map<String, dynamic>;
+                              String userid = _searchResult[index].id;
+                              // Check if userdata is null
+                              if (userdata['First'] == null) {
+                                // Show a loading indicator
+                                if (_isLoading == true) {
+                                  return Container();
+                                } else {
+                                  _isLoading = true;
+                                  return Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                              }
+                              return Column(
+                                children: [
+                                  UserSearch(userdata, userid),
+                                  Divider()
+                                ],
+                              );
+                            } else {
+                              Map<String, dynamic> projectdata =
+                                  _searchResult[index].data()
+                                      as Map<String, dynamic>;
+                               if (projectdata['ProjectTitle'] == null) {
+                                // Show a loading indicator
+                                if (_isLoading == true) {
+                                  return Container();
+                                } else {
+                                  _isLoading = true;
+                                  return Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                              }
+                              return Column(
+                                children: [
+                                  ProjectSearch(projectdata),
+                                  Divider()
+                                ],
+                              );
+                            }
+                          },
+                        ),
             ),
           ],
         ),

@@ -29,7 +29,7 @@ class ProjectDetailJoin extends StatelessWidget {
                   bottomRight: Radius.circular(0.0),
                 ),
                 child: Image.network(
-                    height: height * 0.2,
+                    height: height * 0.4,
                     width: width,
                     fit: BoxFit.cover,
                     projectdata['Projectimg']),

@@ -11,6 +11,8 @@ class UserSearch extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    
+
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -23,19 +25,19 @@ class UserSearch extends StatelessWidget {
         child: Container(
           height: height * 0.1,
           width: width,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Color.fromARGB(255, 237, 241, 245),
-            boxShadow: [
-     BoxShadow(
-                color:
-                    Colors.grey.withOpacity(0.5), // Shadow color (with opacity)
-                spreadRadius: 1, // Extends the shadow beyond the box
-                blurRadius: 1, // Blurs the edges of the shadow
-                offset: Offset(0, 1), // Shifts the shadow (x, y)
-              ),
-    ],
-          ),
+    //       decoration: BoxDecoration(
+    //         borderRadius: BorderRadius.circular(20),
+    //         color: Color.fromARGB(255, 237, 241, 245),
+    //         boxShadow: [
+    //  BoxShadow(
+    //             color:
+    //                 Colors.grey.withOpacity(0.5), // Shadow color (with opacity)
+    //             spreadRadius: 1, // Extends the shadow beyond the box
+    //             blurRadius: 1, // Blurs the edges of the shadow
+    //             offset: Offset(0, 1), // Shifts the shadow (x, y)
+    //           ),
+    // ],
+    //       ),
           child: Row(
             children: [
               CircleAvatar(

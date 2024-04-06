@@ -24,8 +24,11 @@ class ProjectSearch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+
+    
 
     return Padding(
       padding: const EdgeInsets.all(8),
@@ -39,19 +42,19 @@ class ProjectSearch extends StatelessWidget {
         },
         child: Container(
           width: width,
-          height: height * 0.21,
+          height: height * 0.45,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Color.fromARGB(255, 237, 241, 245),
-            boxShadow: [
-              BoxShadow(
-                color:
-                    Colors.grey.withOpacity(0.5), // Shadow color (with opacity)
-                spreadRadius: 1, // Extends the shadow beyond the box
-                blurRadius: 1, // Blurs the edges of the shadow
-                offset: Offset(0, 1), // Shifts the shadow (x, y)
-              ),
-            ],
+            // color: Color.fromARGB(255, 247, 248, 249),
+            // borderRadius: BorderRadius.circular(20),
+            // boxShadow: [
+            //   BoxShadow(
+            //     color:
+            //         Colors.grey.withOpacity(0.5), // Shadow color (with opacity)
+            //     spreadRadius: 1, // Extends the shadow beyond the box
+            //     blurRadius: 1, // Blurs the edges of the shadow
+            //     offset: Offset(0, 1), // Shifts the shadow (x, y)
+            //   ),
+            // ],
           ),
           child: Stack(children: [
             Column(
@@ -64,7 +67,7 @@ class ProjectSearch extends StatelessWidget {
                     bottomRight: Radius.circular(0.0),
                   ),
                   child: Image.network(
-                      height: height * 0.11,
+                      height: height * 0.3,
                       width: width,
                       fit: BoxFit.cover,
                       projectdata['Projectimg']),
@@ -91,6 +94,33 @@ class ProjectSearch extends StatelessWidget {
                             SizedBox(
                               height: height * 0.02,
                             ),
+                             Row(
+                               children: [
+                                 ClipOval(
+                                   child: Image.asset(
+                                     // ownerdata['profilePic'],
+                                     "asset/image 1.png",
+                                     width: 30,
+                                     height: 30,
+                                     fit: BoxFit.cover,
+                                   ),
+                                 ),
+                                 SizedBox(
+                                   width: 5,
+                                 ),
+                                 Text(
+                                   // '${ownerdata['First']} ${ownerdata['Last']}',
+                                   "Alice Bob",
+                                   style: TextStyle(
+                                     color: Colors.black,
+                                     fontSize: 16,
+                                   ),
+                                 ),
+                               ],
+                             ),
+                            SizedBox(
+                              height: height * 0.02,
+                            ),
                             Text(
                               '${projectdata['ProjectDes']}',
                               overflow: TextOverflow.ellipsis,
@@ -105,51 +135,9 @@ class ProjectSearch extends StatelessWidget {
                 )
               ],
             ),
-            Positioned(
-              top: height * 0.07,
-              left: width * 0.04,
-              child: Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 237, 241, 245),
-                    borderRadius: BorderRadius.circular(10),
-                    shape: BoxShape.rectangle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
-                        blurRadius: 3,
-                        offset: Offset(0, -2),
-                      ),
-                    ]),
-                child: Row(
-                  children: [
-                    ClipOval(
-                      child: Image.asset(
-                        // ownerdata['profilePic'],
-                        "asset/image 1.png",
-                        width: 30,
-                        height: 30,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      // '${ownerdata['First']} ${ownerdata['Last']}',
-                      "Alice Bob",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ]),
+          
+          ])),
         ),
-      ),
     );
   }
 }

@@ -92,16 +92,37 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
             children: [
               Center(
                   child: Stack(children: [
-                CircleAvatar(
-                  radius: 40.0,
-                  backgroundImage: imagePath != null
-                      ? FileImage(File(imagePath!))
-                      :null,
-                  child: imagePath == null ? Icon(Icons.person) : null,
-                ),
+                // CircleAvatar(
+                //   radius: 40.0,
+                //   backgroundImage: imagePath != null
+                //       ? FileImage(File(imagePath!))
+                //       :null,
+                //   child: imagePath == null ? Image.asset("asset/idea.png") : null,
+                // ),
+               ClipRRect(
+  borderRadius: const BorderRadius.only(
+    topLeft: Radius.circular(15.0),
+    topRight: Radius.circular(15.0),
+    bottomLeft: Radius.circular(0.0),
+    bottomRight: Radius.circular(0.0),
+  ),
+  child: imagePath != null
+      ? Image.file(
+          File(imagePath!),
+          height: height * 0.3,
+          width: width,
+          fit: BoxFit.cover,
+        )
+      : Image.asset(
+          "asset/idea.png",
+          height: height * 0.4,
+          width: width,
+          fit: BoxFit.cover,
+        ),
+),
                 Positioned(
-                    top: 45,
-                    right: -10,
+                    top: 30,
+                    right: 1,
                     child:IconButton(
                               onPressed: pickImage,
                               icon: Image.asset(

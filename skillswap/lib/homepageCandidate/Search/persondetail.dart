@@ -26,19 +26,12 @@ class PersonalDetail extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(15.0),
-                      topRight: Radius.circular(15.0),
-                      bottomLeft: Radius.circular(15.0),
-                      bottomRight: Radius.circular(15.0),
-                    ),
-                    child: Image.network(
-                        height: height * 0.15,
-                        width: width * 0.3,
-                        fit: BoxFit.cover,
+                 CircleAvatar(
+                  radius: 50,
+                  backgroundImage:NetworkImage(
+                        
                         userdata['profilePic']),
-                  ),
+                 ),
                   SizedBox(
                     width: width * 0.08,
                   ),
@@ -55,12 +48,21 @@ class PersonalDetail extends StatelessWidget {
                       SizedBox(height: 5.0),
                       GestureDetector(
                         onTap:()=>_launchInEmailApp(userdata['Email']),
-                        child: Text(
-                          userdata['Email'],
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            color: Colors.grey,
-                          ),
+                        child: Row(
+                          children: [
+                             Image.asset(
+                      logomap['email']!,
+                      width: width * 0.1,
+                      height: height * 0.02,
+                    ),
+                            Text(
+                              userdata['Email'],
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -214,10 +216,10 @@ class PersonalDetail extends StatelessWidget {
                           'https://linkedin.com/in/', userdata['Linkedin']),
                       child: Container(
                         padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                         color: Color.fromARGB(255, 237, 241, 245),
-                        ),
+                        // decoration: BoxDecoration(
+                        //   borderRadius: BorderRadius.circular(10),
+                        //  color: Color.fromARGB(255, 237, 241, 245),
+                        // ),
                         width: width * 0.76,
                         child: Text(userdata['Linkedin']),
                       ),
@@ -241,10 +243,10 @@ userdata['Github'] != null && userdata['Github'] != ''
                           'https://github.com/',userdata['Github']),
                       child: Container(
                         padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                         color: Color.fromARGB(255, 237, 241, 245),
-                        ),
+                        // decoration: BoxDecoration(
+                        //   borderRadius: BorderRadius.circular(10),
+                        //  color: Color.fromARGB(255, 237, 241, 245),
+                        // ),
                         width: width * 0.76,
                         child: Text(userdata['Github']),
                       ),

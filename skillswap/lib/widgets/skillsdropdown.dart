@@ -127,22 +127,30 @@ class _DropdownState extends State<Dropdown> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // use this button to open the multi-select dialog
-       ButtonThree(widget.skill,Color(0XFF2E307A), Color.fromARGB(255, 237, 241, 245), width*0.9, height*0.06,_showMultiSelect),
+       ButtonThree(widget.skill,Colors.grey, Color.fromARGB(255, 237, 241, 245), width*0.9, height*0.06,_showMultiSelect),
         const Divider(
           height: 30,
         ),
         // display selected items
         Wrap(
           spacing: 8,
-          
           children: _selectedItems
               .map((e) => Chip(
-                backgroundColor: Colors.white,
-                label: Text(""),
-                  avatar: CircleAvatar(
-                    radius: 50,
-                    backgroundImage: AssetImage(logomap[e]!), // Replace with your image URL
-                  ),
+  backgroundColor: Colors.white,
+  label: Text(
+    e,
+    overflow: TextOverflow.ellipsis,
+  ),
+  avatar: CircleAvatar(
+    radius: 50,
+    backgroundImage: logomap.containsKey(e) ? AssetImage(logomap[e]!) : null,
+    backgroundColor: logomap.containsKey(e)
+        ? null
+        : Color.fromARGB(255, 237, 241, 245),
+  ),
+
+
+
                   deleteIcon: Icon(Icons.close),
                   deleteIconColor: Colors.red,
                   onDeleted: () {
