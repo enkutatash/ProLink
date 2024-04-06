@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillswap/Front/signin.dart';
 import 'package:skillswap/Project/projectcontroller.dart';
+import 'package:skillswap/Project/userdata.dart';
 import 'package:skillswap/pages/contact.dart';
 import 'package:skillswap/pages/setting.dart';
 
@@ -15,6 +17,7 @@ class SideBar extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     ProjectController projectController = Get.put(ProjectController.empty());
+    final UserController userController = Get.find();
     return Drawer(
       backgroundColor: Color.fromARGB(255, 237, 241, 245),
       child: Column(
@@ -29,15 +32,25 @@ class SideBar extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundImage: NetworkImage(userdata['profilePic']),
-                      ),
+                      CachedNetworkImage(
+                          imageUrl: userController.userdata['profilePic'],
+                          imageBuilder: (context, imageProvider) => Container(
+                            width: 80.0,
+                            height: 80.0,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: imageProvider, fit: BoxFit.cover),
+                            ),
+                          ),
+                          placeholder: (context, url) => CircularProgressIndicator(),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                        ),
                       SizedBox(
                         height: height * 0.03,
                       ),
                       Text(
-                        '${userdata['First']} ${userdata['Last']} ',
+                        '${userController.userdata['First']} ${userController.userdata['Last']} ',
                         style: TextStyle(color: Colors.white),
                       )
                     ],

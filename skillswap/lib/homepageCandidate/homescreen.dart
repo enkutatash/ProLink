@@ -1,22 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:skillswap/Project/userdata.dart';
 import 'package:skillswap/homepageCandidate/Search/projectsearch.dart';
 import 'package:skillswap/homepageCandidate/Search/search.dart';
 import 'package:skillswap/homepageCandidate/recentproject.dart';
 import 'package:skillswap/homepageCandidate/sidebar.dart';
 import 'package:skillswap/widgets/buttons.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class HomeScreen extends StatefulWidget {
-  Map<String, dynamic> userdata;
-  final String userid;
-  HomeScreen(this.userdata, this.userid, {super.key});
+  
+  HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+   final UserController userController = Get.find();
   List _allProject = [];
   List _Project = [];
   bool _isLoading = false;
@@ -34,11 +37,10 @@ class _HomeScreenState extends State<HomeScreen> {
       _allProject = data.docs;
       // Remove unwanted elements from _allProject
       _allProject
-          .removeWhere((doc) => widget.userdata['MyProjects'].contains(doc.id));
+          .removeWhere((doc) => userController.userdata['MyProjects'].contains(doc.id));
       _Project = List.from(_allProject);
       _isLoading = false;
     });
-    print(_Project);
   }
 
   @override
@@ -52,6 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+   
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -65,11 +68,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () {
                       Scaffold.of(context).openDrawer();
                     },
-                    child: CircleAvatar(
-                      radius: 20.0,
-                      backgroundImage:
-                          NetworkImage(widget.userdata['profilePic']),
-                    ),
+                    child: CachedNetworkImage(
+                          imageUrl: userController.userdata['profilePic'],
+                          imageBuilder: (context, imageProvider) => Container(
+                            width: 50.0,
+                            height: 50.0,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: imageProvider, fit: BoxFit.cover),
+                            ),
+                          ),
+                          placeholder: (context, url) => Icon(Icons.person),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                        ),
                   ),
                   SizedBox(
                     width: 10,
@@ -81,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => Search_Screen(
-                                    widget.userdata, widget.userid)));
+                                    )));
                       },
                       child: Container(
                         padding: EdgeInsets.all(8),
@@ -100,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: width * 0.01,
                             ),
                             Text(
-                              "Search Project and user",
+                             'Search Users and Projects',
                               style: TextStyle(
                                 color: Colors.grey,
                               ),

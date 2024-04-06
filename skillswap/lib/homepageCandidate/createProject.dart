@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:skillswap/Project/projectcontroller.dart';
+import 'package:skillswap/Project/userdata.dart';
 import 'package:skillswap/firebase/firebase.dart';
 import 'package:skillswap/widgets/buttons.dart';
 import 'package:skillswap/widgets/skillsdropdown.dart';
@@ -13,9 +14,8 @@ import 'package:skillswap/homepageCandidate/personalproject.dart';
 import 'package:random_string/random_string.dart';
 
 class CreateProjectPage extends StatefulWidget {
-  Map<String, dynamic> userdata;
-  final String userid;
-  CreateProjectPage(this.userdata, this.userid, {Key? key}) : super(key: key);
+ 
+  CreateProjectPage({Key? key}) : super(key: key);
 
   @override
   State<CreateProjectPage> createState() => _CreateProjectPageState();
@@ -79,6 +79,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    final UserController userController = Get.find();
     return Scaffold(
       appBar: AppBar(
         title: Text('Create Project'),
@@ -164,8 +165,8 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                 downloadUrl!,
                 _titleController.text,
                 _descriptionController.text,
-                widget.userdata,
-                widget.userid,
+                userController.userdata,
+                userController.userid,
                 _requiredSkills,
                 [],
               );
@@ -173,12 +174,10 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                   downloadUrl!,
                   _titleController.text,
                   _descriptionController.text,
-                  widget.userid,
+                  userController.userid,
                   _requiredSkills,
                   []);
-                  setState(() {
-          widget.userdata['Myprojects'].add(projectUid);
-        });
+          userController.userdata['MyProjects'].add(projectUid);
                 
               Navigator.pop(context);
             },)

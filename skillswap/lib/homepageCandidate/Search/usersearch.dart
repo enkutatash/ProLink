@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:skillswap/homepageCandidate/Search/persondetail.dart';
 
@@ -25,26 +26,23 @@ class UserSearch extends StatelessWidget {
         child: Container(
           height: height * 0.1,
           width: width,
-    //       decoration: BoxDecoration(
-    //         borderRadius: BorderRadius.circular(20),
-    //         color: Color.fromARGB(255, 237, 241, 245),
-    //         boxShadow: [
-    //  BoxShadow(
-    //             color:
-    //                 Colors.grey.withOpacity(0.5), // Shadow color (with opacity)
-    //             spreadRadius: 1, // Extends the shadow beyond the box
-    //             blurRadius: 1, // Blurs the edges of the shadow
-    //             offset: Offset(0, 1), // Shifts the shadow (x, y)
-    //           ),
-    // ],
-    //       ),
           child: Row(
             children: [
-              CircleAvatar(
-                radius: 30,
-                backgroundImage: NetworkImage(
-                    userdata['profilePic']),
-              ),
+            
+              CachedNetworkImage(
+                          imageUrl:  userdata['profilePic'],
+                          imageBuilder: (context, imageProvider) => Container(
+                            width: 50.0,
+                            height: 50.0,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: imageProvider, fit: BoxFit.cover),
+                            ),
+                          ),
+                          placeholder: (context, url) => Icon(Icons.person),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                        ),
               SizedBox(
                 width: width * 0.02,
               ),
@@ -79,27 +77,3 @@ class UserSearch extends StatelessWidget {
   }
 }
 
-Future<void> _dialogBuilder(BuildContext context, userdata) {
-  return showDialog<void>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-          title: Text('${userdata['First']} ${userdata['Last']}'),
-          content: Container(
-            width: double.maxFinite,
-            child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: userdata['Skills'].length,
-                itemBuilder: (context, index) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('${userdata['Skills'][index]['skill']}'),
-                      Text('${userdata['Skills'][index]['level']}')
-                    ],
-                  );
-                }),
-          ));
-    },
-  );
-}

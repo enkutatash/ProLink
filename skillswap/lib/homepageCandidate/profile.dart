@@ -1,4 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:skillswap/Project/userdata.dart';
 import 'package:skillswap/pages/contact.dart';
 import 'package:skillswap/pages/setting.dart';
 import 'package:skillswap/widgets/skillimg.dart';
@@ -6,13 +9,12 @@ import 'package:url_launcher/url_launcher.dart';
 
 
 class ProfilePage extends StatelessWidget {
-  Map<String, dynamic> userdata;
-  final String userid;
-  ProfilePage(this.userdata, this.userid, {super.key});
+  ProfilePage({super.key});
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    final UserController userController = Get.find();
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -23,11 +25,20 @@ class ProfilePage extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircleAvatar(
-                   radius: 40,
-                    backgroundImage: NetworkImage(
-                        userdata['profilePic']),
-                  ),
+                  CachedNetworkImage(
+                          imageUrl: userController.userdata['profilePic'],
+                          imageBuilder: (context, imageProvider) => Container(
+                            width: 80.0,
+                            height: 80.0,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: imageProvider, fit: BoxFit.cover),
+                            ),
+                          ),
+                          placeholder: (context, url) => CircularProgressIndicator(),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                        ),
                   SizedBox(
                     width: width * 0.08,
                   ),
@@ -35,7 +46,7 @@ class ProfilePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "${userdata['First']} ${userdata['Last']}",
+                        "${userController.userdata['First']} ${userController.userdata['Last']}",
                         style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
@@ -43,9 +54,9 @@ class ProfilePage extends StatelessWidget {
                       ),
                       SizedBox(height: 5.0),
                       GestureDetector(
-                        onTap:()=>_launchInEmailApp(userdata['Email']),
+                        onTap:()=>_launchInEmailApp(userController.userdata['Email']),
                         child: Text(
-                          userdata['Email'],
+                          userController.userdata['Email'],
                           style: TextStyle(
                             fontSize: 16.0,
                             color: Colors.grey,
@@ -95,9 +106,9 @@ class ProfilePage extends StatelessWidget {
                                   runSpacing:
                                       8, // Adjust the spacing between lines as needed
                                   children: List.generate(
-                                      userdata['Skills'].length, (index) {
+                                      userController.userdata['Skills'].length, (index) {
                                     Map<String, dynamic> skill =
-                                        userdata['Skills'][index];
+                                        userController.userdata['Skills'][index];
 
                                     if (logomap.containsKey(skill['skill'])) {
                                       return GestureDetector(
@@ -185,12 +196,12 @@ class ProfilePage extends StatelessWidget {
                     SizedBox(
                       height: height * 0.01,
                     ),
-                    Text(userdata['Bio']),
+                    Text(userController.userdata['Bio']),
                   ],
                 ),
               ),
               SizedBox(height: height * 0.03),
-              userdata['Linkedin'] != null && userdata['Linkedin'] != ''
+              userController.userdata['Linkedin'] != null && userController.userdata['Linkedin'] != ''
                   ? Row(
                     children: [
                        Image.asset(
@@ -200,15 +211,15 @@ class ProfilePage extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () => _launchInBrowser(
-                          'https://linkedin.com/in/', userdata['Linkedin']),
+                          'https://linkedin.com/in/', userController.userdata['Linkedin']),
                       child: Container(
                         padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                         color: Color.fromARGB(255, 237, 241, 245),
-                        ),
+                        // decoration: BoxDecoration(
+                        //   borderRadius: BorderRadius.circular(10),
+                        //  color: Color.fromARGB(255, 237, 241, 245),
+                        // ),
                         width: width * 0.76,
-                        child: Text(userdata['Linkedin']),
+                        child: Text(userController.userdata['Linkedin']),
                       ),
                     )
                     ],
@@ -217,7 +228,7 @@ class ProfilePage extends StatelessWidget {
              
               SizedBox(height: height * 0.03),
 
-userdata['Github'] != null && userdata['Github'] != ''
+userController.userdata['Github'] != null && userController.userdata['Github'] != ''
                   ? Row(
                     children: [
                        Image.asset(
@@ -227,15 +238,15 @@ userdata['Github'] != null && userdata['Github'] != ''
                     ),
                     InkWell(
                       onTap: () => _launchInBrowser(
-                          'https://github.com/',userdata['Github']),
+                          'https://github.com/',userController.userdata['Github']),
                       child: Container(
                         padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                         color: Color.fromARGB(255, 237, 241, 245),
-                        ),
+                        // decoration: BoxDecoration(
+                        //   borderRadius: BorderRadius.circular(10),
+                        //  color: Color.fromARGB(255, 237, 241, 245),
+                        // ),
                         width: width * 0.76,
-                        child: Text(userdata['Github']),
+                        child: Text(userController.userdata['Github']),
                       ),
                     )
                     ],

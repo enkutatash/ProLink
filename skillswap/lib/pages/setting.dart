@@ -78,7 +78,7 @@ class SettingsPage extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ProfilePage(userdata,userid)),
+                      MaterialPageRoute(builder: (context) => ProfilePage()),
                     );
                   },
                   child: Container(  

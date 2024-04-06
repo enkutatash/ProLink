@@ -2,14 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:skillswap/Project/userdata.dart';
 import 'package:skillswap/firebase/firebase.dart';
 import 'package:skillswap/homepageCandidate/Search/projectsearch.dart';
 import 'package:skillswap/homepageCandidate/Search/usersearch.dart';
 
 class Search_Screen extends StatefulWidget {
-  Map<String, dynamic> userdata;
-  String userid;
-  Search_Screen(this.userdata, this.userid, {super.key});
+  Search_Screen({super.key});
 
   @override
   State<Search_Screen> createState() => _Search_ScreenState();
@@ -19,6 +19,8 @@ class _Search_ScreenState extends State<Search_Screen> {
   final TextEditingController _search = TextEditingController();
   late final Firebase_Service _auth;
   final FocusNode _searchFocusNode = FocusNode();
+  final UserController userController = Get.find();
+
   bool _searchInProjects = false;
   List _allUser = [];
   List _allProject = [];
@@ -33,7 +35,7 @@ class _Search_ScreenState extends State<Search_Screen> {
     setState(() {
       _allUser = data.docs;
     });
-    _allUser.removeWhere((doc) => doc.id == widget.userid);
+    _allUser.removeWhere((doc) => doc.id == userController.userid);
     searchResult();
   }
 
@@ -45,8 +47,8 @@ class _Search_ScreenState extends State<Search_Screen> {
     setState(() {
       _allProject = data.docs;
       // Remove unwanted elements from _allProject
-      _allProject
-          .removeWhere((doc) => widget.userdata['MyProjects'].contains(doc.id));
+      _allProject.removeWhere(
+          (doc) => userController.userdata['MyProjects'].contains(doc.id));
       searchResult(); // Move this inside setState
     });
   }
@@ -141,6 +143,8 @@ class _Search_ScreenState extends State<Search_Screen> {
 
   _onSearch() {
     if (_search.text.isNotEmpty && _search.text.trim() != "") {
+      print("project");
+      print(userController.userdata['MyProjects']);
       searchResult();
     }
   }
