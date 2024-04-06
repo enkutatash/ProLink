@@ -137,7 +137,9 @@ class ProjectSearch extends StatelessWidget {
                           ),
                         ),
                         ButtonTwo("Join", Colors.white, Color(0XFF2E307A),
-                            width * 0.08, height * 0.05, 12, () {}),
+                            width * 0.08, height * 0.05, 12, () {
+                              _showBottomSheet(context,projectdata['SkillReq']);
+                            }),
                       ],
                     ),
                   )
@@ -145,6 +147,82 @@ class ProjectSearch extends StatelessWidget {
               ),
             ])),
       ),
+    );
+  }
+  void _showBottomSheet(BuildContext context, List<dynamic> skills) {
+    List<String> selectedSkills = [];
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    TextEditingController message = TextEditingController();
+
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
+                ),
+              ),
+              padding: EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  CustomTextFormField(
+                      width: width * 0.9,
+                      height: height * 0.06,
+                      hintText: "Message",
+                      controller: message),
+                  Text(
+                    'Apply for',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: skills.length,
+                      itemBuilder: (context, index) {
+                        final item = skills[index];
+                        return CheckboxListTile(
+                          title: Text(item),
+                          value: selectedSkills.contains(item),
+                          onChanged: (bool? value) {
+                            setState(() {
+                              if (value == true) {
+                                selectedSkills.add(item);
+                              } else {
+                                selectedSkills.remove(item);
+                              }
+                            });
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: ButtonTwo("Send", Colors.white, Color(0XFF2E307A),
+                        width * 0.45, height * 0.07, 10, () {
+                      print(message.text);
+                      print(selectedSkills);
+                      Navigator.pop(context);
+                    }),
+                  )
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }

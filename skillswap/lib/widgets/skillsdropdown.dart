@@ -148,9 +148,6 @@ class _DropdownState extends State<Dropdown> {
         ? null
         : Color.fromARGB(255, 237, 241, 245),
   ),
-
-
-
                   deleteIcon: Icon(Icons.close),
                   deleteIconColor: Colors.red,
                   onDeleted: () {

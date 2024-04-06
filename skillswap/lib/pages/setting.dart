@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillswap/Project/userdata.dart';
@@ -95,9 +96,19 @@ class SettingsPage extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        CircleAvatar(
-                          radius: 30.0,
-                          backgroundImage: NetworkImage(userController.userdata['profilePic']),
+                        CachedNetworkImage(
+                          imageUrl: userController.userdata['profilePic'],
+                          imageBuilder: (context, imageProvider) => Container(
+                            width: 50.0,
+                            height: 50.0,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: imageProvider, fit: BoxFit.cover),
+                            ),
+                          ),
+                          placeholder: (context, url) => Icon(Icons.person),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
                         ),
                         const SizedBox(width: 16.0),
                         Column(
