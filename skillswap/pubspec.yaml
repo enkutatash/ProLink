@@ -45,6 +45,7 @@ dependencies:
   intl: ^0.18.1
   google_fonts: ^6.2.1
   get: ^4.6.6
+  random_string: ^2.3.1
  
 
 

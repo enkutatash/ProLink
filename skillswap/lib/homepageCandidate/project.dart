@@ -23,19 +23,19 @@ class Project extends StatelessWidget {
         },
         child: Container(
           width: width,
-          height: height * 0.23,
+          height: height * 0.4,
           decoration: BoxDecoration(
-            color: Color.fromARGB(255, 237, 241, 245),
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color:
-                    Colors.grey.withOpacity(0.5), // Shadow color (with opacity)
-                spreadRadius: 1, // Extends the shadow beyond the box
-                blurRadius: 1, // Blurs the edges of the shadow
-                offset: Offset(0, 1), // Shifts the shadow (x, y)
-              ),
-            ],
+            // color: Color.fromARGB(255, 237, 241, 245),
+            // borderRadius: BorderRadius.circular(10),
+            // boxShadow: [
+            //   BoxShadow(
+            //     color:
+            //         Colors.grey.withOpacity(0.5), // Shadow color (with opacity)
+            //     spreadRadius: 1, // Extends the shadow beyond the box
+            //     blurRadius: 1, // Blurs the edges of the shadow
+            //     offset: Offset(0, 1), // Shifts the shadow (x, y)
+            //   ),
+            // ],
           ),
           child: Column(
             children: [
@@ -47,7 +47,7 @@ class Project extends StatelessWidget {
                   bottomRight: Radius.circular(0.0),
                 ),
                 child: Image.network(
-                    height: height * 0.13,
+                    height: height * 0.3,
                     width: width,
                     fit: BoxFit.cover,
                     projectdata['Projectimg']),
@@ -95,34 +95,3 @@ class Project extends StatelessWidget {
   }
 }
 
-class Button extends StatelessWidget {
-  final String text;
-  final Color btnclr;
-  final Color textclr;
-  final void Function() click;
-  Button(this.text, this.textclr, this.btnclr, this.click, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-    return ElevatedButton(
-      onPressed: click,
-      style: ButtonStyle(
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0), // Set border radius
-          ),
-        ),
-        minimumSize: MaterialStateProperty.all(
-            Size(width * 0.2, height * 0.04)), // Set width and height
-        backgroundColor:
-            MaterialStateProperty.all<Color>(btnclr), // Set color to red
-      ),
-      child: Text(
-        text,
-        style: TextStyle(color: textclr),
-      ),
-    );
-  }
-}

@@ -43,8 +43,8 @@ class ButtonTwo extends StatelessWidget {
   final double width;
   final double height;
   final double fontsize;
-  ButtonTwo(
-      this.text, this.textclr, this.btnclr, this.width, this.height,this.fontsize ,this.click,
+  ButtonTwo(this.text, this.textclr, this.btnclr, this.width, this.height,
+      this.fontsize, this.click,
       {super.key});
 
   @override
@@ -65,7 +65,7 @@ class ButtonTwo extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: TextStyle(color: textclr, fontSize:fontsize),
+        style: TextStyle(color: textclr, fontSize: fontsize),
       ),
     );
   }
@@ -214,7 +214,7 @@ class CustomTextFormFieldTwo extends StatelessWidget {
   final Function(String)? onChanged;
   final Widget? suffixIcon;
   final int? maxLine;
-
+  final int? minLine;
   CustomTextFormFieldTwo(
       {required this.width,
       required this.height,
@@ -226,7 +226,8 @@ class CustomTextFormFieldTwo extends StatelessWidget {
       this.obscureText = false,
       this.suffixIcon,
       this.onChanged,
-      this.maxLine});
+      this.maxLine,
+      this.minLine});
 
   @override
   Widget build(BuildContext context) {
@@ -235,7 +236,7 @@ class CustomTextFormFieldTwo extends StatelessWidget {
       height: height + 20,
       child: TextFormField(
         controller: controller,
-        minLines: 8,
+        minLines: minLine,
         maxLines: maxLine,
         decoration: InputDecoration(
           labelText: labelText,

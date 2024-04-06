@@ -34,7 +34,12 @@ class _ProjectScreenState extends State<ProjectScreen> {
           return ListView.builder(
             itemCount: projectController.Project.length,
             itemBuilder: (context, index) {
-              return Project(projectController.Project[index]);
+              return Column(
+                children: [
+                  Project(projectController.Project[index]),
+                  Divider()
+                ],
+              );
             },
           );
         }

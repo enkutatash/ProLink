@@ -97,9 +97,9 @@ class ProjectSearch extends StatelessWidget {
                              Row(
                                children: [
                                  ClipOval(
-                                   child: Image.asset(
-                                     // ownerdata['profilePic'],
-                                     "asset/image 1.png",
+                                   child: Image.network(
+                                     projectdata['Owner']['profilePic'],
+                                    //  "asset/image 1.png",
                                      width: 30,
                                      height: 30,
                                      fit: BoxFit.cover,
@@ -109,8 +109,8 @@ class ProjectSearch extends StatelessWidget {
                                    width: 5,
                                  ),
                                  Text(
-                                   // '${ownerdata['First']} ${ownerdata['Last']}',
-                                   "Alice Bob",
+                                   '${projectdata['Owner']['First']} ${projectdata['Owner']['Last']}',
+                                  //  "Alice Bob",
                                    style: TextStyle(
                                      color: Colors.black,
                                      fontSize: 16,

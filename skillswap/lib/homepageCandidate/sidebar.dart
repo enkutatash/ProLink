@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillswap/Front/signin.dart';
+import 'package:skillswap/Project/projectcontroller.dart';
 import 'package:skillswap/pages/contact.dart';
 import 'package:skillswap/pages/setting.dart';
 
@@ -13,6 +14,7 @@ class SideBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    ProjectController projectController = Get.put(ProjectController.empty());
     return Drawer(
       backgroundColor: Color.fromARGB(255, 237, 241, 245),
       child: Column(
@@ -75,9 +77,16 @@ class SideBar extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.logout,color: Color(0XFF2E307A),),
-            title: Text('Logout',style: TextStyle(color: Color(0XFF2E307A)),),
+            leading: Icon(
+              Icons.logout,
+              color: Color(0XFF2E307A),
+            ),
+            title: Text(
+              'Logout',
+              style: TextStyle(color: Color(0XFF2E307A)),
+            ),
             onTap: () {
+              projectController.clearProjects();
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => SignInPage()),

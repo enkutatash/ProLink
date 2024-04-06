@@ -60,5 +60,9 @@ class ProjectController extends GetxController {
     _Projects.add(project);
   }
 
+  void clearProjects() {
+    _Projects.clear();
+  }
+
   get Project => _Projects;
 }

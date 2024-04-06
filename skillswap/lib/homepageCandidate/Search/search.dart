@@ -44,12 +44,12 @@ class _Search_ScreenState extends State<Search_Screen> {
         .get();
     setState(() {
       _allProject = data.docs;
+      // Remove unwanted elements from _allProject
+      _allProject
+          .removeWhere((doc) => widget.userdata['MyProjects'].contains(doc.id));
+      searchResult(); // Move this inside setState
     });
-    _allProject = data.docs;
-    // Remove unwanted elements from _allProject
-    _allProject
-        .removeWhere((doc) => widget.userdata['MyProjects'].contains(doc.id));
-    searchResult(); // Move this inside setState
+    print(_allProject);
   }
 
   searchResult() {
@@ -58,10 +58,12 @@ class _Search_ScreenState extends State<Search_Screen> {
     });
     var showResult = [];
     if (_search.text.isNotEmpty) {
-      List<String> searchthis = _search.text.split(" ").where((word) => word.isNotEmpty).map((word) => word.trim()).toList();
+      List<String> searchthis = _search.text
+          .split(" ")
+          .where((word) => word.isNotEmpty)
+          .map((word) => word.trim())
+          .toList();
 
-      print("skills");
-      print(searchthis);
       if (_searchInProjects == false) {
         // Search in users
         for (var u in _allUser) {

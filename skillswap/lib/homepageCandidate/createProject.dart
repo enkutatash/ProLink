@@ -10,6 +10,7 @@ import 'package:skillswap/firebase/firebase.dart';
 import 'package:skillswap/widgets/buttons.dart';
 import 'package:skillswap/widgets/skillsdropdown.dart';
 import 'package:skillswap/homepageCandidate/personalproject.dart';
+import 'package:random_string/random_string.dart';
 
 class CreateProjectPage extends StatefulWidget {
   Map<String, dynamic> userdata;
@@ -139,7 +140,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
               
               SizedBox(height: 20),
               FormText(text: "Project Description", alignment: Alignment.centerLeft),
-              CustomTextFormFieldTwo(width: width*0.9, height: height*0.06, hintText: "Enter Project Description", controller: _descriptionController,keyboardType: TextInputType.emailAddress,maxLine: null,),
+              CustomTextFormFieldTwo(width: width*0.9, height: height*0.06, hintText: "Enter Project Description", controller: _descriptionController,maxLine: 10,minLine: 5,),
               
               SizedBox(height:5,),
               Dropdown(onItemsSelected:  (selectedItems) {
@@ -157,10 +158,13 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
           width: double.infinity,
           height: 50,
           child: ButtonTwo("Create Project", Colors.white, Color(0XFF2E307A), width*0.9, height*0.06, 15,  () {
+            String projectUid = randomAlphaNumeric(10);
               _auth.createProject(
+                projectUid,
                 downloadUrl!,
                 _titleController.text,
                 _descriptionController.text,
+                widget.userdata,
                 widget.userid,
                 _requiredSkills,
                 [],
@@ -172,6 +176,10 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                   widget.userid,
                   _requiredSkills,
                   []);
+                  setState(() {
+          widget.userdata['Myprojects'].add(projectUid);
+        });
+                
               Navigator.pop(context);
             },)
         ),

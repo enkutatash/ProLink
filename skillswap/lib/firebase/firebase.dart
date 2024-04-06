@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+
+
 class Firebase_Service {
   FirebaseAuth _auth = FirebaseAuth.instance;
   final CollectionReference dbrefuser =
@@ -134,25 +136,28 @@ class Firebase_Service {
   }
 
   Future createProject(
+    String projectUid,
       String projectimg,
       String projectTitle,
       String projectDescription,
+     Map<String, dynamic> userdata,
       String userid,
       List<String> skillReq,
       List<String> teams) async {
     var now = new DateTime.now();
     var formatter = new DateFormat('yyyy-MM-dd');
     String formattedDate = formatter.format(now);
-    DocumentReference docref = await dbrefproject.add({
+    await dbrefproject.doc(projectUid).set({
       'Projectimg': projectimg,
       'ProjectTitle': projectTitle,
       'ProjectDes': projectDescription,
-      'Owner': userid,
+      'Owner': userdata,
+      'userid':userid,
       'SkillReq': skillReq,
       'Teams': teams,
       'TimeStamp': formattedDate
     });
-    addProjectToUser(userid, docref.id);
+    addProjectToUser(userid, projectUid);
     _showSnackBar("Project successfully created");
   }
 

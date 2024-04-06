@@ -167,9 +167,9 @@ class SignInPageState extends State<SignInPage> {
     User? user = await _auth.signInWithEmailAndPassword(Email, Password);
 
     if (user != null) {
-      print(user.uid);
+      
       await _fetchUserData(user.uid);
-      print(userdata);
+      
       if (userdata.containsKey('CompanyName')) {
         Navigator.pushAndRemoveUntil(
           context,

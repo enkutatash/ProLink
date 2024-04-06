@@ -12,6 +12,8 @@ import 'package:skillswap/widgets/skillsdropdown.dart';
 import 'package:skillswap/homepageCandidate/homepage.dart';
 import 'package:skillswap/widgets/buttons.dart';
 
+
+
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
   @override
@@ -171,15 +173,15 @@ class SignUpPageState extends State<SignUpPage> {
           
                   
           const FormText(text: "Github", alignment: Alignment.centerLeft),
-          CustomTextFormField(width: width*0.9, height: height*0.06, hintText: "githubhandle", controller: _githubcontroller,keyboardType: TextInputType.emailAddress,),
+          CustomTextFormField(width: width*0.9, height: height*0.06, hintText: "githubhandle", controller: _githubcontroller,),
           
                 const FormText(text: "LinkedIn", alignment: Alignment.centerLeft),
           
-                   CustomTextFormField(width: width*0.9, height: height*0.06, hintText: "Linkedin", controller: _linkedincontroller,keyboardType: TextInputType.emailAddress,),
+                   CustomTextFormField(width: width*0.9, height: height*0.06, hintText: "Linkedin", controller: _linkedincontroller,),
           
                 const FormText(text: "Bio", alignment: Alignment.centerLeft),
           
-                  CustomTextFormFieldTwo(width: width*0.9, height: height*0.06, hintText: "Enter your bio", controller: _biocontroller,keyboardType: TextInputType.emailAddress,maxLine: null,),
+                  CustomTextFormFieldTwo(width: width*0.9, height: height*0.06, hintText: "Enter your bio", controller: _biocontroller,maxLine: null,),
           
                   SizedBox(height: height*0.02,),
                   Dropdown(
@@ -261,7 +263,7 @@ class SignUpPageState extends State<SignUpPage> {
         email, password, downloadUrl!, linkedin, github, bio,_selectedSkills);
     if (user != null) {
       print("User is successfully created");
-       List<Map<String, String>> skillsWithLevel = _selectedSkills.map((skill) => {'skill': skill, 'level': 'Beginner'}).toList();
+      List<Map<String, String>> skillsWithLevel = _selectedSkills?.map((skill) => {'skill': skill, 'level': 'Beginner'}).toList() ?? [];
       Map<String, dynamic> userdata = {
         'Email': email,
         'First': firstName,
@@ -270,7 +272,9 @@ class SignUpPageState extends State<SignUpPage> {
         'profilePic': downloadUrl,
         'Bio': bio,
         'Id': user.uid,
-        'Skills': skillsWithLevel
+        'Skills': skillsWithLevel,
+        'MyProjects': [],
+      'WorkingOnPro': []
       };
 
       Navigator.pushAndRemoveUntil(
