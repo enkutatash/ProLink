@@ -49,7 +49,6 @@ class _Search_ScreenState extends State<Search_Screen> {
           .removeWhere((doc) => widget.userdata['MyProjects'].contains(doc.id));
       searchResult(); // Move this inside setState
     });
-    print(_allProject);
   }
 
   searchResult() {
