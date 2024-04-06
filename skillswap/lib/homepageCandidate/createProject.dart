@@ -100,54 +100,63 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                 //       :null,
                 //   child: imagePath == null ? Image.asset("asset/idea.png") : null,
                 // ),
-               ClipRRect(
-  borderRadius: const BorderRadius.only(
-    topLeft: Radius.circular(15.0),
-    topRight: Radius.circular(15.0),
-    bottomLeft: Radius.circular(0.0),
-    bottomRight: Radius.circular(0.0),
-  ),
-  child: imagePath != null
-      ? Image.file(
-          File(imagePath!),
-          height: height * 0.3,
-          width: width,
-          fit: BoxFit.cover,
-        )
-      : Image.asset(
-          "asset/idea.png",
-          height: height * 0.4,
-          width: width,
-          fit: BoxFit.cover,
-        ),
-),
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(15.0),
+                    topRight: Radius.circular(15.0),
+                    bottomLeft: Radius.circular(0.0),
+                    bottomRight: Radius.circular(0.0),
+                  ),
+                  child: imagePath != null
+                      ? Image.file(
+                          File(imagePath!),
+                          height: height * 0.3,
+                          width: width,
+                          fit: BoxFit.cover,
+                        )
+                      : Image.asset(
+                          "asset/idea.png",
+                          height: height * 0.4,
+                          width: width,
+                          fit: BoxFit.cover,
+                        ),
+                ),
                 Positioned(
                     top: 30,
                     right: 1,
-                    child:IconButton(
-                              onPressed: pickImage,
-                              icon: Image.asset(
-                                width: 30,
-                                height: 30
-                                ,"asset/camera.png")
-                              )
-                        )
+                    child: IconButton(
+                        onPressed: pickImage,
+                        icon: Image.asset(
+                            width: 30, height: 30, "asset/camera.png")))
               ])),
               SizedBox(height: 20),
-
               FormText(text: "Project Title", alignment: Alignment.centerLeft),
-              CustomTextFormField(width: width*0.9, height: height*0.06, hintText: 'Enter project title', controller: _titleController ),
-              
+              CustomTextFormField(
+                  width: width * 0.9,
+                  height: height * 0.06,
+                  hintText: 'Enter project title',
+                  controller: _titleController),
               SizedBox(height: 20),
-              FormText(text: "Project Description", alignment: Alignment.centerLeft),
-              CustomTextFormFieldTwo(width: width*0.9, height: height*0.06, hintText: "Enter Project Description", controller: _descriptionController,maxLine: 10,minLine: 5,),
-              
-              SizedBox(height:5,),
-              Dropdown(onItemsSelected:  (selectedItems) {
+              FormText(
+                  text: "Project Description", alignment: Alignment.centerLeft),
+              CustomTextFormFieldTwo(
+                width: width * 0.9,
+                height: height * 0.06,
+                hintText: "Enter Project Description",
+                controller: _descriptionController,
+                maxLine: 10,
+                minLine: 5,
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Dropdown(
+                  onItemsSelected: (selectedItems) {
                     setState(() {
                       _requiredSkills = selectedItems;
                     });
-                  }, skill: "Required Skills")
+                  },
+                  skill: "Required Skills")
             ],
           ),
         ),
@@ -155,34 +164,41 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
       bottomNavigationBar: Container(
         padding: EdgeInsets.all(20.0),
         child: SizedBox(
-          width: double.infinity,
-          height: 50,
-          child: ButtonTwo("Create Project", Colors.white, Color(0XFF2E307A), width*0.9, height*0.06, 15,  () {
-            String projectUid = randomAlphaNumeric(10);
-              _auth.createProject(
-                projectUid,
-                downloadUrl!,
-                _titleController.text,
-                _descriptionController.text,
-                widget.userdata,
-                widget.userid,
-                _requiredSkills,
-                [],
-              );
-              projectController.addProject(
+            width: double.infinity,
+            height: 50,
+            child: ButtonTwo(
+              "Create Project",
+              Colors.white,
+              Color(0XFF2E307A),
+              width * 0.9,
+              height * 0.06,
+              15,
+              () {
+                String projectUid = randomAlphaNumeric(10);
+                _auth.createProject(
+                  projectUid,
                   downloadUrl!,
                   _titleController.text,
                   _descriptionController.text,
+                  widget.userdata,
                   widget.userid,
                   _requiredSkills,
-                  []);
-                  setState(() {
-          widget.userdata['Myprojects'].add(projectUid);
-        });
-                
-              Navigator.pop(context);
-            },)
-        ),
+                  [],
+                );
+                projectController.addProject(
+                    downloadUrl!,
+                    _titleController.text,
+                    _descriptionController.text,
+                    widget.userid,
+                    _requiredSkills, []);
+                print("mid");
+                setState(() {
+                  widget.userdata['MyProjects'].add(projectUid);
+                });
+                print(widget.userdata);
+                Navigator.pop(context);
+              },
+            )),
       ),
     );
   }
