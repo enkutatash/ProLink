@@ -55,10 +55,24 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-  
-          return Scaffold(
-            drawer: SideBar(),
-            body: SafeArea(
+    return Scaffold(
+      drawer: SideBar(),
+      body: FutureBuilder(
+        future: usercontroller.initializeuser(widget.userid),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // Display a loading indicator while waiting for data
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            // Handle error state
+            return Center(
+              child: Text('Error loading data'),
+            );
+          } else {
+            // Data has been fetched, build the UI
+            return SafeArea(
               bottom: false,
               child: PageView(
                 controller: _pageController,
@@ -74,69 +88,62 @@ class _HomepageState extends State<Homepage> {
                   ProfilePage(),
                 ],
               ),
-            ),
-            bottomNavigationBar: BottomAppBar(
-              color: Color.fromARGB(255, 237, 241, 245),
-              shape: CircularNotchedRectangle(),
-              notchMargin: 8.0, // Adjust the margin as needed
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.home),
-                    onPressed: () {
-                      _onItemTapped(0);
-                    },
-                    color: _currentPageIndex == 0
-                        ? Color(0XFF2E307A)
-                        : Colors.grey,
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.task),
-                    onPressed: () {
-                      _onItemTapped(1);
-                    },
-                    color: _currentPageIndex == 1
-                        ? Color(0XFF2E307A)
-                        : Colors.grey,
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.message),
-                    onPressed: () {
-                      _onItemTapped(2);
-                    },
-                    color: _currentPageIndex == 2
-                        ? Color(0XFF2E307A)
-                        : Colors.grey,
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.person),
-                    onPressed: () {
-                      _onItemTapped(3);
-                    },
-                    color: _currentPageIndex == 3
-                        ? Color(0XFF2E307A)
-                        : Colors.grey,
-                  ),
-                ],
-              ),
-            ),
-            floatingActionButton: FloatingActionButton(
+            );
+          }
+        },
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Color.fromARGB(255, 237, 241, 245),
+        shape: CircularNotchedRectangle(),
+        notchMargin: 8.0, // Adjust the margin as needed
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.home),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CreateProjectPage(),
-                  ),
-                );
+                _onItemTapped(0);
               },
-              child: Icon(Icons.add, color: Color(0XFF2E307A), size: 30),
-              shape: CircleBorder(),
-              backgroundColor: Colors.white,
+              color: _currentPageIndex == 0 ? Color(0XFF2E307A) : Colors.grey,
             ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerDocked,
+            IconButton(
+              icon: Icon(Icons.task),
+              onPressed: () {
+                _onItemTapped(1);
+              },
+              color: _currentPageIndex == 1 ? Color(0XFF2E307A) : Colors.grey,
+            ),
+            IconButton(
+              icon: Icon(Icons.message),
+              onPressed: () {
+                _onItemTapped(2);
+              },
+              color: _currentPageIndex == 2 ? Color(0XFF2E307A) : Colors.grey,
+            ),
+            IconButton(
+              icon: Icon(Icons.person),
+              onPressed: () {
+                _onItemTapped(3);
+              },
+              color: _currentPageIndex == 3 ? Color(0XFF2E307A) : Colors.grey,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CreateProjectPage(),
+            ),
           );
-        }
+        },
+        child: Icon(Icons.add, color: Color(0XFF2E307A), size: 30),
+        shape: CircleBorder(),
+        backgroundColor: Colors.white,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
   }
-
+}
