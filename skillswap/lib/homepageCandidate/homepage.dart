@@ -55,17 +55,7 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<UserController>(
-      init: UserController(widget.userid),
-      builder: (userController) {
-        if (userController.loading.value) {
-          // Show loading indicator while data is being fetched
-          return Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        } else {
+  
           return Scaffold(
             drawer: SideBar(),
             body: SafeArea(
@@ -148,7 +138,5 @@ class _HomepageState extends State<Homepage> {
                 FloatingActionButtonLocation.centerDocked,
           );
         }
-      },
-    );
   }
-}
+
