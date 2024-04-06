@@ -6,7 +6,6 @@ import 'package:skillswap/homepageCandidate/homepage.dart';
 import 'package:skillswap/homepageRec/homepagerec.dart';
 import 'package:skillswap/widgets/buttons.dart';
 
-
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
   @override
@@ -19,8 +18,8 @@ class SignInPageState extends State<SignInPage> {
   final _passwordController = TextEditingController();
   late Map<String, dynamic> userdata;
   bool _obscureText = true;
-  late RegExp emailValidation;
   final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -41,7 +40,6 @@ class SignInPageState extends State<SignInPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-
                 SizedBox(
                   height: height * 0.2,
                 ),
@@ -57,40 +55,47 @@ class SignInPageState extends State<SignInPage> {
                   height: height * 0.07,
                 ),
                 const FormText(text: "Email", alignment: Alignment.centerLeft),
-                  CustomTextFormField(width: width*0.9, height: height*0.06, hintText: "abc@gmail.com", controller: _emailController,keyboardType: TextInputType.emailAddress,validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your email';
-                            }
-                            return null;
-                          } ,),
-                 
-                  const FormText(text: "Password", alignment: Alignment.centerLeft),
-          
-                  CustomTextFormField(
-                    width: width * 0.9,
-                    height: height * 0.06,
-                    hintText: "********",
-                    controller: _passwordController,
-                    obscureText: _obscureText,
-                    suffixIcon:  IconButton(
-                          icon: const Icon(Icons.remove_red_eye),
-                          onPressed: () {
-                            // toggle password visibility
-                            setState(() {
-                              _passwordController.text =
-                                  _passwordController.text.replaceAll('•', '');
-                              _obscureText = !_obscureText;
-                            });
-                          },
-                        ),
-                    validator:(value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
-                        } else if (value.length < 8 || value.length > 16) {
-                          return 'Password must be between 8 and 16 characters long';
-                        }
-                        return null;
-                      }, ),
+                CustomTextFormField(
+                  width: width * 0.9,
+                  height: height * 0.06,
+                  hintText: "abc@gmail.com",
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    return null;
+                  },
+                ),
+                const FormText(
+                    text: "Password", alignment: Alignment.centerLeft),
+                CustomTextFormField(
+                  width: width * 0.9,
+                  height: height * 0.06,
+                  hintText: "********",
+                  controller: _passwordController,
+                  obscureText: _obscureText,
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.remove_red_eye),
+                    onPressed: () {
+                      // toggle password visibility
+                      setState(() {
+                        _passwordController.text =
+                            _passwordController.text.replaceAll('•', '');
+                        _obscureText = !_obscureText;
+                      });
+                    },
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your password';
+                    } else if (value.length < 8 || value.length > 16) {
+                      return 'Password must be between 8 and 16 characters long';
+                    }
+                    return null;
+                  },
+                ),
                 Align(
                   alignment: Alignment.centerRight,
                   child: GestureDetector(
@@ -100,11 +105,12 @@ class SignInPageState extends State<SignInPage> {
                       )),
                 ),
                 SizedBox(height: height * 0.04),
-                ButtonTwo("Log In", Colors.white, Color(0XFF2E307A),width*0.8, height*0.07, 16, () {
-                  if (_formKey.currentState!.validate()) {
+                ButtonTwoLoading("Log In", Colors.white, Color(0XFF2E307A),
+                    width * 0.8, height * 0.07, 16, () {
+                  if (_formKey.currentState!.validate() && !_isLoading) {
                     _signIn();
                   }
-                }),
+                },_isLoading),
                 SizedBox(height: height * 0.02),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -157,35 +163,42 @@ class SignInPageState extends State<SignInPage> {
     }
   }
 
-  void _signIn() async {
-    String Email = _emailController.text;
-    String Password = _passwordController.text;
+ void _signIn() async {
+  setState(() {
+    _isLoading = true;
+  });
+  String Email = _emailController.text;
+  String Password = _passwordController.text;
 
-    User? user = await _auth.signInWithEmailAndPassword(Email, Password);
+  User? user = await _auth.signInWithEmailAndPassword(Email, Password);
 
-    if (user != null) {
-      
-      await _fetchUserData(user.uid);
-      
-      if (userdata.containsKey('CompanyName')) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (context) => HomepageREC(user.uid, userdata)),
-          (route) => false,
-        );
-        _showSnackBar("Recruiter is successfully Sign in");
-      } else {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => Homepage(user.uid, userdata)),
-          (route) => false,
-        );
-        _showSnackBar("User is successfully Sign in");
-      }
+  if (user != null) {
+    await _fetchUserData(user.uid);
+
+    if (userdata.containsKey('CompanyName')) {
+      await Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+            builder: (context) => HomepageREC(user.uid, userdata)),
+        (route) => false,
+      );
+      _showSnackBar("Recruiter is successfully Sign in");
     } else {
-      _showSnackBar("Some error happend on Signing in user");
+      await Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => Homepage(user.uid, userdata)),
+        (route) => false,
+      );
+      _showSnackBar("User is successfully Sign in");
     }
+  } else {
+    _showSnackBar("Some error happend on Signing in user");
   }
+  setState(() {
+    _isLoading = false;
+  });
 }
+
+  }
+  
 

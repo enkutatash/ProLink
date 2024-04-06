@@ -30,6 +30,7 @@ class SignUpPageState extends State<SignUpPage> {
   final _biocontroller = TextEditingController();
   late final Firebase_Service _auth;
   List<String> _selectedSkills = [];
+  bool _isLoading = false;
 
   bool _obscureText = true;
   String? imagePath;
@@ -193,12 +194,12 @@ class SignUpPageState extends State<SignUpPage> {
                     },
                   ),
                   SizedBox(height: height * 0.03),
-                  ButtonTwo("Sign Up", Colors.white, Color(0XFF2E307A), width*0.8, height*0.07, 16,() {
-                    if (_formKey.currentState!.validate()) {
+                  ButtonTwoLoading("Sign Up", Colors.white, Color(0XFF2E307A), width*0.8, height*0.07, 16,() {
+                    if (_formKey.currentState!.validate()&& !_isLoading) {
                       // form is valid, submit the form
                       _signUp();
                     }
-                  }),
+                  },_isLoading),
                   SizedBox(height: height * 0.02),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -251,6 +252,9 @@ class SignUpPageState extends State<SignUpPage> {
   }
 
   void _signUp() async {
+    setState(() {
+    _isLoading = true;
+  });
     String email = _emailController.text;
     String password = _passwordController.text;
     String firstName = _firstnameController.text;
@@ -288,6 +292,9 @@ class SignUpPageState extends State<SignUpPage> {
       print("Some error happend on create user");
       _showSnackBar("Some error happend on create user");
     }
+      setState(() {
+    _isLoading = false;
+  });
   }
 }
 

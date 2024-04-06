@@ -6,16 +6,14 @@ import 'package:skillswap/firebase/firebase.dart';
 import 'package:skillswap/homepageCandidate/project.dart';
 import 'package:skillswap/homepageCandidate/createProject.dart';
 
-class ProjectScreen extends StatefulWidget {
-  Map<String, dynamic> userdata;
-  final String userid;
-  ProjectScreen(this.userdata, this.userid, {super.key});
+class MyProjects extends StatefulWidget {
+  MyProjects({super.key});
 
   @override
-  State<ProjectScreen> createState() => _ProjectScreenState();
+  State<MyProjects> createState() => _MyProjectsState();
 }
 
-class _ProjectScreenState extends State<ProjectScreen> {
+class _MyProjectsState extends State<MyProjects> {
   @override
   Widget build(BuildContext context) {
     final ProjectController projectController = Get.find();

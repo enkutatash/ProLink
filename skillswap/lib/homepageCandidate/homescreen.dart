@@ -130,9 +130,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ListView.builder(
                   itemCount: _Project.length,
                   itemBuilder: (context, index) {
-                   Map<String, dynamic> projectdata = _Project[index]
-                                  .data() as Map<String, dynamic>;
-                              if (projectdata['ProjectTitle'] == null) {
+                   Map<String, dynamic>? projectdata = _Project[index]
+                                  .data() as Map<String, dynamic>?;
+                              if (projectdata!['ProjectTitle'] == null) {
                                 // Show a loading indicator
                                 if (_isLoading == true) {
                                   return Container();

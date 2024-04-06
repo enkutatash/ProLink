@@ -6,12 +6,16 @@ class UserController extends GetxController {
       FirebaseFirestore.instance.collection('Users');
 
   var _user = RxMap<String, dynamic>();
+  var _LoadingUserData = true.obs;
   var _userid;
 
-  UserController(String userid) {
-    initializeuser(userid);
-    _userid = userid;
-  }
+ UserController(String userid) {
+  _userid = userid;
+  _LoadingUserData.value = true; 
+  initializeuser(userid).then((_) {
+    _LoadingUserData.value = false;
+  });
+}
 
   Future<void> initializeuser(String userid) async {
     _user = await userData(userid);
@@ -34,6 +38,7 @@ class UserController extends GetxController {
     }
   }
 
+  get loading => _LoadingUserData;
   get userid => _userid;
   get userdata => _user;
 }

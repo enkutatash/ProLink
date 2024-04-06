@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:skillswap/Project/userdata.dart';
 import 'package:skillswap/homepageCandidate/profile.dart';
 import 'package:skillswap/pages/aboutus.dart';
 import 'package:skillswap/pages/help.dart';
 import 'package:skillswap/pages/privacyPolicy.dart';
 
 class SettingsPage extends StatelessWidget {
-  Map<String, dynamic> userdata;
-  final String userid;
-  
   SettingsPage({
     Key? key,
-    required this.userdata,
-    required this.userid
   }) : super(key: key);
 
-  Widget buildSettingItem({IconData? icon, String? title, required VoidCallback navigate,}) {
+  Widget buildSettingItem({
+    IconData? icon,
+    String? title,
+    required VoidCallback navigate,
+  }) {
+    
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
@@ -43,6 +45,7 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final UserController userController = Get.find();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
@@ -81,10 +84,10 @@ class SettingsPage extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => ProfilePage()),
                     );
                   },
-                  child: Container(  
+                  child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20.0),
-                     color: Color(0XFF7980C2),
+                      color: Color(0XFF7980C2),
                     ),
                     padding: const EdgeInsets.symmetric(
                       horizontal: 40.0,
@@ -94,14 +97,14 @@ class SettingsPage extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 30.0,
-                          backgroundImage: NetworkImage(userdata['profilePic']),
+                          backgroundImage: NetworkImage(userController.userdata['profilePic']),
                         ),
                         const SizedBox(width: 16.0),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                               "${userdata['First']} ${userdata['Last']}",
+                              "${userController.userdata['First']} ${userController.userdata['Last']}",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
@@ -109,7 +112,7 @@ class SettingsPage extends StatelessWidget {
                             ),
                             SizedBox(height: 4.0),
                             Text(
-                              '${userdata['Email']}',
+                              '${userController.userdata['Email']}',
                               style: TextStyle(
                                 color: Colors.white,
                               ),
@@ -150,24 +153,23 @@ class SettingsPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   buildSettingItem(
-                    icon: Icons.notifications,
-                    title: 'Notifications',
-                    navigate: (){}
-                  ),
+                      icon: Icons.notifications,
+                      title: 'Notifications',
+                      navigate: () {}),
                   const SizedBox(height: 20.0),
                   buildSettingItem(
-                    icon: Icons.language_rounded,
-                    title: 'Language',
-                    navigate: (){}
-                  ),
+                      icon: Icons.language_rounded,
+                      title: 'Language',
+                      navigate: () {}),
                   const SizedBox(height: 20.0),
                   buildSettingItem(
                     icon: Icons.privacy_tip_sharp,
                     title: 'Privacy',
-                     navigate: () {
+                    navigate: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => PrivacyPolicyPage()),
+                        MaterialPageRoute(
+                            builder: (context) => PrivacyPolicyPage()),
                       );
                     },
                   ),
@@ -175,18 +177,18 @@ class SettingsPage extends StatelessWidget {
                   buildSettingItem(
                     icon: Icons.help_center,
                     title: 'Help Center',
-                     navigate: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => HelpPage()),
-                            );
-                          },
-                          ),
+                    navigate: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HelpPage()),
+                      );
+                    },
+                  ),
                   const SizedBox(height: 20.0),
                   buildSettingItem(
                     icon: Icons.info,
                     title: 'About Us',
-                     navigate: () {
+                    navigate: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => AboutUsPage()),

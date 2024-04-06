@@ -71,6 +71,48 @@ class ButtonTwo extends StatelessWidget {
   }
 }
 
+class ButtonTwoLoading extends StatelessWidget {
+  final String text;
+  final Color btnclr;
+  final Color textclr;
+  final void Function() click;
+  final double width;
+  final double height;
+  final double fontsize;
+  bool isLoading;
+  ButtonTwoLoading(this.text, this.textclr, this.btnclr, this.width,
+      this.height, this.fontsize, this.click,this.isLoading,
+      {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: click,
+      style: ButtonStyle(
+        elevation: MaterialStateProperty.all<double?>(4),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0), // Set border radius
+          ),
+        ),
+        minimumSize: MaterialStateProperty.all(
+            Size(width, height)), // Set width and height
+        backgroundColor:
+            MaterialStateProperty.all<Color>(btnclr), // Set color to red
+      ),
+      child: isLoading
+          ? CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(
+                  Colors.white),
+          ) // Show loading indicator
+          : Text(
+              text,
+              style: TextStyle(color: textclr, fontSize: fontsize),
+            ),
+    );
+  }
+}
+
 class ButtonThree extends StatelessWidget {
   final String text;
   final Color btnclr;

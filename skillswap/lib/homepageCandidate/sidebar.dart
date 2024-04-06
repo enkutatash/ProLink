@@ -8,16 +8,15 @@ import 'package:skillswap/pages/contact.dart';
 import 'package:skillswap/pages/setting.dart';
 
 class SideBar extends StatelessWidget {
-  final Map<String, dynamic> userdata;
-  final String userid;
+  
 
-  SideBar(this.userdata, this.userid, {Key? key}) : super(key: key);
+  SideBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     ProjectController projectController = Get.put(ProjectController.empty());
-    final UserController userController = Get.find();
+final UserController userController = Get.find();
     return Drawer(
       backgroundColor: Color.fromARGB(255, 237, 241, 245),
       child: Column(
@@ -71,8 +70,6 @@ class SideBar extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => SettingsPage(
-                          userdata: userdata,
-                          userid: userid,
                         ),
                       ),
                     );

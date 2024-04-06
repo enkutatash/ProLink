@@ -6,21 +6,7 @@ import 'package:skillswap/firebase/firebase.dart';
 import 'package:skillswap/homepageCandidate/Search/projectdetailtojoin.dart';
 import 'package:skillswap/widgets/buttons.dart';
 
-//   late Firebase_Service _auth;
-//   late Map<String, dynamic> ownerdata;
 
-//   @override
-// void initState() {
-//   super.initState();
-//   _auth = Firebase_Service(context);
-//   _auth.userdataTwo(widget.projectdata['Owner']).then((userData) {
-//     setState(() {
-//       ownerdata = userData;
-//     });
-//   }).catchError((error) {
-//     print("Error fetching owner data: $error");
-//   });
-// }
 class ProjectSearch extends StatelessWidget {
   Map<String, dynamic> projectdata;
   ProjectSearch(this.projectdata, {super.key});
