@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:skillswap/Front/signin.dart';
 import 'package:skillswap/homepageCandidate/homepage.dart';
@@ -26,12 +27,20 @@ class PersonalDetail extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                 CircleAvatar(
-                  radius: 50,
-                  backgroundImage:NetworkImage(
-                        
-                        userdata['profilePic']),
-                 ),
+                 CachedNetworkImage(
+                          imageUrl:  userdata['profilePic'],
+                          imageBuilder: (context, imageProvider) => Container(
+                            width: 80.0,
+                            height: 80.0,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: imageProvider, fit: BoxFit.cover),
+                            ),
+                          ),
+                          placeholder: (context, url) => Icon(Icons.person),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                        ),
                   SizedBox(
                     width: width * 0.08,
                   ),

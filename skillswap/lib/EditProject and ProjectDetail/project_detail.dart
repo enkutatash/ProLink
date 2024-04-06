@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:skillswap/widgets/buttons.dart';
 
@@ -21,19 +22,20 @@ class ProjectDetailPage extends StatelessWidget {
             padding: EdgeInsets.all(10),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(15.0),
-                  topRight: Radius.circular(15.0),
-                  bottomLeft: Radius.circular(0.0),
-                  bottomRight: Radius.circular(0.0),
-                ),
-                child: Image.network(
-                    height: height * 0.4,
-                    width: width,
-                    fit: BoxFit.cover,
-                    projectdata['Projectimg']),
-              ),
+             CachedNetworkImage(
+                          imageUrl:  projectdata['Projectimg'],
+                          imageBuilder: (context, imageProvider) => Container(
+                            height: height * 0.4,
+                            width: width,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              image: DecorationImage(
+                                image: imageProvider, fit: BoxFit.cover),
+                            ),
+                          ),
+                          placeholder: (context, url) =>CircularProgressIndicator(),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                        ),
               const SizedBox(height: 40),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20),

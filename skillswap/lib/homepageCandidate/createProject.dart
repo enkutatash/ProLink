@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:skillswap/Project/projectcontroller.dart';
+import 'package:skillswap/Project/userdata.dart';
 import 'package:skillswap/firebase/firebase.dart';
 import 'package:skillswap/widgets/buttons.dart';
 import 'package:skillswap/widgets/skillsdropdown.dart';
@@ -13,9 +14,8 @@ import 'package:skillswap/homepageCandidate/personalproject.dart';
 import 'package:random_string/random_string.dart';
 
 class CreateProjectPage extends StatefulWidget {
-  Map<String, dynamic> userdata;
-  final String userid;
-  CreateProjectPage(this.userdata, this.userid, {Key? key}) : super(key: key);
+ 
+  CreateProjectPage({Key? key}) : super(key: key);
 
   @override
   State<CreateProjectPage> createState() => _CreateProjectPageState();
@@ -79,6 +79,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    final UserController userController = Get.find();
     return Scaffold(
       appBar: AppBar(
         title: Text('Create Project'),
@@ -164,41 +165,32 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
       bottomNavigationBar: Container(
         padding: EdgeInsets.all(20.0),
         child: SizedBox(
-            width: double.infinity,
-            height: 50,
-            child: ButtonTwo(
-              "Create Project",
-              Colors.white,
-              Color(0XFF2E307A),
-              width * 0.9,
-              height * 0.06,
-              15,
-              () {
-                String projectUid = randomAlphaNumeric(10);
-                _auth.createProject(
-                  projectUid,
+          width: double.infinity,
+          height: 50,
+          child: ButtonTwo("Create Project", Colors.white, Color(0XFF2E307A), width*0.9, height*0.06, 15,  () {
+            String projectUid = randomAlphaNumeric(10);
+              _auth.createProject(
+                projectUid,
+                downloadUrl!,
+                _titleController.text,
+                _descriptionController.text,
+                userController.userdata,
+                userController.userid,
+                _requiredSkills,
+                [],
+              );
+              projectController.addProject(
                   downloadUrl!,
                   _titleController.text,
                   _descriptionController.text,
-                  widget.userdata,
-                  widget.userid,
+                  userController.userid,
                   _requiredSkills,
-                  [],
-                );
-                projectController.addProject(
-                    downloadUrl!,
-                    _titleController.text,
-                    _descriptionController.text,
-                    widget.userid,
-                    _requiredSkills, []);
-                print("mid");
-                setState(() {
-                  widget.userdata['MyProjects'].add(projectUid);
-                });
-                print(widget.userdata);
-                Navigator.pop(context);
-              },
-            )),
+                  []);
+          userController.userdata['MyProjects'].add(projectUid);
+                
+              Navigator.pop(context);
+            },)
+        ),
       ),
     );
   }

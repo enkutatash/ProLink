@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:skillswap/EditProject%20and%20ProjectDetail/project_detail.dart';
 
@@ -39,19 +40,33 @@ class Project extends StatelessWidget {
           ),
           child: Column(
             children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(10.0),
-                  topRight: Radius.circular(10.0),
-                  bottomLeft: Radius.circular(0.0),
-                  bottomRight: Radius.circular(0.0),
-                ),
-                child: Image.network(
-                    height: height * 0.3,
-                    width: width,
-                    fit: BoxFit.cover,
-                    projectdata['Projectimg']),
-              ),
+              // ClipRRect(
+              //   borderRadius: const BorderRadius.only(
+              //     topLeft: Radius.circular(10.0),
+              //     topRight: Radius.circular(10.0),
+              //     bottomLeft: Radius.circular(0.0),
+              //     bottomRight: Radius.circular(0.0),
+              //   ),
+              //   child: Image.network(
+              //       height: height * 0.3,
+              //       width: width,
+              //       fit: BoxFit.cover,
+              //       projectdata['Projectimg']),
+              // ),
+              CachedNetworkImage(
+                          imageUrl:  projectdata['Projectimg'],
+                          imageBuilder: (context, imageProvider) => Container(
+                            height: height * 0.28,
+                            width: width,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              image: DecorationImage(
+                                image: imageProvider, fit: BoxFit.cover),
+                            ),
+                          ),
+                          placeholder: (context, url) =>CircularProgressIndicator(),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                        ),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0, right: 8),
                 child: Row(

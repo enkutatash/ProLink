@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillswap/Project/projectcontroller.dart';
+import 'package:skillswap/Project/userdata.dart';
 import 'package:skillswap/homepageCandidate/createProject.dart';
 import 'package:skillswap/homepageCandidate/homescreen.dart';
 import 'package:skillswap/homepageCandidate/message.dart';
@@ -10,11 +11,10 @@ import 'package:skillswap/homepageCandidate/Search/search.dart';
 import 'package:skillswap/homepageCandidate/recentproject.dart';
 import 'package:skillswap/homepageCandidate/sidebar.dart';
 
-
 class Homepage extends StatefulWidget {
   Map<String, dynamic> userdata;
   final String userid;
- 
+
   Homepage(this.userid, this.userdata, {Key? key}) : super(key: key);
 
   @override
@@ -24,13 +24,16 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   late PageController _pageController;
   late final ProjectController projectController;
+  late final UserController usercontroller;
   int _currentPageIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    projectController = Get.put(ProjectController(widget.userdata['MyProjects']));
+    projectController =
+        Get.put(ProjectController(widget.userdata['MyProjects']));
     _pageController = PageController();
+    usercontroller = Get.put(UserController(widget.userid));
   }
 
   @override
@@ -50,7 +53,7 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     
     return Scaffold(
-      drawer: SideBar(widget.userdata,widget.userid),
+      drawer: SideBar(widget.userdata, widget.userid),
       body: SafeArea(
         bottom: false,
         child: PageView(
@@ -61,10 +64,10 @@ class _HomepageState extends State<Homepage> {
             });
           },
           children: [
-            HomeScreen(widget.userdata, widget.userid),
+            HomeScreen(),
             ProjectScreen(widget.userdata, widget.userid),
             ChatPage(),
-            ProfilePage(widget.userdata, widget.userid),
+            ProfilePage(),
           ],
         ),
       ),
@@ -111,7 +114,8 @@ class _HomepageState extends State<Homepage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => CreateProjectPage(widget.userdata, widget.userid),
+              builder: (context) =>
+                  CreateProjectPage(),
             ),
           );
         },
