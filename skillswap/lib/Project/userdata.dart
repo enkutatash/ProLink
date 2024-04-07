@@ -9,16 +9,17 @@ class UserController extends GetxController {
   var _LoadingUserData = true.obs;
   var _userid;
 
- UserController(String userid) {
-  _userid = userid;
-  _LoadingUserData.value = true; 
-  initializeuser(userid).then((_) {
-    _LoadingUserData.value = false;
-  });
-}
+  UserController(String userid) {
+    
+    _LoadingUserData.value = true;
+    initializeuser(userid).then((_) {
+      _LoadingUserData.value = false;
+    });
+  }
 
   Future<void> initializeuser(String userid) async {
     _user = await userData(userid);
+    _userid = userid;
   }
 
   Future<RxMap<String, dynamic>> userData(String docid) async {
@@ -36,6 +37,11 @@ class UserController extends GetxController {
       print("Error fetching user data: $e");
       return RxMap<String, dynamic>(); // Return empty map if there's an error
     }
+  }
+
+  void clear() {
+    _user.clear();
+    _userid = '';
   }
 
   get loading => _LoadingUserData;

@@ -212,8 +212,6 @@ class ProjectSearch extends StatelessWidget {
                     alignment: Alignment.bottomCenter,
                     child: ButtonTwo("Send", Colors.white, Color(0XFF2E307A),
                         width * 0.45, height * 0.07, 10, () {
-                      print(message.text);
-                      print(selectedSkills);
                       Navigator.pop(context);
                     }),
                   )

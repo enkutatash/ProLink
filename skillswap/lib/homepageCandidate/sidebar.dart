@@ -8,15 +8,13 @@ import 'package:skillswap/pages/contact.dart';
 import 'package:skillswap/pages/setting.dart';
 
 class SideBar extends StatelessWidget {
-  
-
   SideBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     ProjectController projectController = Get.put(ProjectController.empty());
-final UserController userController = Get.find();
+    final UserController userController = Get.find();
     return Drawer(
       backgroundColor: Color.fromARGB(255, 237, 241, 245),
       child: Column(
@@ -32,19 +30,20 @@ final UserController userController = Get.find();
                   child: Column(
                     children: [
                       CachedNetworkImage(
-                          imageUrl: userController.userdata['profilePic'],
-                          imageBuilder: (context, imageProvider) => Container(
-                            width: 80.0,
-                            height: 80.0,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
+                        imageUrl: userController.userdata['profilePic'],
+                        imageBuilder: (context, imageProvider) => Container(
+                          width: 80.0,
+                          height: 80.0,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
                                 image: imageProvider, fit: BoxFit.cover),
-                            ),
                           ),
-                          placeholder: (context, url) => CircularProgressIndicator(),
-                          errorWidget: (context, url, error) => Icon(Icons.error),
                         ),
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),
                       SizedBox(
                         height: height * 0.03,
                       ),
@@ -69,8 +68,7 @@ final UserController userController = Get.find();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SettingsPage(
-                        ),
+                        builder: (context) => SettingsPage(),
                       ),
                     );
                   },
@@ -97,6 +95,7 @@ final UserController userController = Get.find();
             ),
             onTap: () {
               projectController.clearProjects();
+              userController.clear();
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => SignInPage()),

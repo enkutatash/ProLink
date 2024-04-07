@@ -36,6 +36,8 @@ class _Search_ScreenState extends State<Search_Screen> {
       _allUser = data.docs;
     });
     _allUser.removeWhere((doc) => doc.id == userController.userid);
+    print("user uid");
+    print(userController.userid);
     searchResult();
   }
 
@@ -143,8 +145,6 @@ class _Search_ScreenState extends State<Search_Screen> {
 
   _onSearch() {
     if (_search.text.isNotEmpty && _search.text.trim() != "") {
-      print("project");
-      print(userController.userdata['MyProjects']);
       searchResult();
     }
   }

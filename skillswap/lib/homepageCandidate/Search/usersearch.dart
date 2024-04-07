@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:skillswap/homepageCandidate/Search/persondetail.dart';
+import 'package:skillswap/Chat/chatpage.dart';
 
 class UserSearch extends StatelessWidget {
   Map<String, dynamic> userdata;
@@ -12,7 +13,6 @@ class UserSearch extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    
 
     return InkWell(
       onTap: () {
@@ -28,21 +28,20 @@ class UserSearch extends StatelessWidget {
           width: width,
           child: Row(
             children: [
-            
               CachedNetworkImage(
-                          imageUrl:  userdata['profilePic'],
-                          imageBuilder: (context, imageProvider) => Container(
-                            width: 50.0,
-                            height: 50.0,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: imageProvider, fit: BoxFit.cover),
-                            ),
-                          ),
-                          placeholder: (context, url) => Icon(Icons.person),
-                          errorWidget: (context, url, error) => Icon(Icons.error),
-                        ),
+                imageUrl: userdata['profilePic'],
+                imageBuilder: (context, imageProvider) => Container(
+                  width: 50.0,
+                  height: 50.0,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        image: imageProvider, fit: BoxFit.cover),
+                  ),
+                ),
+                placeholder: (context, url) => Icon(Icons.person),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+              ),
               SizedBox(
                 width: width * 0.02,
               ),
@@ -68,7 +67,16 @@ class UserSearch extends StatelessWidget {
                     ],
                   ),
                 ),
-              )
+              ),
+              IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ChatPage(
+                                recieverid: userid, userdata: userdata)));
+                  },
+                  icon: Image.asset(width: 30, height: 30, "asset/send.png"))
             ],
           ),
         ),
@@ -76,4 +84,3 @@ class UserSearch extends StatelessWidget {
     );
   }
 }
-
