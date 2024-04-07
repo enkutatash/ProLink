@@ -44,16 +44,6 @@ class _ChatPageState extends State<ChatPage> {
     Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              size: 20,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
           title: Text("Messages"),
           centerTitle: true,
           actions: <Widget>[

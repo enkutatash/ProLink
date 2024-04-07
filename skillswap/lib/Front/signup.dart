@@ -276,9 +276,11 @@ class SignUpPageState extends State<SignUpPage> {
         'profilePic': downloadUrl,
         'Bio': bio,
         'Id': user.uid,
+        'Linkedin': linkedin,
+        'Github': github,
         'Skills': skillsWithLevel,
         'MyProjects': [],
-      'WorkingOnPro': []
+        'WorkingOnPro': []
       };
 
       Navigator.pushAndRemoveUntil(

@@ -24,17 +24,13 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   late PageController _pageController;
   late final ProjectController projectController;
-  late final UserController usercontroller;
   int _currentPageIndex = 0;
+  late final UserController usercontroller;
 
   @override
   void initState() {
     super.initState();
-
     usercontroller = Get.put(UserController(widget.userid));
-    //   WidgetsBinding.instance.addPostFrameCallback((_) async {
-    //   await usercontroller.initializeuser(widget.userid); // Assuming you have a method to initialize user data in your controller
-    // });
     projectController =
         Get.put(ProjectController(widget.userdata['MyProjects']));
     _pageController = PageController();
@@ -58,20 +54,8 @@ class _HomepageState extends State<Homepage> {
     return Scaffold(
       drawer: SideBar(),
       body: FutureBuilder(
-        future: usercontroller.initializeuser(widget.userid),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // Display a loading indicator while waiting for data
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            // Handle error state
-            return Center(
-              child: Text('Error loading data'),
-            );
-          } else {
-            // Data has been fetched, build the UI
+          future: usercontroller.initializeuser(widget.userid),
+          builder: (context, snapshot) {
             return SafeArea(
               bottom: false,
               child: PageView(
@@ -89,9 +73,7 @@ class _HomepageState extends State<Homepage> {
                 ],
               ),
             );
-          }
-        },
-      ),
+          }),
       bottomNavigationBar: BottomAppBar(
         color: Color.fromARGB(255, 237, 241, 245),
         shape: CircularNotchedRectangle(),

@@ -17,10 +17,21 @@ class UserController extends GetxController {
     });
   }
 
-  Future<void> initializeuser(String userid) async {
+  // Future<void> initializeuser(String userid) async {
+  //   _user = await userData(userid);
+  //   _userid = userid;
+  // }
+
+Future<void> initializeuser(String userid) async {
+  try {
     _user = await userData(userid);
     _userid = userid;
+  } catch (e) {
+    print("Error initializing user: $e");
+    // Handle error (e.g., set _LoadingUserData to false or show error message)
   }
+}
+
 
   Future<RxMap<String, dynamic>> userData(String docid) async {
     try {
