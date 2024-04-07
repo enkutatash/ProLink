@@ -3,10 +3,13 @@ import 'dart:io';
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:skillswap/Front/signin.dart';
+import 'package:skillswap/Project/projectcontroller.dart';
+import 'package:skillswap/Project/userdata.dart';
 import 'package:skillswap/firebase/firebase.dart';
 import 'package:skillswap/widgets/skillsdropdown.dart';
 import 'package:skillswap/homepageCandidate/homepage.dart';
@@ -28,6 +31,8 @@ class SignUpPageState extends State<SignUpPage> {
   final _linkedincontroller = TextEditingController();
   final _githubcontroller = TextEditingController();
   final _biocontroller = TextEditingController();
+  late final UserController usercontroller;
+  late final ProjectController projectController;
   late final Firebase_Service _auth;
   List<String> _selectedSkills = [];
   bool _isLoading = false;
@@ -68,6 +73,8 @@ class SignUpPageState extends State<SignUpPage> {
   @override
   void initState() {
     _auth = Firebase_Service(context);
+    usercontroller = Get.put(UserController());
+    projectController = Get.put(ProjectController());
     super.initState();
   }
 
@@ -266,23 +273,8 @@ class SignUpPageState extends State<SignUpPage> {
     User? user = await _auth.signUpWithEmailAndPassword(firstName, lastName,
         email, password, downloadUrl!, linkedin, github, bio,_selectedSkills);
     if (user != null) {
+      await usercontroller.initializeuser(user.uid);
       print("User is successfully created");
-      List<Map<String, String>> skillsWithLevel = _selectedSkills?.map((skill) => {'skill': skill, 'level': 'Beginner'}).toList() ?? [];
-      Map<String, dynamic> userdata = {
-        'Email': email,
-        'First': firstName,
-        'Last': lastName,
-        'password': password,
-        'profilePic': downloadUrl,
-        'Bio': bio,
-        'Id': user.uid,
-        'Linkedin': linkedin,
-        'Github': github,
-        'Skills': skillsWithLevel,
-        'MyProjects': [],
-        'WorkingOnPro': []
-      };
-
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => Homepage(user.uid)),

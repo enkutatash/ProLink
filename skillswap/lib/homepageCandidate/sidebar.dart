@@ -13,7 +13,7 @@ class SideBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    ProjectController projectController = Get.put(ProjectController.empty());
+    ProjectController projectController = Get.put(ProjectController());
     final UserController userController = Get.find();
     return Drawer(
       backgroundColor: Color.fromARGB(255, 237, 241, 245),

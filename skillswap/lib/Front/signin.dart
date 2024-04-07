@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillswap/Front/signup.dart';
+import 'package:skillswap/Project/projectcontroller.dart';
 import 'package:skillswap/Project/userdata.dart';
 import 'package:skillswap/firebase/firebase.dart';
 import 'package:skillswap/homepageCandidate/homepage.dart';
@@ -23,11 +24,12 @@ class SignInPageState extends State<SignInPage> {
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   late final UserController usercontroller;
-
+  late final ProjectController projectController;
   @override
   void initState() {
     _auth = Firebase_Service(context);
     usercontroller = Get.put(UserController());
+    projectController = Get.put(ProjectController());
     super.initState();
   }
 
@@ -179,7 +181,8 @@ class SignInPageState extends State<SignInPage> {
     if (user != null) {
       // await _fetchUserData(user.uid);
       await usercontroller.initializeuser(user.uid);
-
+      await projectController
+          .initializeProjects(usercontroller.userdata['MyProjects']);
       if (usercontroller.userdata.containsKey('CompanyName')) {
         await Navigator.pushAndRemoveUntil(
           context,

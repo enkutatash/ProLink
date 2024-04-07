@@ -8,12 +8,12 @@ class ProjectController extends GetxController {
       FirebaseFirestore.instance.collection('Project');
   var _Projects = <Map<String, dynamic>>[].obs;
 
-  ProjectController(List<dynamic> projectids) {
-    _initializeProjects(projectids);
-  }
-  ProjectController.empty() {}
+  // ProjectController(List<dynamic> projectids) {
+  //   _initializeProjects(projectids);
+  // }
+  // ProjectController.empty() {}
 
-  Future<void> _initializeProjects(List<dynamic>? projectids) async {
+  Future<void> initializeProjects(List<dynamic>? projectids) async {
     if (projectids != null) {
       for (var p in projectids) {
         final projectData = await ProjectData(p);

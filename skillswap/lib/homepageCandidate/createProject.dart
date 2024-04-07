@@ -26,7 +26,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
   late TextEditingController _descriptionController;
   late TextEditingController _itemsNeededController;
   late final Firebase_Service _auth;
-  ProjectController projectController = Get.put(ProjectController.empty());
+  ProjectController projectController = Get.put(ProjectController());
   String? imagePath;
   File? _image;
   String? downloadUrl;

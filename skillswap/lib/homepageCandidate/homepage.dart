@@ -30,8 +30,8 @@ class _HomepageState extends State<Homepage> {
   void initState() {
     super.initState();
     // usercontroller = Get.put(UserController(widget.userid));
-    projectController =
-        Get.put(ProjectController(usercontroller.userdata['MyProjects']));
+    // projectController =
+    //     Get.put(ProjectController(usercontroller.userdata['MyProjects']));
     _pageController = PageController(initialPage: _currentPageIndex);
   }
 
