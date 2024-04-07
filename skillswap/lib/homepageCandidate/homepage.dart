@@ -12,10 +12,9 @@ import 'package:skillswap/homepageCandidate/recentproject.dart';
 import 'package:skillswap/homepageCandidate/sidebar.dart';
 
 class Homepage extends StatefulWidget {
-  Map<String, dynamic> userdata;
   final String userid;
 
-  Homepage(this.userid, this.userdata, {Key? key}) : super(key: key);
+  Homepage(this.userid,{Key? key}) : super(key: key);
 
   @override
   State<Homepage> createState() => _HomepageState();
@@ -25,16 +24,17 @@ class _HomepageState extends State<Homepage> {
   late PageController _pageController;
   late final ProjectController projectController;
   int _currentPageIndex = 0;
-  late final UserController usercontroller;
+  final UserController usercontroller = Get.find();
 
   @override
   void initState() {
     super.initState();
-    usercontroller = Get.put(UserController(widget.userid));
+    // usercontroller = Get.put(UserController(widget.userid));
     projectController =
-        Get.put(ProjectController(widget.userdata['MyProjects']));
-    _pageController = PageController();
+        Get.put(ProjectController(usercontroller.userdata['MyProjects']));
+    _pageController = PageController(initialPage: _currentPageIndex);
   }
+
 
   @override
   void dispose() {
@@ -53,27 +53,23 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: SideBar(),
-      body: FutureBuilder(
-          future: usercontroller.initializeuser(widget.userid),
-          builder: (context, snapshot) {
-            return SafeArea(
-              bottom: false,
-              child: PageView(
-                controller: _pageController,
-                onPageChanged: (index) {
-                  setState(() {
-                    _currentPageIndex = index;
-                  });
-                },
-                children: [
-                  HomeScreen(),
-                  MyProjects(),
-                  ChatPage(),
-                  ProfilePage(),
-                ],
-              ),
-            );
-          }),
+      body:SafeArea(
+            bottom: false,
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentPageIndex = index;
+                });
+              },
+              children: [
+                HomeScreen(),
+                MyProjects(),
+                ChatPage(),
+                ProfilePage(),
+              ],
+            ),
+          ),
       bottomNavigationBar: BottomAppBar(
         color: Color.fromARGB(255, 237, 241, 245),
         shape: CircularNotchedRectangle(),

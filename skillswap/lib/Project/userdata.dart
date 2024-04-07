@@ -9,13 +9,15 @@ class UserController extends GetxController {
   var _LoadingUserData = true.obs;
   var _userid;
 
-  UserController(String userid) {
+  
+
+  // UserController(String userid) {
     
-    _LoadingUserData.value = true;
-    initializeuser(userid).then((_) {
-      _LoadingUserData.value = false;
-    });
-  }
+  //   _LoadingUserData.value = true;
+  //   initializeuser(userid).then((_) {
+  //     _LoadingUserData.value = false;
+  //   });
+  // }
 
   // Future<void> initializeuser(String userid) async {
   //   _user = await userData(userid);

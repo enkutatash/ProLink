@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:skillswap/Front/signup.dart';
+import 'package:skillswap/Project/userdata.dart';
 import 'package:skillswap/firebase/firebase.dart';
 import 'package:skillswap/homepageCandidate/homepage.dart';
 import 'package:skillswap/homepageRec/homepagerec.dart';
@@ -20,10 +22,12 @@ class SignInPageState extends State<SignInPage> {
   bool _obscureText = true;
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
+  late final UserController usercontroller;
 
   @override
   void initState() {
     _auth = Firebase_Service(context);
+    usercontroller = Get.put(UserController());
     super.initState();
   }
 
@@ -110,7 +114,7 @@ class SignInPageState extends State<SignInPage> {
                   if (_formKey.currentState!.validate() && !_isLoading) {
                     _signIn();
                   }
-                },_isLoading),
+                }, _isLoading),
                 SizedBox(height: height * 0.02),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -155,50 +159,48 @@ class SignInPageState extends State<SignInPage> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  Future<void> _fetchUserData(String userId) async {
-    try {
-      userdata = await _auth.userData(userId);
-    } catch (e) {
-      // Handle error
-    }
-  }
+  // Future<void> _fetchUserData(String userId) async {
+  //   try {
+  //     userdata = await _auth.userData(userId);
+  //   } catch (e) {
+  //     // Handle error
+  //   }
+  // }
 
- void _signIn() async {
-  setState(() {
-    _isLoading = true;
-  });
-  String Email = _emailController.text;
-  String Password = _passwordController.text;
+  void _signIn() async {
+    setState(() {
+      _isLoading = true;
+    });
+    String Email = _emailController.text;
+    String Password = _passwordController.text;
 
-  User? user = await _auth.signInWithEmailAndPassword(Email, Password);
+    User? user = await _auth.signInWithEmailAndPassword(Email, Password);
 
-  if (user != null) {
-    await _fetchUserData(user.uid);
+    if (user != null) {
+      // await _fetchUserData(user.uid);
+      await usercontroller.initializeuser(user.uid);
 
-    if (userdata.containsKey('CompanyName')) {
-      await Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-            builder: (context) => HomepageREC(user.uid, userdata)),
-        (route) => false,
-      );
-      _showSnackBar("Recruiter is successfully Sign in");
+      if (usercontroller.userdata.containsKey('CompanyName')) {
+        await Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) => HomepageREC(user.uid, userdata)),
+          (route) => false,
+        );
+        _showSnackBar("Recruiter is successfully Sign in");
+      } else {
+        await Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => Homepage(user.uid)),
+          (route) => false,
+        );
+        _showSnackBar("User is successfully Sign in");
+      }
     } else {
-      await Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => Homepage(user.uid, userdata)),
-        (route) => false,
-      );
-      _showSnackBar("User is successfully Sign in");
+      _showSnackBar("Some error happend on Signing in user");
     }
-  } else {
-    _showSnackBar("Some error happend on Signing in user");
+    setState(() {
+      _isLoading = false;
+    });
   }
-  setState(() {
-    _isLoading = false;
-  });
 }
-
-  }
-  
-
