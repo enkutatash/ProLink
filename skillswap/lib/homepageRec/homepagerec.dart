@@ -11,9 +11,8 @@ import 'package:skillswap/homepageRec/searchrec.dart';
 
 
 class HomepageREC extends StatefulWidget {
-  Map<String, dynamic> userdata;
   final String userid;
-  HomepageREC(this.userid,this.userdata, {Key? key}) : super(key: key);
+  HomepageREC(this.userid, {Key? key}) : super(key: key);
 
   @override
   State<HomepageREC> createState() => _HomepageRECState();

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillswap/Front/signup.dart';
+import 'package:skillswap/Front/signup2.dart';
 import 'package:skillswap/Project/projectcontroller.dart';
 import 'package:skillswap/Project/userdata.dart';
 import 'package:skillswap/firebase/firebase.dart';
@@ -9,13 +10,13 @@ import 'package:skillswap/homepageCandidate/homepage.dart';
 import 'package:skillswap/homepageRec/homepagerec.dart';
 import 'package:skillswap/widgets/buttons.dart';
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({Key? key}) : super(key: key);
+class SignInPage2 extends StatefulWidget {
+  const SignInPage2({Key? key}) : super(key: key);
   @override
-  SignInPageState createState() => SignInPageState();
+  SignInPage2State createState() => SignInPage2State();
 }
 
-class SignInPageState extends State<SignInPage> {
+class SignInPage2State extends State<SignInPage2> {
   late final Firebase_Service _auth;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -130,7 +131,7 @@ class SignInPageState extends State<SignInPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SignUpPage()));
+                                builder: (context) => SignUpRecPage()));
                       },
                       child: const Text(
                         'Sign up',
@@ -180,16 +181,15 @@ class SignInPageState extends State<SignInPage> {
 
     if (user != null) {
       // await _fetchUserData(user.uid);
-      await usercontroller.initializeuser(user.uid);
-      await projectController
-          .initializeProjects(usercontroller.userdata['MyProjects']);
-      
+      await usercontroller.initializeRec(user.uid);
         await Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => Homepage(user.uid)),
+          MaterialPageRoute(
+              builder: (context) => HomepageREC(user.uid)),
           (route) => false,
         );
-        _showSnackBar("User is successfully Sign in");
+        _showSnackBar("Recruiter is successfully Sign in");
+      
     } else {
       _showSnackBar("Some error happend on Signing in user");
     }
