@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     var data = await FirebaseFirestore.instance
         .collection('Project')
-        .orderBy('TimeStamp', descending: true)
+        .orderBy('TimeStamp', descending: false)
         .limit(10) // Limit to only fetch the top 10 projects
         .get();
     setState(() {
@@ -102,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     fetchNextProject();
-    allproject();
+    // allproject();
     super.initState();
     
   }
@@ -184,10 +184,10 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 height: height,
                 child: ListView.builder(
-                  itemCount: _Project.length,
+                  itemCount: _preference.length,
                   itemBuilder: (context, index) {
                     Map<String, dynamic>? projectdata =
-                        _Project[index].data() as Map<String, dynamic>?;
+                        _preference[index].data() as Map<String, dynamic>?;
                     if (projectdata!['ProjectTitle'] == null) {
                       // Show a loading indicator
                       if (_isLoading == true) {

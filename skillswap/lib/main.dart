@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:skillswap/Front/recruiterORuser.dart';
 import 'package:skillswap/firebase/firebase_options.dart';
+import 'package:skillswap/Front/onboarding1.dart';
+
 
 
 void main() async {
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           scaffoldBackgroundColor: Colors.white, ),
       debugShowCheckedModeBanner: false,
-      home:WelcomePage(),
+      home:NavigationPage(),
     );
   }
 }
