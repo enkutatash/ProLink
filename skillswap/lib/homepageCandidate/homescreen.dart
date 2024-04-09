@@ -224,7 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 20.0),
               SizedBox(
-                height: height*6,
+                height: height*_Project.length,
                 child: Expanded(
                   child: ListView.builder(
                     itemCount: _Project.length,
