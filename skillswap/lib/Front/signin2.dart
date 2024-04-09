@@ -181,15 +181,15 @@ class SignInPage2State extends State<SignInPage2> {
 
     if (user != null) {
       // await _fetchUserData(user.uid);
-      await usercontroller.initializeRec(user.uid);
-        await Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (context) => HomepageREC(user.uid)),
-          (route) => false,
-        );
-        _showSnackBar("Recruiter is successfully Sign in");
       
+      await usercontroller.initializeRec(user.uid);
+      print(usercontroller.userdata['First']);
+      await Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => HomepageREC(user.uid)),
+        (route) => false,
+      );
+      _showSnackBar("Recruiter is successfully Sign in");
     } else {
       _showSnackBar("Some error happend on Signing in user");
     }

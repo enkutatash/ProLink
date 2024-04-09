@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:skillswap/Front/recruiterORuser.dart';
 import 'package:skillswap/Front/signin.dart';
 import 'package:skillswap/Project/projectcontroller.dart';
 import 'package:skillswap/Project/userdata.dart';
@@ -55,14 +57,14 @@ class SideBar extends StatelessWidget {
                   ),
                 ),
                 ListTile(
-                  leading: Icon(Icons.home),
+                  leading:  Icon(CupertinoIcons.house,size: 30,),
                   title: Text('Home'),
                   onTap: () {
                     Navigator.pop(context);
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.settings),
+                  leading:  Icon(CupertinoIcons.gear,size: 30,),
                   title: Text('Settings'),
                   onTap: () {
                     Navigator.push(
@@ -74,7 +76,7 @@ class SideBar extends StatelessWidget {
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.settings),
+                  leading: Icon(CupertinoIcons.phone,size: 30,),
                   title: Text('Contact'),
                   onTap: () {
                     Navigator.push(context,
@@ -98,7 +100,7 @@ class SideBar extends StatelessWidget {
               userController.clear();
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => SignInPage()),
+                MaterialPageRoute(builder: (context) => WelcomePage()),
                 (route) => false,
               );
             },

@@ -71,6 +71,52 @@ class ButtonTwo extends StatelessWidget {
   }
 }
 
+class Upload extends StatelessWidget {
+  final IconData icon;
+  final String text;
+  final Color btnclr;
+  final Color textclr;
+  final void Function() click;
+  final double width;
+  final double height;
+  final double fontsize;
+  Upload(this.icon,this.text, this.textclr, this.btnclr, this.width, this.height,
+      this.fontsize, this.click,
+      {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      child: ElevatedButton(
+        onPressed: click,
+        style: ButtonStyle(
+          elevation: MaterialStateProperty.all<double?>(4),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0), // Set border radius
+            ),
+          ),
+          minimumSize: MaterialStateProperty.all(
+              Size(width, height)), // Set width and height
+          backgroundColor:
+              MaterialStateProperty.all<Color>(btnclr), // Set color to red
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon,color:  Color(0XFF2E307A),),
+            Text(
+              text,
+              style: TextStyle(color: textclr, fontSize: fontsize),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class ButtonTwoLoading extends StatelessWidget {
   final String text;
   final Color btnclr;
@@ -81,7 +127,7 @@ class ButtonTwoLoading extends StatelessWidget {
   final double fontsize;
   bool isLoading;
   ButtonTwoLoading(this.text, this.textclr, this.btnclr, this.width,
-      this.height, this.fontsize, this.click,this.isLoading,
+      this.height, this.fontsize, this.click, this.isLoading,
       {super.key});
 
   @override
@@ -102,9 +148,8 @@ class ButtonTwoLoading extends StatelessWidget {
       ),
       child: isLoading
           ? CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(
-                  Colors.white),
-          ) // Show loading indicator
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            ) // Show loading indicator
           : Text(
               text,
               style: TextStyle(color: textclr, fontSize: fontsize),
@@ -275,10 +320,10 @@ class CustomTextFormFieldTwo extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: width,
-      height: height + 20,
+      // height: 400,
       child: TextFormField(
         controller: controller,
-        minLines: minLine,
+        // minLines: minLine,
         maxLines: maxLine,
         decoration: InputDecoration(
           labelText: labelText,

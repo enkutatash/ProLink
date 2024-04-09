@@ -1,57 +1,108 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:skillswap/Project/userdata.dart';
 
-class HomeRecruiter extends StatelessWidget {
+class HomeRecruiter extends StatefulWidget {
   const HomeRecruiter({super.key});
 
   @override
+  State<HomeRecruiter> createState() => _HomeRecruiterState();
+}
+
+class _HomeRecruiterState extends State<HomeRecruiter> {
+    final UserController userController = Get.find();
+
+
+  @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
-       appBar: AppBar(
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: const Icon(Icons.menu), // Hamburger icon
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-              );
-            },
-          ),
-          title: const Text(''), // Empty title
-        ),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 20),
-            const Row(
-              children: [
-                CircleAvatar(
-                  backgroundImage: AssetImage(
-                      'asset/profile_img.jpg'), // Add your profile picture asset here
-                  radius: 30,
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 20),
+              Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                      child: Icon(CupertinoIcons.text_justify,size: 30,)
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(8),
+                          height: height * 0.06,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.grey[200],
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.search,
+                                color: Colors.grey,
+                              ),
+                              SizedBox(
+                                width: width * 0.01,
+                              ),
+                              Text(
+                                'Search Users and Projects',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                     CachedNetworkImage(
+                        imageUrl: userController.userdata['profilePic'],
+                        imageBuilder: (context, imageProvider) => Container(
+                          width: 50.0,
+                          height: 50.0,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: imageProvider, fit: BoxFit.cover),
+                          ),
+                        ),
+                        placeholder: (context, url) => Icon(Icons.person),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),
+                  ],
                 ),
-                SizedBox(width: 10),
-                Text(
-                  'Hello, recruiter',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Users with Specific Skills',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, fontSize: 18), // Bold text style
-            ),
-            const SizedBox(height: 10),
-            _buildUserRow('asset/image 1.png', 'Username 1',
-                'Skill Description 1', context),
-            _buildUserRow('asset/image 2.png', 'Username 2',
-                'Skill Description 2', context),
-            _buildUserRow('asset/image 3.png', 'Username 3',
-                'Skill Description 3', context),
-          ],
+              const SizedBox(height: 20),
+              const Text(
+                'Users with Specific Skills',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 18), // Bold text style
+              ),
+              const SizedBox(height: 10),
+              _buildUserRow('asset/image 1.png', 'Username 1',
+                  'Skill Description 1', context),
+              _buildUserRow('asset/image 2.png', 'Username 2',
+                  'Skill Description 2', context),
+              _buildUserRow('asset/image 3.png', 'Username 3',
+                  'Skill Description 3', context),
+            ],
+          ),
         ),
       ),
     );

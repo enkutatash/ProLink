@@ -56,7 +56,7 @@ Future<RxMap<String, dynamic>> userData(String docid) async {
 
 Future<void> initializeRec(String userid) async {
   try {
-    _user = await userData(userid);
+    _user = await userRec(userid);
     _userid = userid;
   } catch (e) {
     print("Error initializing user: $e");

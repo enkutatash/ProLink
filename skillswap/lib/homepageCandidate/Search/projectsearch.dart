@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:skillswap/Project/userdata.dart';
 import 'package:skillswap/firebase/firebase.dart';
 import 'package:skillswap/homepageCandidate/Search/projectdetailtojoin.dart';
+import 'package:skillswap/homepageCandidate/Search/requestpage.dart';
 import 'package:skillswap/widgets/buttons.dart';
-
 
 class ProjectSearch extends StatelessWidget {
   Map<String, dynamic> projectdata;
@@ -63,8 +63,8 @@ class ProjectSearch extends StatelessWidget {
                   CachedNetworkImage(
                     imageUrl: projectdata['Projectimg'],
                     imageBuilder: (context, imageProvider) => Container(
-                     height: height * 0.28,
-                        width: width,
+                      height: height * 0.28,
+                      width: width,
                       decoration: BoxDecoration(
                         shape: BoxShape.rectangle,
                         image: DecorationImage(
@@ -100,19 +100,24 @@ class ProjectSearch extends StatelessWidget {
                               Row(
                                 children: [
                                   CachedNetworkImage(
-                          imageUrl:  projectdata['Owner']['profilePic'],
-                          imageBuilder: (context, imageProvider) => Container(
-                            width: 30.0,
-                            height: 30.0,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: imageProvider, fit: BoxFit.cover),
-                            ),
-                          ),
-                          placeholder: (context, url) => CircularProgressIndicator(),
-                          errorWidget: (context, url, error) => Icon(Icons.error),
-                        ),
+                                    imageUrl: projectdata['Owner']
+                                        ['profilePic'],
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
+                                      width: 30.0,
+                                      height: 30.0,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.cover),
+                                      ),
+                                    ),
+                                    placeholder: (context, url) =>
+                                        CircularProgressIndicator(),
+                                    errorWidget: (context, url, error) =>
+                                        Icon(Icons.error),
+                                  ),
                                   SizedBox(
                                     width: 5,
                                   ),
@@ -138,8 +143,13 @@ class ProjectSearch extends StatelessWidget {
                         ),
                         ButtonTwo("Join", Colors.white, Color(0XFF2E307A),
                             width * 0.08, height * 0.05, 12, () {
-                              _showBottomSheet(context,projectdata['SkillReq']);
-                            }),
+                          // _showBottomSheet(context,projectdata['SkillReq']);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      RequestPage(projectdata)));
+                        }),
                       ],
                     ),
                   )
@@ -149,6 +159,7 @@ class ProjectSearch extends StatelessWidget {
       ),
     );
   }
+
   void _showBottomSheet(BuildContext context, List<dynamic> skills) {
     List<String> selectedSkills = [];
     double width = MediaQuery.of(context).size.width;
