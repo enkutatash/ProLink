@@ -64,7 +64,7 @@ class Project extends StatelessWidget {
                                 image: imageProvider, fit: BoxFit.cover),
                             ),
                           ),
-                          placeholder: (context, url) =>CircularProgressIndicator(),
+                          // placeholder: (context, url) =>CircularProgressIndicator(),
                           errorWidget: (context, url, error) => Icon(Icons.error),
                         ),
               Padding(

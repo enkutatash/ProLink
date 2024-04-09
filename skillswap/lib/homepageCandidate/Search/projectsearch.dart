@@ -71,7 +71,7 @@ class ProjectSearch extends StatelessWidget {
                             image: imageProvider, fit: BoxFit.cover),
                       ),
                     ),
-                    placeholder: (context, url) => CircularProgressIndicator(),
+                    // placeholder: (context, url) => CircularProgressIndicator(),
                     errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
 
@@ -113,8 +113,8 @@ class ProjectSearch extends StatelessWidget {
                                             fit: BoxFit.cover),
                                       ),
                                     ),
-                                    placeholder: (context, url) =>
-                                        CircularProgressIndicator(),
+                                    // placeholder: (context, url) =>
+                                    //     CircularProgressIndicator(),
                                     errorWidget: (context, url, error) =>
                                         Icon(Icons.error),
                                   ),
