@@ -245,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               }
                               return Column(
                                 children: [
-                                  ProjectSearch(projectdata),
+                                  ProjectSearch(projectdata,_Project[index].id),
                                   Divider()
                                 ],
                               );

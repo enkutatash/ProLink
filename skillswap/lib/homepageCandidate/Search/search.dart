@@ -272,7 +272,7 @@ class _Search_ScreenState extends State<Search_Screen> {
                               }
                               return Column(
                                 children: [
-                                  ProjectSearch(projectdata),
+                                  ProjectSearch(projectdata,_searchResult[index].id),
                                   Divider()
                                 ],
                               );

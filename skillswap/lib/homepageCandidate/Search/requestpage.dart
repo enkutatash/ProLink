@@ -4,14 +4,18 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/request/request.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:skillswap/Project/userdata.dart';
+import 'package:skillswap/Request/requestTemplate.dart';
+import 'package:skillswap/Request/sendrequest.dart';
 import 'package:skillswap/widgets/buttons.dart';
 import 'package:file_picker/file_picker.dart';
 
 class RequestPage extends StatefulWidget {
   Map<String, dynamic> projectdata;
-  RequestPage(this.projectdata, {super.key});
+  String projectid;
+  RequestPage(this.projectdata, this.projectid, {super.key});
 
   @override
   State<RequestPage> createState() => _RequestPageState();
@@ -25,15 +29,11 @@ class _RequestPageState extends State<RequestPage> {
   late String _downloadUrl;
   PlatformFile? pickedfile;
   UploadTask? uploadTask;
+  RequestSend request = RequestSend();
 
-  Future<void> pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-
-        if (result != null) {
-          File file = File(result.files.single.path!);
-        } else {
-          // User canceled the picker
-        }
+  void sendrequest(String recieverid, String message, String projectid,
+      List<String> skill) async {
+    await request.sendrequest(recieverid, projectid, message,userController.userdata,skill);
   }
 
   TextEditingController message = TextEditingController();
@@ -77,25 +77,25 @@ class _RequestPageState extends State<RequestPage> {
               controller: message,
               maxLine: null,
             ),
-            const FormText(
-                text: "Upload your CV here", alignment: Alignment.centerLeft),
-            Row(
-              children: [
-                Upload(
-                    Icons.upload,
-                    "Send",
-                    Color(0XFF2E307A),
-                    Color.fromARGB(255, 237, 241, 245),
-                    width * 0.4,
-                    height * 0.05,
-                    17, () {
-                  pickFile();
-                }),
-                pickedfile != null
-                    ? Text(pickedfile!.name)
-                    : Text("No file selected")
-              ],
-            ),
+            // const FormText(
+            //     text: "Upload your CV here", alignment: Alignment.centerLeft),
+            // Row(
+            //   children: [
+            //     Upload(
+            //         Icons.upload,
+            //         "Send",
+            //         Color(0XFF2E307A),
+            //         Color.fromARGB(255, 237, 241, 245),
+            //         width * 0.4,
+            //         height * 0.05,
+            //         17, () {
+            //       pickFile();
+            //     }),
+            //     pickedfile != null
+            //         ? Text(pickedfile!.name)
+            //         : Text("No file selected")
+            //   ],
+            // ),
             SizedBox(height: 10),
             Text(
               'Apply for',
@@ -131,8 +131,8 @@ class _RequestPageState extends State<RequestPage> {
               alignment: Alignment.bottomCenter,
               child: ButtonTwo("Send", Colors.white, Color(0XFF2E307A),
                   width * 0.45, height * 0.05, 17, () {
-                print(selectedSkills);
-                print(message.text);
+                sendrequest(widget.projectdata['userid'], message.text,
+                    widget.projectid, selectedSkills);
                 Navigator.pop(context);
               }),
             )

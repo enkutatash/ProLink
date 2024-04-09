@@ -1,22 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:skillswap/Chat/chat.dart';
+import 'package:skillswap/Request/requestui.dart';
+import 'package:skillswap/Request/sendrequest.dart';
 import 'chatDetailPage.dart';
-
-List<Map<String, dynamic>> messages = [
-  {
-    'avatar': 'asset/image 1.png',
-    'name': 'John Doe',
-    'message': 'Hello, how are you doing?',
-    'timestamp': '12:00 PM',
-    'online': true,
-  },
-  {
-    'avatar': 'asset/image 2.png',
-    'name': 'Jane Smith',
-    'message': 'Can we meet tomorrow?',
-    'timestamp': '10:00 AM',
-    'online': false,
-  },
-];
 
 class ChatPage extends StatefulWidget {
   @override
@@ -24,277 +14,175 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  // Function to handle message deletion
-  void deleteMessage(int index) {
-    setState(() {
-      messages.removeAt(index);
-    });
-  }
-
+  RequestSend _request = RequestSend();
+  final Chat _chat = Chat();
+  final FirebaseAuth _authentication = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
-    int collaborationRequestsCount = 1;
-    int incomingMessagesCount = messages.length;
-
-    int totalNotifications = collaborationRequestsCount + incomingMessagesCount;
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return 
-      
-    Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          title: Text("Messages"),
-          centerTitle: true,
-          actions: <Widget>[
-              Stack(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Requests"),
+        backgroundColor: Colors.white,
+        centerTitle: true,
+      ),
+      body: Expanded(child: _buildRequests()),
+    );
+  }
+
+  Widget _buildRequests() {
+    return StreamBuilder(
+        stream: _request.getrequest(_authentication.currentUser!.uid),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text("Error" + snapshot.error.toString());
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Text("Loading ...");
+          }
+
+          return SizedBox(
+            child: ListView(
+              children: snapshot.data!.docs
+                  .map((document) => _sendRequest(document))
+                  .toList(),
+            ),
+          );
+        });
+  }
+
+  Widget _sendRequest(DocumentSnapshot document) {
+    Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    String requestId = document.id;
+
+    // void removeRequest() async {
+    //   print("start");
+    //   await _request.removeRequest(_authentication.currentUser!.uid, requestId);
+    //   print("end");
+    // }
+
+    return Column(
+      children: [
+        Container(
+          width: width * 0.9,
+          height: height * 0.15,
+          padding: EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            color:Colors.white,
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.notifications,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {},
-                  ),
-                  Positioned(
-                    top: 8,
-                    right: 8,
-                    child: Container(
-                      padding: EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CachedNetworkImage(
+                        imageUrl: data['UserData']['profilePic'],
+                        imageBuilder: (context, imageProvider) => Container(
+                          width: 50.0,
+                          height: 50.0,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: imageProvider, fit: BoxFit.cover),
+                          ),
+                        ),
+                        placeholder: (context, url) => Icon(CupertinoIcons.person),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
                       ),
-                      child: Text(
-                        totalNotifications.toString(),
+                      Text(
+                        '${data['UserData']['First']} ${data['UserData']['Last']}',
+                        textAlign: TextAlign.start,
                         style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              print(document.id);
+                              FirebaseFirestore.instance
+                                  .collection("Requests")
+                                  .doc(_authentication.currentUser!.uid)
+                                  .collection('messages')
+                                  .doc(requestId)
+                                  .delete();
+                              // send rejection message
+                              _chat.sendmessage(
+                                  data['senderId'], "User request has rejected");
+                            },
+                            icon: Icon(
+                              CupertinoIcons.clear_circled,
+                              size: 45,
+                              color: Colors.red,
+                            ),
+                          ),
+                          SizedBox(width: 8.0),
+                          IconButton(
+                            onPressed: () {
+                              FirebaseFirestore.instance
+                                  .collection("Requests")
+                                  .doc(_authentication.currentUser!.uid)
+                                  .collection('messages')
+                                  .doc(requestId)
+                                  .delete();
+                            FirebaseFirestore.instance
+                                  .collection("Requests")
+                                  .doc(_authentication.currentUser!.uid)
+                                  .collection('messages')
+                                  .doc(requestId)
+                                  .delete();
+                              // send rejection message
+                              _chat.sendmessage(
+                                  data['senderId'], "User request has Accepted");
+                            // add project to working on projects
+                           FirebaseFirestore.instance
+                              .collection("Users")
+                              .doc(data['senderId'])
+                              .update({'WorkingOnPro': FieldValue.arrayUnion([data['projectId']])})
+                              .then((value) {
+                            print("Element added to the working list successfully.");
+                          }).catchError((error) {
+                            print("Failed to add element to the working list: $error");
+                          });
+                            },
+                            icon: Icon(
+                              CupertinoIcons.check_mark_circled,
+                              size: 45,
+                              color: Colors.green,
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8.0),
+                  Text(
+                    ' ${data['message']}',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
                     ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
             ],
           ),
-        body: Container(
-          padding: EdgeInsets.all(16.0),
-          color: Colors.white,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Collaboration Requests',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color:Color(0XFF2E307A),
-                ),
-              ),
-              SizedBox(height: 16.0),
-              Container(
-                padding: EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                color: Color.fromARGB(255, 207, 210, 236),
-                  borderRadius: BorderRadius.circular(10.0),
-                  boxShadow: [
-      BoxShadow(
-        color: Colors.grey.withOpacity(0.5), // Shadow color (with opacity)
-        spreadRadius: 1, // Extends the shadow beyond the box
-        blurRadius: 1,
-        offset: Offset(0, 3), // Shifts the shadow (x, y)
-      ),
-    ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'John Doe',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                MaterialButton(
-                                  color: Colors.green.shade500,
-                                  onPressed: () {},
-                                  child: Text(
-                                    'Accept',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 8.0),
-                                MaterialButton(
-                                  color: Colors.red.shade500,
-                                  onPressed: () {},
-                                  child: Text(
-                                    'Decline',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8.0),
-                        Text(
-                          'Can we collaborate on web design?',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 16.0),
-              Text(
-                'Incoming Messages',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              SizedBox(height: 16.0),
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: messages.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ChatDetailPage(
-                            avatar: messages[index]['avatar'] ?? 'Unknown',
-                            name: messages[index]['name'] ?? 'Unknown',
-                            message: messages[index]['message'] ?? 'Unknown',
-                            timestamp:
-                                messages[index]['timestamp'] ?? 'Unknown',
-                            isOnline: messages[index]['online'] ?? false,
-                          ),
-                        ),
-                      ).then((value) {
-                        deleteMessage(index);
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Container(
-                        width: width*0.9,
-                        padding: EdgeInsets.all(16.0),
-                        height: height*0.12,
-                        decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 207, 210, 236),
-                          borderRadius: BorderRadius.circular(10.0),
-                          boxShadow: [
-      BoxShadow(
-        color: Colors.grey.withOpacity(0.5), // Shadow color (with opacity)
-        spreadRadius: 1, // Extends the shadow beyond the box
-        blurRadius: 1,
-        offset: Offset(0, 3), // Shifts the shadow (x, y)
-      ),
-    ],
-                        ),
-                        child: Row(
-                          children: [
-                            Stack(
-                              children: [
-                                CircleAvatar(
-                                  radius: 30.0,
-                                  // image: AssetImage('assets/avatar1.png'),
-                                ),
-                                Positioned(
-                                  bottom: 0,
-                                  right: 0,
-                                  child: Container(
-                                    width: 12,
-                                    height: 12,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: messages[index]['online']
-                                          ? Colors.green
-                                          : Colors.grey,
-                                      border: Border.all(
-                                        color: Colors.white,
-                                        width: 2,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(width: width*0.01,),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  messages[index]['name'] ?? 'Unknown',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                SizedBox(height: 4.0),
-                                Container(
-                                  width: width*0.5,
-                                  child: Text(
-                                    messages[index]['message'] ?? '',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                      
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: Text(
-                                messages[index]['timestamp'] ?? '12:00 PM',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
         ),
-      )
-    ;
+        Divider()
+      ],
+    );
   }
 }

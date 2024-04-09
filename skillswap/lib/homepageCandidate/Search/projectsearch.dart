@@ -9,7 +9,8 @@ import 'package:skillswap/widgets/buttons.dart';
 
 class ProjectSearch extends StatelessWidget {
   Map<String, dynamic> projectdata;
-  ProjectSearch(this.projectdata, {super.key});
+  String projectid;
+  ProjectSearch(this.projectdata,this.projectid, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +26,12 @@ class ProjectSearch extends StatelessWidget {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      ProjectDetailJoin(projectdata: projectdata)));
+                      ProjectDetailJoin(projectdata: projectdata,projectid: projectid,)));
         },
         child: Container(
             width: width,
             height: height * 0.45,
-            decoration: BoxDecoration(
-                ),
+            decoration: BoxDecoration(),
             child: Stack(children: [
               Column(
                 children: [
@@ -49,7 +49,6 @@ class ProjectSearch extends StatelessWidget {
                     // placeholder: (context, url) => CircularProgressIndicator(),
                     errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
-
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0, right: 8),
                     child: Row(
@@ -123,7 +122,7 @@ class ProjectSearch extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      RequestPage(projectdata)));
+                                      RequestPage(projectdata,projectid)));
                         }),
                       ],
                     ),

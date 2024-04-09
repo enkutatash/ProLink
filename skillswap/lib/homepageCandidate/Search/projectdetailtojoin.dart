@@ -5,7 +5,8 @@ import 'package:skillswap/widgets/buttons.dart';
 
 class ProjectDetailJoin extends StatefulWidget {
   Map<String, dynamic> projectdata;
-  ProjectDetailJoin({super.key, required this.projectdata});
+  String projectid;
+  ProjectDetailJoin({super.key, required this.projectdata,required this.projectid});
 
   @override
   State<ProjectDetailJoin> createState() => _ProjectDetailJoinState();
@@ -121,11 +122,11 @@ class _ProjectDetailJoinState extends State<ProjectDetailJoin> {
               height * 0.06,
               15,
               () {
-                 Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      RequestPage(widget.projectdata)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            RequestPage(widget.projectdata, widget.projectid)));
                 // _showBottomSheet(context, widget.projectdata['SkillReq']);
               },
             )),
