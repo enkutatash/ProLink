@@ -17,49 +17,6 @@ final List<String> items = [
   "Project Management",
 ];
 
-class FilterPage extends StatefulWidget {
-  const FilterPage({Key? key}) : super(key: key);
-
-  @override
-  State<FilterPage> createState() => _FilterPageState();
-}
-
-class _FilterPageState extends State<FilterPage> {
-  int _selected = 0;
-
-  void setSelected(int index) {
-    setState(() {
-      _selected = index;
-    });
-    print(items[_selected]);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-
-    return 
-         Container(
-          height: height * 0.07,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) {
-              return Select(
-                title: items[index],
-                isSelected: _selected == index,
-                onTap: () => setSelected(index), // Pass callback function
-              );
-            },
-            separatorBuilder: (context, index) {
-              return SizedBox(
-                width: 5,
-              );
-            },
-            itemCount: items.length,
-          ),
-    );
-  }
-}
 
 class Select extends StatelessWidget {
   final String title;

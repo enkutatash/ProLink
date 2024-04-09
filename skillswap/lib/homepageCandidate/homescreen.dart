@@ -6,10 +6,10 @@ import 'package:skillswap/Project/userdata.dart';
 import 'package:skillswap/homepageCandidate/Search/projectsearch.dart';
 import 'package:skillswap/homepageCandidate/Search/search.dart';
 import 'package:skillswap/homepageCandidate/filter.dart';
-import 'package:skillswap/homepageCandidate/recentproject.dart';
-import 'package:skillswap/homepageCandidate/sidebar.dart';
-import 'package:skillswap/widgets/buttons.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
+
+
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
@@ -23,62 +23,9 @@ class _HomeScreenState extends State<HomeScreen> {
   List _allProject = [];
   List _Project = [];
   bool _isLoading = false;
-  List _preference = [];
-
   int fetchedCount = 0;
   DocumentSnapshot? lastDocument;
-
-  fetchNextProject() async {
-    if (fetchedCount >= 10) {
-      // Stop fetching data once result list size reaches 10
-      return;
-    }
-
-    QuerySnapshot querySnapshot;
-
-    if (lastDocument == null) {
-      // Fetch the first batch of data
-      querySnapshot = await FirebaseFirestore.instance
-          .collection('Project')
-          .orderBy('TimeStamp', descending: true)
-          .limit(1)
-          .get();
-    } else {
-      // Fetch the next batch of data using pagination
-      querySnapshot = await FirebaseFirestore.instance
-          .collection('Project')
-          .orderBy('TimeStamp', descending: true)
-          .startAfterDocument(lastDocument!)
-          .limit(1)
-          .get();
-    }
-
-    if (querySnapshot.docs.isNotEmpty) {
-      var project = querySnapshot.docs[0];
-      List<String> skills = List<String>.from(project['SkillReq'] ?? []);
-      // print(skills);
-      // print("user");
-      // print(userController.userdata['Skills']);
-      List user = [];
-      for (var s in userController.userdata['Skills']) {
-        user.add(s['skill'].toLowerCase());
-      }
-      List<String> skillNames = [];
-      for (var skill in skills) {
-        skillNames.add(skill.toLowerCase());
-      }
-      if (user.any((skill) => skillNames.contains(skill.toLowerCase())) &&
-          !userController.userdata['MyProjects'].contains(project)) {
-        // Some action here
-        _preference.add(project);
-        fetchedCount++;
-      }
-
-      // Update lastDocument for pagination
-      lastDocument = querySnapshot.docs.last;
-      fetchNextProject();
-    }
-  }
+  int _selected = 0;
 
   allproject() async {
     setState(() {
@@ -98,14 +45,18 @@ class _HomeScreenState extends State<HomeScreen> {
       _isLoading = false;
     });
   }
+   void setSelected(int index) {
+    setState(() {
+      _selected = index;
+    });
+    print(items[_selected]);
+  }
 
   @override
   void initState() {
     // TODO: implement initState
-    fetchNextProject();
     allproject();
     super.initState();
-    
   }
 
   @override
@@ -181,7 +132,25 @@ class _HomeScreenState extends State<HomeScreen> {
                   )
                 ],
               ),
-              FilterPage(),
+              Container(
+          height: height * 0.07,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              return Select(
+                title: items[index],
+                isSelected: _selected == index,
+                onTap: () => setSelected(index), // Pass callback function
+              );
+            },
+            separatorBuilder: (context, index) {
+              return SizedBox(
+                width: 5,
+              );
+            },
+            itemCount: items.length,
+          ),
+    ),
               const SizedBox(height: 20.0),
               Container(
                 height: height,
@@ -214,5 +183,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-
