@@ -102,13 +102,13 @@ class _HomeScreenState extends State<HomeScreen> {
     double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+      body: Padding(
+        padding: EdgeInsets.all(width * 0.05),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child:  Row(
                 children: [
                   GestureDetector(
                     onTap: () {
@@ -169,7 +169,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   )
                 ],
               ),
-              Container(
+            ),
+            SizedBox(
                 height: height * 0.07,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -182,10 +183,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         setState(() {
                           if (isSelected) {
                             selectedItems.remove(item);
-                            
                           } else {
                             selectedItems.add(item);
-                            
                           }
                           searchResult();
                         });
@@ -222,35 +221,39 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ),
-              const SizedBox(height: 20.0),
-              SizedBox(
-                height: height*_Project.length,
-                child: Expanded(
-                  child: ListView.builder(
-                    itemCount: _Project.length,
-                    itemBuilder: (context, index) {
-                      Map<String, dynamic>? projectdata =
-                          _Project[index].data() as Map<String, dynamic>?;
-                      if (projectdata!['ProjectTitle'] == null) {
-                        // Show a loading indicator
-                        if (_isLoading == true) {
-                          return Container();
-                        } else {
-                          _isLoading = true;
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                      }
-                      return Column(
-                        children: [ProjectSearch(projectdata), Divider()],
-                      );
-                    },
-                  ),
-                ),
-              )
-            ],
-          ),
+            Expanded(
+              child: _Project.isEmpty
+                      ? Center(
+                          child: Text("No results found"),
+                        )
+                      : ListView.builder(
+                          itemCount: _Project.length,
+                          itemBuilder: (context, index) {
+                              Map<String, dynamic> projectdata =
+                                  _Project[index].data()
+                                      as Map<String, dynamic>;
+                              if (projectdata['ProjectTitle'] == null) {
+                                // Show a loading indicator
+                                if (_isLoading == true) {
+                                  return Container();
+                                } else {
+                                  _isLoading = true;
+                                  return Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                              }
+                              return Column(
+                                children: [
+                                  ProjectSearch(projectdata),
+                                  Divider()
+                                ],
+                              );
+                            
+                          },
+                        ),
+            ),
+          ],
         ),
       ),
     );

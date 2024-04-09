@@ -31,35 +31,10 @@ class ProjectSearch extends StatelessWidget {
             width: width,
             height: height * 0.45,
             decoration: BoxDecoration(
-                // color: Color.fromARGB(255, 247, 248, 249),
-                // borderRadius: BorderRadius.circular(20),
-                // boxShadow: [
-                //   BoxShadow(
-                //     color:
-                //         Colors.grey.withOpacity(0.5), // Shadow color (with opacity)
-                //     spreadRadius: 1, // Extends the shadow beyond the box
-                //     blurRadius: 1, // Blurs the edges of the shadow
-                //     offset: Offset(0, 1), // Shifts the shadow (x, y)
-                //   ),
-                // ],
                 ),
             child: Stack(children: [
               Column(
                 children: [
-                  // ClipRRect(
-                  //   borderRadius: const BorderRadius.only(
-                  //     topLeft: Radius.circular(15.0),
-                  //     topRight: Radius.circular(15.0),
-                  //     bottomLeft: Radius.circular(0.0),
-                  //     bottomRight: Radius.circular(0.0),
-                  //   ),
-                  //   child: Image.network(
-                  //       height: height * 0.3,
-                  //       width: width,
-                  //       fit: BoxFit.cover,
-                  //       projectdata['Projectimg']),
-                  // ),
-
                   CachedNetworkImage(
                     imageUrl: projectdata['Projectimg'],
                     imageBuilder: (context, imageProvider) => Container(

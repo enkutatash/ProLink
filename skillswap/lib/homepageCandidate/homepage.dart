@@ -71,55 +71,43 @@ class _HomepageState extends State<Homepage> {
               ],
             ),
           ),
-      bottomNavigationBar: SizedBox(
-        height: 100,
-        child: PhysicalModel(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
-          ),
-          clipBehavior: Clip.antiAlias,
-          elevation: 5.0,
-          child: BottomAppBar(
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            color: Color.fromARGB(255, 237, 241, 245),
-            shape: CircularNotchedRectangle(),
-            notchMargin: 8.0, // Adjust the margin as needed
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(CupertinoIcons.house, size: 30),
-                  onPressed: () {
-                    _onItemTapped(0);
-                  },
-                  color: _currentPageIndex == 0 ? Color(0XFF2E307A) : Colors.grey,
-                ),
-                IconButton(
-                  icon: Icon(CupertinoIcons.folder, size: 30),
-                  onPressed: () {
-                    _onItemTapped(1);
-                  },
-                  color: _currentPageIndex == 1 ? Color(0XFF2E307A) : Colors.grey,
-                ),
-                IconButton(
-                  icon: Icon(CupertinoIcons.chat_bubble_2, size: 30),
-                  onPressed: () {
-                    _onItemTapped(2);
-                  },
-                  color: _currentPageIndex == 2 ? Color(0XFF2E307A) : Colors.grey,
-                ),
-                IconButton(
-                  icon: Icon(CupertinoIcons.person, size: 30),
-                  onPressed: () {
-                    _onItemTapped(3);
-                  },
-                  color: _currentPageIndex == 3 ? Color(0XFF2E307A) : Colors.grey,
-                ),
-              ],
+      bottomNavigationBar: BottomAppBar(
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        color: Color.fromARGB(255, 237, 241, 245),
+        shape: CircularNotchedRectangle(),
+        notchMargin: 8.0, // Adjust the margin as needed
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(CupertinoIcons.house, size: 30),
+              onPressed: () {
+                _onItemTapped(0);
+              },
+              color: _currentPageIndex == 0 ? Color(0XFF2E307A) : Colors.grey,
             ),
-          ),
+            IconButton(
+              icon: Icon(CupertinoIcons.folder, size: 30),
+              onPressed: () {
+                _onItemTapped(1);
+              },
+              color: _currentPageIndex == 1 ? Color(0XFF2E307A) : Colors.grey,
+            ),
+            IconButton(
+              icon: Icon(CupertinoIcons.chat_bubble_2, size: 30),
+              onPressed: () {
+                _onItemTapped(2);
+              },
+              color: _currentPageIndex == 2 ? Color(0XFF2E307A) : Colors.grey,
+            ),
+            IconButton(
+              icon: Icon(CupertinoIcons.person, size: 30),
+              onPressed: () {
+                _onItemTapped(3);
+              },
+              color: _currentPageIndex == 3 ? Color(0XFF2E307A) : Colors.grey,
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
