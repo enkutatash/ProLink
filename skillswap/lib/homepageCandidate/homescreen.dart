@@ -9,7 +9,21 @@ import 'package:skillswap/homepageCandidate/filter.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
 
-
+List<String> items = [
+  'Flutter',
+  'Node.js',
+  'React Native',
+  'Java',
+  'Docker',
+  'MySQL',
+  "UI/UX",
+  "Django",
+  "React",
+  "Machine Learning",
+  "Artificial Intelligence",
+  "Competitive Programming",
+  "Project Management",
+];
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
@@ -25,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _isLoading = false;
   int fetchedCount = 0;
   DocumentSnapshot? lastDocument;
-  int _selected = 0;
+  List<String> selectedItems = [];
 
   allproject() async {
     setState(() {
@@ -34,7 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
     var data = await FirebaseFirestore.instance
         .collection('Project')
         .orderBy('TimeStamp', descending: true)
-        .limit(10) // Limit to only fetch the top 10 projects
         .get();
     setState(() {
       _allProject = data.docs;
@@ -45,11 +58,35 @@ class _HomeScreenState extends State<HomeScreen> {
       _isLoading = false;
     });
   }
-   void setSelected(int index) {
+
+  searchResult() {
+    var showResult = [];
+    List<String> filter = [];
+    for (var skill in selectedItems) {
+      filter.add(skill.toLowerCase());
+    }
+
+    if (filter.length != 0) {
+      for (var project in _allProject) {
+        List<String> skills = List<String>.from(project['SkillReq'] ?? []);
+        List<String> skillNames = [];
+
+        for (var skill in skills) {
+          skillNames.add(skill.toLowerCase());
+        }
+
+        if (filter.every((skill) => skillNames.contains(skill.toLowerCase()))) {
+          showResult.add(project);
+        }
+      }
+    } else {
+      // Reset search result based on current search mode
+      showResult = List.from(_allProject);
+    }
     setState(() {
-      _selected = index;
+      _Project = showResult;
+      _isLoading = false;
     });
-    print(items[_selected]);
   }
 
   @override
@@ -133,47 +170,83 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               Container(
-          height: height * 0.07,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) {
-              return Select(
-                title: items[index],
-                isSelected: _selected == index,
-                onTap: () => setSelected(index), // Pass callback function
-              );
-            },
-            separatorBuilder: (context, index) {
-              return SizedBox(
-                width: 5,
-              );
-            },
-            itemCount: items.length,
-          ),
-    ),
-              const SizedBox(height: 20.0),
-              Container(
-                height: height,
+                height: height * 0.07,
                 child: ListView.builder(
-                  itemCount: _Project.length,
-                  itemBuilder: (context, index) {
-                    Map<String, dynamic>? projectdata =
-                        _Project[index].data() as Map<String, dynamic>?;
-                    if (projectdata!['ProjectTitle'] == null) {
-                      // Show a loading indicator
-                      if (_isLoading == true) {
-                        return Container();
-                      } else {
-                        _isLoading = true;
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                    }
-                    return Column(
-                      children: [ProjectSearch(projectdata), Divider()],
+                  scrollDirection: Axis.horizontal,
+                  itemCount: items.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final item = items[index];
+                    final isSelected = selectedItems.contains(item);
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          if (isSelected) {
+                            selectedItems.remove(item);
+                            
+                          } else {
+                            selectedItems.add(item);
+                            
+                          }
+                          searchResult();
+                        });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: width * 0.2 + item.length * 3,
+                          height: height * 0.03,
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: isSelected
+                                  ? Color(0XFF2E307A)
+                                  : Colors.transparent,
+                            ),
+                            color: isSelected
+                                ? Color(0XFF2E307A)
+                                : Color.fromARGB(255, 237, 241, 245),
+                          ),
+                          child: Center(
+                            child: Text(
+                              item,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: isSelected ? Colors.white : Colors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     );
                   },
+                ),
+              ),
+              const SizedBox(height: 20.0),
+              SizedBox(
+                height: height*6,
+                child: Expanded(
+                  child: ListView.builder(
+                    itemCount: _Project.length,
+                    itemBuilder: (context, index) {
+                      Map<String, dynamic>? projectdata =
+                          _Project[index].data() as Map<String, dynamic>?;
+                      if (projectdata!['ProjectTitle'] == null) {
+                        // Show a loading indicator
+                        if (_isLoading == true) {
+                          return Container();
+                        } else {
+                          _isLoading = true;
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      }
+                      return Column(
+                        children: [ProjectSearch(projectdata), Divider()],
+                      );
+                    },
+                  ),
                 ),
               )
             ],

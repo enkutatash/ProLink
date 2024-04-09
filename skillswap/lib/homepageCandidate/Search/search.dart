@@ -119,7 +119,6 @@ class _Search_ScreenState extends State<Search_Screen> {
           if (searchthis
               .every((skill) => skillNames.contains(skill.toLowerCase()))) {
             showResult.add(project);
-            break;
           }
         }
       }
