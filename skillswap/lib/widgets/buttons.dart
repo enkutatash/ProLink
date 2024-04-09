@@ -355,3 +355,41 @@ class CustomTextFormFieldTwo extends StatelessWidget {
     );
   }
 }
+
+
+
+
+class Filter extends StatelessWidget {
+  final String text;
+  final Color btnclr;
+  final Color textclr;
+  final double width;
+  final double height;
+  final void Function() click;
+  final double fontsize;
+  Filter(this.text, this.textclr, this.btnclr, this.width, this.height,
+      this.fontsize, this.click,
+      {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: click,
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0), // Set border radius
+          ),
+        ),
+        minimumSize: MaterialStateProperty.all(
+            Size(width, height)), // Set width and height
+        backgroundColor:
+            MaterialStateProperty.all<Color>(btnclr), // Set color to red
+      ),
+      child: Text(
+        text,
+        style: TextStyle(color: textclr, fontSize: fontsize),
+      ),
+    );
+  }
+}

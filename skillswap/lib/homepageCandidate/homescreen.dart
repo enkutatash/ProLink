@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:skillswap/Project/userdata.dart';
 import 'package:skillswap/homepageCandidate/Search/projectsearch.dart';
 import 'package:skillswap/homepageCandidate/Search/search.dart';
+import 'package:skillswap/homepageCandidate/filter.dart';
 import 'package:skillswap/homepageCandidate/recentproject.dart';
 import 'package:skillswap/homepageCandidate/sidebar.dart';
 import 'package:skillswap/widgets/buttons.dart';
@@ -180,6 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   )
                 ],
               ),
+              FilterPage(),
               const SizedBox(height: 20.0),
               Container(
                 height: height,
@@ -212,3 +214,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+
