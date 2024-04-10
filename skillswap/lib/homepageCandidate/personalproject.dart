@@ -50,7 +50,7 @@ class _MyProjectsState extends State<MyProjects> {
             if (usercontroller.userdata['MyProjects'].contains(projectId)) {
             Map<String, dynamic> projectData =
                 pro.data() as Map<String, dynamic>;
-              final oneProject = Project(projectData);
+              final oneProject = Project(projectData,projectId);
               projectlist.add(oneProject);
             }
           }

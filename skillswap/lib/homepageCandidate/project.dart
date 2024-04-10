@@ -4,7 +4,8 @@ import 'package:skillswap/EditProject%20and%20ProjectDetail/project_detail.dart'
 
 class Project extends StatelessWidget {
   Map<String, dynamic> projectdata;
-  Project(this.projectdata, {super.key});
+  String projectid;
+  Project(this.projectdata, this.projectid,{super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,30 +15,29 @@ class Project extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: GestureDetector(
-
-        onTap: (){
-           Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                ProjectDetailPage(projectdata: projectdata)));
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      ProjectDetailPage(projectdata: projectdata,projectid: projectid,)));
         },
         child: Container(
           width: width,
           height: height * 0.4,
           decoration: BoxDecoration(
-            // color: Color.fromARGB(255, 237, 241, 245),
-            // borderRadius: BorderRadius.circular(10),
-            // boxShadow: [
-            //   BoxShadow(
-            //     color:
-            //         Colors.grey.withOpacity(0.5), // Shadow color (with opacity)
-            //     spreadRadius: 1, // Extends the shadow beyond the box
-            //     blurRadius: 1, // Blurs the edges of the shadow
-            //     offset: Offset(0, 1), // Shifts the shadow (x, y)
-            //   ),
-            // ],
-          ),
+              // color: Color.fromARGB(255, 237, 241, 245),
+              // borderRadius: BorderRadius.circular(10),
+              // boxShadow: [
+              //   BoxShadow(
+              //     color:
+              //         Colors.grey.withOpacity(0.5), // Shadow color (with opacity)
+              //     spreadRadius: 1, // Extends the shadow beyond the box
+              //     blurRadius: 1, // Blurs the edges of the shadow
+              //     offset: Offset(0, 1), // Shifts the shadow (x, y)
+              //   ),
+              // ],
+              ),
           child: Column(
             children: [
               // ClipRRect(
@@ -54,19 +54,19 @@ class Project extends StatelessWidget {
               //       projectdata['Projectimg']),
               // ),
               CachedNetworkImage(
-                          imageUrl:  projectdata['Projectimg'],
-                          imageBuilder: (context, imageProvider) => Container(
-                            height: height * 0.28,
-                            width: width,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              image: DecorationImage(
-                                image: imageProvider, fit: BoxFit.cover),
-                            ),
-                          ),
-                          // placeholder: (context, url) =>CircularProgressIndicator(),
-                          errorWidget: (context, url, error) => Icon(Icons.error),
-                        ),
+                imageUrl: projectdata['Projectimg'],
+                imageBuilder: (context, imageProvider) => Container(
+                  height: height * 0.28,
+                  width: width,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    image: DecorationImage(
+                        image: imageProvider, fit: BoxFit.cover),
+                  ),
+                ),
+                // placeholder: (context, url) =>CircularProgressIndicator(),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0, right: 8),
                 child: Row(
@@ -109,4 +109,3 @@ class Project extends StatelessWidget {
     );
   }
 }
-
