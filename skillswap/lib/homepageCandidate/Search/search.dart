@@ -27,33 +27,42 @@ class _Search_ScreenState extends State<Search_Screen> {
   List _searchResult = [];
   bool _isLoading = false;
 
-  allUser() async {
-    var data = await FirebaseFirestore.instance
-        .collection('Users')
-        .orderBy('First')
-        .get();
+ allUser() {
+  setState(() {
+    _isLoading = true; // Set isLoading to true before performing search
+  });
+  FirebaseFirestore.instance
+      .collection('Users')
+      .orderBy('First')
+      .snapshots()
+      .listen((QuerySnapshot snapshot) {
     setState(() {
-      _allUser = data.docs;
+      _allUser = snapshot.docs;
+      _allUser.removeWhere((doc) => doc.id == userController.userid);
+      searchResult(); // Move this inside setState
     });
-    _allUser.removeWhere((doc) => doc.id == userController.userid);
-    print("user uid");
-    print(userController.userid);
-    searchResult();
-  }
+  });
+}
 
-  allproject() async {
-    var data = await FirebaseFirestore.instance
-        .collection('Project')
-        .orderBy('TimeStamp')
-        .get();
+allProject() {
+  setState(() {
+    _isLoading = true; // Set isLoading to true before performing search
+  });
+  FirebaseFirestore.instance
+      .collection('Project')
+      .orderBy('TimeStamp')
+      .snapshots()
+      .listen((QuerySnapshot snapshot) {
     setState(() {
-      _allProject = data.docs;
+      _allProject = snapshot.docs;
       // Remove unwanted elements from _allProject
       _allProject.removeWhere(
           (doc) => userController.userdata['MyProjects'].contains(doc.id));
       searchResult(); // Move this inside setState
     });
-  }
+  });
+}
+
 
   searchResult() {
     setState(() {
@@ -207,7 +216,7 @@ class _Search_ScreenState extends State<Search_Screen> {
                       setState(() {
                         _searchInProjects = true;
                       });
-                      allproject();
+                      allProject();
                     },
                     child: Text(
                       "Projects",

@@ -10,7 +10,6 @@ import 'package:skillswap/Project/userdata.dart';
 import 'package:skillswap/firebase/firebase.dart';
 import 'package:skillswap/widgets/buttons.dart';
 import 'package:skillswap/widgets/skillsdropdown.dart';
-import 'package:skillswap/homepageCandidate/personalproject.dart';
 import 'package:random_string/random_string.dart';
 
 class CreateProjectPage extends StatefulWidget {

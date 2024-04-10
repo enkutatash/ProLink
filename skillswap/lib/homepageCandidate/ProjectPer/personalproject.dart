@@ -5,8 +5,7 @@ import 'package:path/path.dart';
 import 'package:skillswap/Project/projectcontroller.dart';
 import 'package:skillswap/Project/userdata.dart';
 import 'package:skillswap/firebase/firebase.dart';
-import 'package:skillswap/homepageCandidate/project.dart';
-import 'package:skillswap/homepageCandidate/createProject.dart';
+import 'package:skillswap/homepageCandidate/ProjectPer/project.dart';
 
 class MyProjects extends StatefulWidget {
   MyProjects({super.key});

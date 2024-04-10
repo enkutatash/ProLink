@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:skillswap/Project/userdata.dart';
 import 'package:skillswap/homepageCandidate/Search/projectsearch.dart';
 import 'package:skillswap/homepageCandidate/Search/search.dart';
-import 'package:skillswap/homepageCandidate/filter.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
 

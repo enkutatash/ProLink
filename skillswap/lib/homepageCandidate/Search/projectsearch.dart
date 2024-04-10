@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:skillswap/Project/userdata.dart';
 import 'package:skillswap/firebase/firebase.dart';
 import 'package:skillswap/homepageCandidate/Search/projectdetailtojoin.dart';
-import 'package:skillswap/homepageCandidate/Search/requestpage.dart';
+import 'package:skillswap/Request/requestpage.dart';
 import 'package:skillswap/widgets/buttons.dart';
 
 class ProjectSearch extends StatelessWidget {

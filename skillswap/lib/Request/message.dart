@@ -7,7 +7,6 @@ import 'package:skillswap/Chat/chat.dart';
 import 'package:skillswap/Request/requestdetail.dart';
 import 'package:skillswap/Request/requestui.dart';
 import 'package:skillswap/Request/sendrequest.dart';
-import 'chatDetailPage.dart';
 
 class ChatPage extends StatefulWidget {
   @override

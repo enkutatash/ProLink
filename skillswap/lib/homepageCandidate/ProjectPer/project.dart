@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:skillswap/EditProject%20and%20ProjectDetail/project_detail.dart';
+import 'package:skillswap/homepageCandidate/ProjectPer/project_detail.dart';
 
 class Project extends StatelessWidget {
   Map<String, dynamic> projectdata;
