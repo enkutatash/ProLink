@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:skillswap/Project/projectcontroller.dart';
 import 'package:skillswap/Project/userdata.dart';
 import 'package:skillswap/pages/contact.dart';
 import 'package:skillswap/pages/setting.dart';
@@ -15,6 +16,39 @@ class SenderProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+
+  Future workingonProject(String projectid) async {
+  ProjectController projectController = Get.find();
+  Map<String, dynamic> projectdata =
+      await projectController.ProjectData(projectid);
+      final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+  return Container(
+    width: width*0.4 ,
+    height: height*0.1,
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        CachedNetworkImage(
+          imageUrl: projectdata['Projectimg'],
+          imageBuilder: (context, imageProvider) => Container(
+            width: 70.0,
+            height: 70.0,
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+            ),
+          ),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+        ),
+        
+            Text(projectdata['ProjectTitle'],style: TextStyle(fontSize: 20),),
+        
+      ],
+    ),
+  );
+}
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -253,7 +287,81 @@ data['Github'] != null && data['Github'] != ''
                   )
                   : Container(),
 
-              
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Working On Projects",
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: height * 0.02,
+              ),
+              SizedBox(
+                height: 300,
+                child: Expanded(
+                    child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                      ),
+                        itemCount:
+                            data['WorkingOnPro'].length,
+                        itemBuilder: (context, index){
+                           return FutureBuilder(
+                              future: workingonProject(data['WorkingOnPro'][index]),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  return CircularProgressIndicator(); // Or any loading indicator
+                                } else if (snapshot.hasError) {
+                                  return Text('Error: ${snapshot.error}');
+                                } else {
+                                  return snapshot.data;
+                                }
+                              },
+                            );
+                        })),
+              ),
+
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Personal Projects",
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: height * 0.02,
+              ),
+              SizedBox(
+                height: 300,
+                child: Expanded(
+                    child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                      ),
+                        itemCount:
+                            data['MyProjects'].length,
+                        itemBuilder: (context, index){
+                           return FutureBuilder(
+                              future: workingonProject(data['MyProjects'][index]),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  return CircularProgressIndicator(); // Or any loading indicator
+                                } else if (snapshot.hasError) {
+                                  return Text('Error: ${snapshot.error}');
+                                } else {
+                                  return snapshot.data;
+                                }
+                              },
+                            );
+                        })),
+              ),
              
             ],
           ),

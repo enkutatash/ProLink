@@ -336,6 +336,85 @@ userdata['Github'] != null && userdata['Github'] != ''
                             );
                         })),
               ),
+                              SizedBox(
+                height: height * 0.02,
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Personal Projects",
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: height * 0.02,
+              ),
+              SizedBox(
+                height: 300,
+                child: Expanded(
+                    child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                      ),
+                        itemCount:
+                            userdata['MyProjects'].length,
+                        itemBuilder: (context, index){
+                           return FutureBuilder(
+                              future: workingonProject(userdata['MyProjects'][index]),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  return CircularProgressIndicator(); // Or any loading indicator
+                                } else if (snapshot.hasError) {
+                                  return Text('Error: ${snapshot.error}');
+                                } else {
+                                  return snapshot.data;
+                                }
+                              },
+                            );
+                        })),
+              ),
+
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Completed Projects",
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: height * 0.02,
+              ),
+              SizedBox(
+                height: 300,
+                child: Expanded(
+                    child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                      ),
+                        itemCount:
+                            userdata['CompletedProject'].length,
+                        itemBuilder: (context, index){
+                           return FutureBuilder(
+                              future: workingonProject(userdata['CompletedProject'][index]),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  return CircularProgressIndicator(); // Or any loading indicator
+                                } else if (snapshot.hasError) {
+                                  return Text('Error: ${snapshot.error}');
+                                } else {
+                                  return snapshot.data;
+                                }
+                              },
+                            );
+                        })),
+              ),
+              
               
              
             ],

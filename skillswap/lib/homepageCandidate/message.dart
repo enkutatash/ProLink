@@ -223,6 +223,21 @@ class _ChatPageState extends State<ChatPage> {
                                   print(
                                       "Failed to add element to the working list: $error");
                                 });
+
+                              FirebaseFirestore.instance
+                          .collection("Users")
+                          .doc( _authentication.currentUser!.uid)
+                          .update({
+                        'Teams':
+                            FieldValue.arrayUnion([data['senderId']])
+                      }).then((value) {
+                        print(
+                            "Element added to the Myproject teams list successfully.");
+                      }).catchError((error) {
+                        print(
+                            "Failed to add element to the working list: $error");
+                      });
+
                                 sendMessage("I hope this letter finds you well. I want to extend my sincere gratitude for your interest in collaborating with me on ${data['Title']} Project. I have carefully reviewed your proposal and deliberated on the potential synergies that could arise from such a collaboration.\After thoughtful consideration, however, I regret to inform you that I am unable to accept your request for collaboration at this time.", chatRoomId!);
                                 //  Navigator.pop(context);
                               },
