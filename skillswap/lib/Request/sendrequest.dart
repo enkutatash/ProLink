@@ -7,7 +7,7 @@ class RequestSend extends ChangeNotifier {
   final FirebaseAuth _authentication = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Future<void> sendrequest(String recieverid, String projectid, String message,
-      Map<String, dynamic> userdata, List<String> skill) async {
+      Map<String, dynamic> userdata, String title,List<String> skill) async {
     final String senderid = _authentication.currentUser!.uid;
     final Timestamp timestamp = Timestamp.now();
     RequestTemp newrequest = RequestTemp(
@@ -17,7 +17,9 @@ class RequestSend extends ChangeNotifier {
         message: message,
         timestamp: timestamp,
         skills: skill,
-        userdata: userdata);
+        userdata: userdata,
+        projectTitle: title
+        );
     await _firestore
         .collection("Requests")
         .doc(recieverid)

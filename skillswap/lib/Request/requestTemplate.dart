@@ -7,6 +7,7 @@ class RequestTemp {
   final String message;
   final Timestamp timestamp;
   List<String> skills;
+  final String projectTitle;
   Map<String, dynamic> userdata;
 
   RequestTemp({
@@ -16,6 +17,7 @@ class RequestTemp {
     required this.message,
     required this.timestamp,
     required this.userdata,
+    required this.projectTitle,
     this.skills = const [],
   });
   Map<String, dynamic> tomap() {
@@ -26,7 +28,8 @@ class RequestTemp {
       'message': message,
       'timestamp': timestamp,
       'Skill': skills,
-      'UserData':userdata
+      'UserData':userdata,
+      'Title':projectTitle,
     };
   }
 }

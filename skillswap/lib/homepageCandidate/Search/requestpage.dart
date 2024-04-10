@@ -31,9 +31,9 @@ class _RequestPageState extends State<RequestPage> {
   UploadTask? uploadTask;
   RequestSend request = RequestSend();
 
-  void sendrequest(String recieverid, String message, String projectid,
+  void sendrequest(String recieverid, String message, String projectid,String title,
       List<String> skill) async {
-    await request.sendrequest(recieverid, projectid, message,userController.userdata,skill);
+    await request.sendrequest(recieverid, projectid, message,userController.userdata,title,skill);
   }
 
   TextEditingController message = TextEditingController();
@@ -132,7 +132,7 @@ class _RequestPageState extends State<RequestPage> {
               child: ButtonTwo("Send", Colors.white, Color(0XFF2E307A),
                   width * 0.45, height * 0.05, 17, () {
                 sendrequest(widget.projectdata['userid'], message.text,
-                    widget.projectid, selectedSkills);
+                    widget.projectid, widget.projectdata['ProjectTitle'],selectedSkills);
                 Navigator.pop(context);
               }),
             )
