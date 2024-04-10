@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconify_flutter/icons/zondicons.dart';
-import 'package:skillswap/Project/userdata.dart';
+import 'package:skillswap/Datas/userdata.dart';
 // import 'package:skillswap/homepageCandidate/homescreen.dart';
 import 'package:skillswap/Request/message.dart';
 import 'package:skillswap/homepageCandidate/home/profile.dart';

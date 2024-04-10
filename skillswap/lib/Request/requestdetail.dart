@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillswap/Chat/chat.dart';
 import 'package:skillswap/Chat/chatpage.dart';
-import 'package:skillswap/Project/projectcontroller.dart';
+import 'package:skillswap/Datas/projectcontroller.dart';
 import 'package:skillswap/Request/senderprofile.dart';
 import 'package:skillswap/Request/sendrequest.dart';
 import 'package:skillswap/Message/chatDetailPage.dart';

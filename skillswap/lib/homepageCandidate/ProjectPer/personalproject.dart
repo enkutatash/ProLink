@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
-import 'package:skillswap/Project/projectcontroller.dart';
-import 'package:skillswap/Project/userdata.dart';
+import 'package:skillswap/Datas/projectcontroller.dart';
+import 'package:skillswap/Datas/userdata.dart';
 import 'package:skillswap/firebase/firebase.dart';
 import 'package:skillswap/homepageCandidate/ProjectPer/project.dart';
 

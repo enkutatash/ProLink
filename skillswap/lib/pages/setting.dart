@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:skillswap/Project/userdata.dart';
+import 'package:skillswap/Datas/userdata.dart';
 import 'package:skillswap/homepageCandidate/home/profile.dart';
 import 'package:skillswap/pages/aboutus.dart';
 import 'package:skillswap/pages/help.dart';

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:skillswap/Project/userdata.dart';
+import 'package:skillswap/Datas/userdata.dart';
 import 'package:skillswap/Request/requestTemplate.dart';
 import 'package:skillswap/Request/sendrequest.dart';
 import 'package:skillswap/widgets/buttons.dart';
