@@ -9,7 +9,7 @@ import 'package:skillswap/Chat/chatpage.dart';
 import 'package:skillswap/Project/projectcontroller.dart';
 import 'package:skillswap/Request/senderprofile.dart';
 import 'package:skillswap/Request/sendrequest.dart';
-import 'package:skillswap/homepageCandidate/chatDetailPage.dart';
+import 'package:skillswap/Message/chatDetailPage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class RequestDetail extends StatelessWidget {
@@ -20,12 +20,58 @@ class RequestDetail extends StatelessWidget {
   ProjectController projectController = Get.find();
   final FirebaseAuth _authentication = FirebaseAuth.instance;
   RequestSend _request = RequestSend();
-  final Chat _chat = Chat();
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+
+    Future<String?> fetchOrCreateChatRoomId(String uid1, String uid2) async {
+      String currentUid = _authentication.currentUser!.uid;
+      List<String> participantUids = [uid1, uid2];
+      participantUids.sort(); // Ensure consistent order of participants
+
+      DocumentReference chatRoomRef = FirebaseFirestore.instance
+          .collection('ChatRooms')
+          .doc('${participantUids[0]}_${participantUids[1]}');
+
+      DocumentSnapshot snapshot = await chatRoomRef.get();
+
+      if (snapshot.exists) {
+        return chatRoomRef.id;
+      } else {
+        try {
+          await chatRoomRef.set({
+            'participants': participantUids,
+            // Add any other fields you want to initialize for the chat room
+          });
+          return chatRoomRef.id;
+        } catch (e) {
+          print('Error creating chat room: $e');
+          return null;
+        }
+      }
+    }
+
+    void sendMessage(String message, String chatroom) async {
+      if (message.isNotEmpty) {
+        // Add the message to Firestore
+        DocumentReference docRef = await firestore
+            .collection('ChatRooms')
+            .doc(chatroom)
+            .collection('Messages')
+            .add({
+          'message': message,
+          'timestamp': Timestamp.now(),
+          'sender_uid': _authentication.currentUser!.uid,
+          'recipient_uid': data['senderId'],
+          'readBy': [
+            _authentication.currentUser!.uid
+          ], // Ensure readBy field is set initially
+        });
+      }
+    }
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -155,7 +201,9 @@ class RequestDetail extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   IconButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      String? chatRoomId = await fetchOrCreateChatRoomId(
+                          data['senderId'], _authentication.currentUser!.uid);
                       FirebaseFirestore.instance
                           .collection("Requests")
                           .doc(_authentication.currentUser!.uid)
@@ -163,8 +211,9 @@ class RequestDetail extends StatelessWidget {
                           .doc(requestId)
                           .delete();
                       // send rejection message
-                      _chat.sendmessage(
-                          data['senderId'], "User request has rejected");
+                      // _chat.sendmessage(
+                      //     data['senderId'], "User request has rejected",chatRoomId!);
+                      sendMessage("I hope this letter finds you well. I want to extend my sincere gratitude for your interest in collaborating with me on ${data['Title']}. I have carefully reviewed your proposal and deliberated on the potential synergies that could arise from such a collaboration.\After thoughtful consideration, however, I regret to inform you that I am unable to accept your request for collaboration at this time.", chatRoomId!);
                     },
                     icon: Icon(
                       CupertinoIcons.clear_circled,
@@ -174,7 +223,9 @@ class RequestDetail extends StatelessWidget {
                   ),
                   SizedBox(width: 8.0),
                   IconButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      String? chatRoomId = await fetchOrCreateChatRoomId(
+                          data['senderId'], _authentication.currentUser!.uid);
                       FirebaseFirestore.instance
                           .collection("Requests")
                           .doc(_authentication.currentUser!.uid)
@@ -188,8 +239,9 @@ class RequestDetail extends StatelessWidget {
                           .doc(requestId)
                           .delete();
                       // send rejection message
-                      _chat.sendmessage(
-                          data['senderId'], "User request has Accepted");
+                      // _chat.sendmessage(data['senderId'],
+                      //     "User request has Accepted", chatRoomId!);
+                      sendMessage("I am delighted to accept your invitation to collaborate on ${data['Title']}. It is truly an honor to have the opportunity to work together and contribute to the success of this initiative.", chatRoomId!);
                       // add project to working on projects
                       FirebaseFirestore.instance
                           .collection("Users")
@@ -214,15 +266,28 @@ class RequestDetail extends StatelessWidget {
                 ],
               ),
               IconButton(
-                  onPressed: () {
-                    Navigator.push(
+                  onPressed: () async {
+                    String? chatRoomId = await fetchOrCreateChatRoomId(
+                        data['senderId'], _authentication.currentUser!.uid);
+                    if (chatRoomId != null) {
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ChatDetailPage()
-                            ));
-                            ChatPage(
-                                recieverid: data['senderId'],
-                                userdata: data['UserData'])
+                          builder: (context) => ChatDetailPage(
+                            currentUserUid: _authentication.currentUser!.uid,
+                            chatRoomId: chatRoomId,
+                            recipientUid: data['senderId'],
+                          ),
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content:
+                              Text('Error creating or fetching chat room!'),
+                        ),
+                      );
+                    }
                   },
                   icon: Image.asset(width: 30, height: 30, "asset/send.png"))
             ],

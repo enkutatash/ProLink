@@ -136,11 +136,4 @@ class _MessagePageState extends State<MessagePage> {
   }
 }
 
-class CollaborationRequestsTab extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Collaboration Requests Tab'),
-    );
-  }
-}
+

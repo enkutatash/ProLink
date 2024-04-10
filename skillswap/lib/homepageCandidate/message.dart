@@ -16,8 +16,12 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   RequestSend _request = RequestSend();
-  final Chat _chat = Chat();
+  // final Chat _chat = Chat();
   final FirebaseAuth _authentication = FirebaseAuth.instance;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+ 
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -28,6 +32,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget _buildRequests() {
+       
     return StreamBuilder(
         stream: _request.getrequest(_authentication.currentUser!.uid),
         builder: (context, snapshot) {
@@ -59,6 +64,52 @@ class _ChatPageState extends State<ChatPage> {
     //   await _request.removeRequest(_authentication.currentUser!.uid, requestId);
     //   print("end");
     // }
+
+    Future<String?> fetchOrCreateChatRoomId(String uid1, String uid2) async {
+      String currentUid = _authentication.currentUser!.uid;
+      List<String> participantUids = [uid1, uid2];
+      participantUids.sort(); // Ensure consistent order of participants
+
+      DocumentReference chatRoomRef = FirebaseFirestore.instance
+          .collection('ChatRooms')
+          .doc('${participantUids[0]}_${participantUids[1]}');
+
+      DocumentSnapshot snapshot = await chatRoomRef.get();
+
+      if (snapshot.exists) {
+        return chatRoomRef.id;
+      } else {
+        try {
+          await chatRoomRef.set({
+            'participants': participantUids,
+            // Add any other fields you want to initialize for the chat room
+          });
+          return chatRoomRef.id;
+        } catch (e) {
+          print('Error creating chat room: $e');
+          return null;
+        }
+      }
+    }
+
+    void sendMessage(String message, String chatroom) async {
+      if (message.isNotEmpty) {
+        // Add the message to Firestore
+        DocumentReference docRef = await firestore
+            .collection('ChatRooms')
+            .doc(chatroom)
+            .collection('Messages')
+            .add({
+          'message': message,
+          'timestamp': Timestamp.now(),
+          'sender_uid': _authentication.currentUser!.uid,
+          'recipient_uid': data['senderId'],
+          'readBy': [
+            _authentication.currentUser!.uid
+          ], // Ensure readBy field is set initially
+        });
+      }
+    }
 
     return Column(
       children: [
@@ -116,7 +167,9 @@ class _ChatPageState extends State<ChatPage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             IconButton(
-                              onPressed: () {
+                              onPressed: () async{
+                                String? chatRoomId = await fetchOrCreateChatRoomId(
+                          data['senderId'], _authentication.currentUser!.uid);
                                 print(document.id);
                                 FirebaseFirestore.instance
                                     .collection("Requests")
@@ -125,8 +178,9 @@ class _ChatPageState extends State<ChatPage> {
                                     .doc(requestId)
                                     .delete();
                                 // send rejection message
-                                _chat.sendmessage(data['senderId'],
-                                    "User request has rejected");
+                                // _chat.sendmessage(data['senderId'],
+                                //     "User request has rejected");
+                                sendMessage("I hope this letter finds you well. I want to extend my sincere gratitude for your interest in collaborating with me on ${data['Title']}. I have carefully reviewed your proposal and deliberated on the potential synergies that could arise from such a collaboration.\After thoughtful consideration, however, I regret to inform you that I am unable to accept your request for collaboration at this time.", chatRoomId!);
                                 // Navigator.pop(context);
                               },
                               icon: Icon(
@@ -137,7 +191,9 @@ class _ChatPageState extends State<ChatPage> {
                             ),
                             SizedBox(width: 8.0),
                             IconButton(
-                              onPressed: () {
+                              onPressed: () async{
+                                 String? chatRoomId = await fetchOrCreateChatRoomId(
+                          data['senderId'], _authentication.currentUser!.uid);
                                 FirebaseFirestore.instance
                                     .collection("Requests")
                                     .doc(_authentication.currentUser!.uid)
@@ -151,8 +207,8 @@ class _ChatPageState extends State<ChatPage> {
                                     .doc(requestId)
                                     .delete();
                                 // send rejection message
-                                _chat.sendmessage(data['senderId'],
-                                    "User request has Accepted");
+                                // _chat.sendmessage(data['senderId'],
+                                //     "User request has Accepted");
                                 // add project to working on projects
                                 FirebaseFirestore.instance
                                     .collection("Users")
@@ -167,6 +223,7 @@ class _ChatPageState extends State<ChatPage> {
                                   print(
                                       "Failed to add element to the working list: $error");
                                 });
+                                sendMessage("I hope this letter finds you well. I want to extend my sincere gratitude for your interest in collaborating with me on ${data['Title']}. I have carefully reviewed your proposal and deliberated on the potential synergies that could arise from such a collaboration.\After thoughtful consideration, however, I regret to inform you that I am unable to accept your request for collaboration at this time.", chatRoomId!);
                                 //  Navigator.pop(context);
                               },
                               icon: Icon(

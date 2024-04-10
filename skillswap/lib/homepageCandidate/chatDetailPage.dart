@@ -14,7 +14,7 @@ class ChatDetailPage extends StatelessWidget {
     this.message = 'Hello, how are you doing?',
     this.timestamp = '12:00 PM',
     this.isOnline = false,
-    this.isMessageSeen = true,
+    this.isMessageSeen = true, required String currentUserUid, required String chatRoomId, required String recipientUid,
   });
 
   @override

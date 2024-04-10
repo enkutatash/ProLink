@@ -200,21 +200,21 @@ class _MessageRecState extends State< MessageRec> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ChatDetailPage(
-                            avatar: messages[index]['avatar'] ?? 'Unknown',
-                            name: messages[index]['name'] ?? 'Unknown',
-                            message: messages[index]['message'] ?? 'Unknown',
-                            timestamp:
-                                messages[index]['timestamp'] ?? 'Unknown',
-                            isOnline: messages[index]['online'] ?? false,
-                          ),
-                        ),
-                      ).then((value) {
-                        deleteMessage(index);
-                      });
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => ChatDetailPage(
+                      //       avatar: messages[index]['avatar'] ?? 'Unknown',
+                      //       name: messages[index]['name'] ?? 'Unknown',
+                      //       message: messages[index]['message'] ?? 'Unknown',
+                      //       timestamp:
+                      //           messages[index]['timestamp'] ?? 'Unknown',
+                      //       isOnline: messages[index]['online'] ?? false,
+                      //     ),
+                      //   ),
+                      // ).then((value) {
+                      //   deleteMessage(index);
+                      // });
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 16.0),
