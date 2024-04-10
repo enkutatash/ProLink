@@ -7,13 +7,14 @@ import 'package:get/get.dart';
 import 'package:skillswap/Chat/chat.dart';
 import 'package:skillswap/Chat/chatpage.dart';
 import 'package:skillswap/Project/projectcontroller.dart';
+import 'package:skillswap/Request/senderprofile.dart';
 import 'package:skillswap/Request/sendrequest.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class RequestDetail extends StatelessWidget {
   Map<String, dynamic> data;
   String requestId;
-  RequestDetail(this.data, this.requestId,{super.key});
+  RequestDetail(this.data, this.requestId, {super.key});
 
   ProjectController projectController = Get.find();
   final FirebaseAuth _authentication = FirebaseAuth.instance;
@@ -35,19 +36,29 @@ class RequestDetail extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CachedNetworkImage(
-                    imageUrl: data['UserData']['profilePic'],
-                    imageBuilder: (context, imageProvider) => Container(
-                      width: 80.0,
-                      height: 80.0,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                            image: imageProvider, fit: BoxFit.cover),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  SenderProfile(data['UserData'])));
+                    },
+                    child: CachedNetworkImage(
+                      imageUrl: data['UserData']['profilePic'],
+                      imageBuilder: (context, imageProvider) => Container(
+                        width: 80.0,
+                        height: 80.0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.cover),
+                        ),
                       ),
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
-                    placeholder: (context, url) => CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                   SizedBox(
                     width: width * 0.08,
@@ -104,7 +115,7 @@ class RequestDetail extends StatelessWidget {
                       ),
                     ),
                     const Text(
-                      "Application letter",
+                      "letter",
                       style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.bold,
@@ -207,7 +218,8 @@ class RequestDetail extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => ChatPage(
-                                recieverid:data['senderId'] , userdata: data['UserData'])));
+                                recieverid: data['senderId'],
+                                userdata: data['UserData'])));
                   },
                   icon: Image.asset(width: 30, height: 30, "asset/send.png"))
             ],
