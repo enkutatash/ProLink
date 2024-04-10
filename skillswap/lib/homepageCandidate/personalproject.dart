@@ -45,11 +45,11 @@ class _MyProjectsState extends State<MyProjects> {
           List<Project> projectlist = [];
           final projects = snapshot.data!.docs.toList();
           for (var pro in projects) {
+
+            final projectId = pro.id;
+            if (usercontroller.userdata['MyProjects'].contains(projectId)) {
             Map<String, dynamic> projectData =
                 pro.data() as Map<String, dynamic>;
-            final projectId = pro.id;
-
-            if (usercontroller.userdata['MyProjects'].contains(projectId)) {
               final oneProject = Project(projectData);
               projectlist.add(oneProject);
             }

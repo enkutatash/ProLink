@@ -150,7 +150,7 @@ class PersonalDetail extends StatelessWidget {
                                   runSpacing:
                                       8, // Adjust the spacing between lines as needed
                                   children: List.generate(
-                                      userdata['Skills'].length, (index) {
+                                      userdata['Skills'] != null ? userdata['Skills'].length : 0, (index) {
                                     Map<String, dynamic> skill =
                                         userdata['Skills'][index];
 

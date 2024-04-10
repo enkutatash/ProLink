@@ -54,6 +54,28 @@ Future<RxMap<String, dynamic>> userData(String docid) async {
     }
   }
 
+  Stream<DocumentSnapshot<Object?>> getuserdata(String userid) {
+     return dbrefuser
+         .doc(userid)
+         .snapshots();
+   }
+
+  Future<Map<String, dynamic>> userData2(String docid) async {
+    try {
+     DocumentSnapshot snapshot = await dbrefuser.doc(docid).get();
+      if (snapshot.exists) {
+        Map<String, dynamic> userdata =
+            snapshot.data() as Map<String, dynamic>;
+        return userdata;
+      } else {
+        return {}; // Return empty map if the document doesn't exist
+      }
+    } catch (e) {
+      print("Error fetching user data: $e");
+      return {}; // Return empty map if there's an error
+    }
+  }
+
 Future<void> initializeRec(String userid) async {
   try {
     _user = await userRec(userid);
