@@ -114,20 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () {
                       Scaffold.of(context).openDrawer();
                     },
-                    child: CachedNetworkImage(
-                      imageUrl: userController.userdata['profilePic'],
-                      imageBuilder: (context, imageProvider) => Container(
-                        width: 50.0,
-                        height: 50.0,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: imageProvider, fit: BoxFit.cover),
-                        ),
-                      ),
-                      placeholder: (context, url) => Icon(Icons.person),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                    ),
+                    child: Icon(CupertinoIcons.text_justify,size: 30,)
                   ),
                   SizedBox(
                     width: 10,
@@ -162,11 +149,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: Colors.grey,
                               ),
                             ),
+                           
                           ],
                         ),
                       ),
                     ),
-                  )
+                  ),
+                   CachedNetworkImage(
+                      imageUrl: userController.userdata['profilePic'],
+                      imageBuilder: (context, imageProvider) => Container(
+                        width: 50.0,
+                        height: 50.0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.cover),
+                        ),
+                      ),
+                      placeholder: (context, url) => Icon(Icons.person),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    ),
                 ],
               ),
             ),
