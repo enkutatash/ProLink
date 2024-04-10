@@ -9,6 +9,7 @@ import 'package:skillswap/Chat/chatpage.dart';
 import 'package:skillswap/Project/projectcontroller.dart';
 import 'package:skillswap/Request/senderprofile.dart';
 import 'package:skillswap/Request/sendrequest.dart';
+import 'package:skillswap/homepageCandidate/chatDetailPage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class RequestDetail extends StatelessWidget {
@@ -217,9 +218,11 @@ class RequestDetail extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ChatPage(
+                            builder: (context) => ChatDetailPage()
+                            ));
+                            ChatPage(
                                 recieverid: data['senderId'],
-                                userdata: data['UserData'])));
+                                userdata: data['UserData'])
                   },
                   icon: Image.asset(width: 30, height: 30, "asset/send.png"))
             ],

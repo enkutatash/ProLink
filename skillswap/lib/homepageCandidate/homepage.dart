@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:skillswap/Message/message.dart';
 import 'package:skillswap/Project/projectcontroller.dart';
 import 'package:skillswap/Project/userdata.dart';
 import 'package:skillswap/homepageCandidate/createProject.dart';
@@ -26,6 +28,8 @@ class _HomepageState extends State<Homepage> {
   late final ProjectController projectController;
   int _currentPageIndex = 0;
   final UserController usercontroller = Get.find();
+  final FirebaseAuth _authentication = FirebaseAuth.instance;
+
 
   @override
   void initState() {
@@ -66,7 +70,8 @@ class _HomepageState extends State<Homepage> {
               children: [
                 HomeScreen(),
                 MyProjects(),
-                ChatPage(),
+                // ChatPage(),
+                MessagePage(currentUserUid: _authentication.currentUser!.uid),
                 ProfilePage(),
               ],
             ),

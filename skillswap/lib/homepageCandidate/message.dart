@@ -23,11 +23,6 @@ class _ChatPageState extends State<ChatPage> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Requests"),
-        backgroundColor: Colors.white,
-        centerTitle: true,
-      ),
       body: Expanded(child: _buildRequests()),
     );
   }
@@ -132,7 +127,7 @@ class _ChatPageState extends State<ChatPage> {
                                 // send rejection message
                                 _chat.sendmessage(data['senderId'],
                                     "User request has rejected");
-                                Navigator.pop(context);
+                                // Navigator.pop(context);
                               },
                               icon: Icon(
                                 CupertinoIcons.clear_circled,
@@ -172,7 +167,7 @@ class _ChatPageState extends State<ChatPage> {
                                   print(
                                       "Failed to add element to the working list: $error");
                                 });
-                                 Navigator.pop(context);
+                                //  Navigator.pop(context);
                               },
                               icon: Icon(
                                 CupertinoIcons.check_mark_circled,
