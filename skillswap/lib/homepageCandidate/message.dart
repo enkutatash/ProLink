@@ -40,7 +40,7 @@ class _ChatPageState extends State<ChatPage> {
             return Text("Error" + snapshot.error.toString());
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Text("Loading ...");
+            return Center(child: const CircularProgressIndicator());
           }
 
           return SizedBox(
@@ -223,6 +223,18 @@ class _ChatPageState extends State<ChatPage> {
                                   print(
                                       "Failed to add element to the working list: $error");
                                 });
+                                 FirebaseFirestore.instance
+                            .collection("Project")
+                            .doc(data['projectId'])
+                            .update({
+                          'Teams': FieldValue.arrayUnion([data['senderId']])
+                        }).then((value) {
+                          print(
+                              "Element added to the Myproject teams list successfully.");
+                        }).catchError((error) {
+                          print(
+                              "Failed to add element to the working list: $error");
+                        });
 
                               FirebaseFirestore.instance
                           .collection("Users")

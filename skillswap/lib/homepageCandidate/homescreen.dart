@@ -287,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         skillNames.add(skill.toLowerCase());
                       }
 
-                      if (filter.every((skill) => skillNames.contains(skill.toLowerCase()))) {
+                      if (filter.every((skill) => skillNames.contains(skill.toLowerCase())) && !userController.userdata['MyProjects'].contains(projectId)) {
                     final oneProject = ProjectSearch(projectData, projectId);
                     projectlist.add(oneProject);
                       }

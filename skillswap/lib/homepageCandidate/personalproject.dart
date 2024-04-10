@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:skillswap/Project/projectcontroller.dart';
+import 'package:skillswap/Project/userdata.dart';
 import 'package:skillswap/firebase/firebase.dart';
 import 'package:skillswap/homepageCandidate/project.dart';
 import 'package:skillswap/homepageCandidate/createProject.dart';
@@ -14,34 +16,50 @@ class MyProjects extends StatefulWidget {
 }
 
 class _MyProjectsState extends State<MyProjects> {
+  final UserController usercontroller = Get.find();
   @override
   Widget build(BuildContext context) {
     final ProjectController projectController = Get.find();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: const Text("My Projects"),
         centerTitle: true,
       ),
-      body: Obx(() {
-        if (projectController.Project.isEmpty) {
-          return const Center(
-            child: Text("No project"),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('Project')
+            .orderBy('TimeStamp', descending: true)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+                child: CircularProgressIndicator()); // Or any loading indicator
+          }
+
+          List<Project> projectlist = [];
+          final projects = snapshot.data!.docs.toList();
+          for (var pro in projects) {
+            Map<String, dynamic> projectData =
+                pro.data() as Map<String, dynamic>;
+            final projectId = pro.id;
+
+            if (usercontroller.userdata['MyProjects'].contains(projectId)) {
+              final oneProject = Project(projectData);
+              projectlist.add(oneProject);
+            }
+          }
+
+          return ListView(
+            children: projectlist,
           );
-        } else {
-          return ListView.builder(
-            itemCount: projectController.Project.length,
-            itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  Project(projectController.Project[index]),
-                  Divider()
-                ],
-              );
-            },
-          );
-        }
-      }),
+        },
+      ),
     );
   }
 }

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:skillswap/widgets/buttons.dart';
 
 class ProjectDetailPage extends StatelessWidget {
-  Map<String, dynamic> projectdata;
-  ProjectDetailPage({super.key, required this.projectdata});
+ final Map<String, dynamic> projectdata;
+  const ProjectDetailPage({super.key, required this.projectdata});
 
   @override
   Widget build(BuildContext context) {
@@ -89,9 +89,33 @@ class ProjectDetailPage extends StatelessWidget {
                           itemBuilder: (context, index) {
                           return Text('${projectdata['SkillReq'][index]}');
                         })),
+
                   ],
                 ),
               ),
+
+              const Align(
+      alignment: Alignment.centerLeft,
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Text(
+          "Teams",
+          style: TextStyle(fontSize: 20),
+        ),
+      ),
+    ),
+     Container(
+                      padding: EdgeInsets.all(10),
+                        height: 100,
+                          decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          
+                        ),
+                        child: ListView.builder(
+                          itemCount: projectdata['Teams'].length,
+                          itemBuilder: (context, index) {
+                          return Text('${projectdata['Teams'][index]}');
+                        })),
             ]
             )
             )
