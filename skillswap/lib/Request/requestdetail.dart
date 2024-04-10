@@ -213,7 +213,7 @@ class RequestDetail extends StatelessWidget {
                       // send rejection message
                       // _chat.sendmessage(
                       //     data['senderId'], "User request has rejected",chatRoomId!);
-                      sendMessage("I hope this letter finds you well. I want to extend my sincere gratitude for your interest in collaborating with me on ${data['Title']}. I have carefully reviewed your proposal and deliberated on the potential synergies that could arise from such a collaboration.\After thoughtful consideration, however, I regret to inform you that I am unable to accept your request for collaboration at this time.", chatRoomId!);
+                      sendMessage("I hope this letter finds you well. I want to extend my sincere gratitude for your interest in collaborating with me on ${data['Title']} Project. I have carefully reviewed your proposal and deliberated on the potential synergies that could arise from such a collaboration.\After thoughtful consideration, however, I regret to inform you that I am unable to accept your request for collaboration at this time.", chatRoomId!);
                     },
                     icon: Icon(
                       CupertinoIcons.clear_circled,
@@ -241,7 +241,7 @@ class RequestDetail extends StatelessWidget {
                       // send rejection message
                       // _chat.sendmessage(data['senderId'],
                       //     "User request has Accepted", chatRoomId!);
-                      sendMessage("I am delighted to accept your invitation to collaborate on ${data['Title']}. It is truly an honor to have the opportunity to work together and contribute to the success of this initiative.", chatRoomId!);
+                      sendMessage("I am delighted to accept your invitation to collaborate on ${data['Title']} Project. It is truly an honor to have the opportunity to work together and contribute to the success of this initiative.", chatRoomId!);
                       // add project to working on projects
                       FirebaseFirestore.instance
                           .collection("Users")

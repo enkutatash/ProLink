@@ -99,9 +99,9 @@ class _Search_ScreenState extends State<Search_Screen> {
       else {
         // Search in projects
         for (var project in _allProject) {
-          // var name = project['ProjectTitle'].toString().toLowerCase();
+          var name = project['ProjectTitle'].toString().toLowerCase();
 
-          List<String> skills = List<String>.from(project['SkillReq'] ?? []);
+          // List<String> skills = List<String>.from(project['SkillReq'] ?? []);
 
           // search one by one skill
 
@@ -110,16 +110,20 @@ class _Search_ScreenState extends State<Search_Screen> {
           //     showResult.add(project);
           //   }
           // }
-          List<String> skillNames = [];
+          // List<String> skillNames = [];
 
-          for (var skill in skills) {
-            skillNames.add(skill.toLowerCase());
-          }
+          // for (var skill in skills) {
+          //   skillNames.add(skill.toLowerCase());
+          // }
 
-          if (searchthis
-              .every((skill) => skillNames.contains(skill.toLowerCase()))) {
-            showResult.add(project);
-          }
+          // if (searchthis
+          //     .every((skill) => skillNames.contains(skill.toLowerCase()))) {
+          //   showResult.add(project);
+          // }
+
+          if (name.contains(_search.text.toLowerCase())) {
+          showResult.add(project);
+        }
         }
       }
     } else {
