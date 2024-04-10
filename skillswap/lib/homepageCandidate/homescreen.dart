@@ -108,14 +108,16 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child:  Row(
+              child: Row(
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      Scaffold.of(context).openDrawer();
-                    },
-                    child: Icon(CupertinoIcons.text_justify,size: 30,)
-                  ),
+                      onTap: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                      child: Icon(
+                        CupertinoIcons.text_justify,
+                        size: 30,
+                      )),
                   SizedBox(
                     width: 10,
                   ),
@@ -149,112 +151,155 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: Colors.grey,
                               ),
                             ),
-                           
                           ],
                         ),
                       ),
                     ),
                   ),
-                   CachedNetworkImage(
-                      imageUrl: userController.userdata['profilePic'],
-                      imageBuilder: (context, imageProvider) => Container(
-                        width: 50.0,
-                        height: 50.0,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: imageProvider, fit: BoxFit.cover),
-                        ),
+                  CachedNetworkImage(
+                    imageUrl: userController.userdata['profilePic'],
+                    imageBuilder: (context, imageProvider) => Container(
+                      width: 50.0,
+                      height: 50.0,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            image: imageProvider, fit: BoxFit.cover),
                       ),
-                      placeholder: (context, url) => Icon(Icons.person),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
+                    placeholder: (context, url) => Icon(Icons.person),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
                 ],
               ),
             ),
             SizedBox(
-                height: height * 0.07,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: items.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final item = items[index];
-                    final isSelected = selectedItems.contains(item);
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          if (isSelected) {
-                            selectedItems.remove(item);
-                          } else {
-                            selectedItems.add(item);
-                          }
-                          searchResult();
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          width: width * 0.2 + item.length * 3,
-                          height: height * 0.03,
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: isSelected
-                                  ? Color(0XFF2E307A)
-                                  : Colors.transparent,
-                            ),
+              height: height * 0.07,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: items.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final item = items[index];
+                  final isSelected = selectedItems.contains(item);
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (isSelected) {
+                          selectedItems.remove(item);
+                        } else {
+                          selectedItems.add(item);
+                        }
+                        // searchResult();
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: width * 0.2 + item.length * 3,
+                        height: height * 0.03,
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
                             color: isSelected
                                 ? Color(0XFF2E307A)
-                                : Color.fromARGB(255, 237, 241, 245),
+                                : Colors.transparent,
                           ),
-                          child: Center(
-                            child: Text(
-                              item,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: isSelected ? Colors.white : Colors.black,
-                              ),
+                          color: isSelected
+                              ? Color(0XFF2E307A)
+                              : Color.fromARGB(255, 237, 241, 245),
+                        ),
+                        child: Center(
+                          child: Text(
+                            item,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: isSelected ? Colors.white : Colors.black,
                             ),
                           ),
                         ),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
-            Expanded(
-              child: _Project.isEmpty
-                      ? Center(
-                          child: Text("No results found"),
-                        )
-                      : ListView.builder(
-                          itemCount: _Project.length,
-                          itemBuilder: (context, index) {
-                              Map<String, dynamic> projectdata =
-                                  _Project[index].data()
-                                      as Map<String, dynamic>;
-                              if (projectdata['ProjectTitle'] == null) {
-                                // Show a loading indicator
-                                if (_isLoading == true) {
-                                  return Container();
-                                } else {
-                                  _isLoading = true;
-                                  return Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                }
-                              }
-                              return Column(
-                                children: [
-                                  ProjectSearch(projectdata,_Project[index].id),
-                                  Divider()
-                                ],
-                              );
-                            
-                          },
-                        ),
             ),
+            // Expanded(
+            //   child: _Project.isEmpty
+            //           ? Center(
+            //               child: Text("No results found"),
+            //             )
+            //           : ListView.builder(
+            //               itemCount: _Project.length,
+            //               itemBuilder: (context, index) {
+            //                   Map<String, dynamic> projectdata =
+            //                       _Project[index].data()
+            //                           as Map<String, dynamic>;
+            //                   if (projectdata['ProjectTitle'] == null) {
+            //                     // Show a loading indicator
+            //                     if (_isLoading == true) {
+            //                       return Container();
+            //                     } else {
+            //                       _isLoading = true;
+            //                       return Center(
+            //                         child: CircularProgressIndicator(),
+            //                       );
+            //                     }
+            //                   }
+            //                   return Column(
+            //                     children: [
+            //                       ProjectSearch(projectdata,_Project[index].id),
+            //                       Divider()
+            //                     ],
+            //                   );
+
+            //               },
+            //             ),
+            // ),
+            Expanded(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('Project')
+                    .orderBy('TimeStamp', descending: true)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  }
+              
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator()); // Or any loading indicator
+                  }
+
+                  List<String> filter = [];
+                  for (var skill in selectedItems) {
+                    filter.add(skill.toLowerCase());
+                  }
+                  List<ProjectSearch> projectlist = [];
+                  final projects = snapshot.data!.docs.toList();
+                  for (var pro in projects) {
+                    Map<String, dynamic> projectData = pro.data() as Map<String, dynamic>;
+                    final projectId = pro.id;
+                    List<String> skills = List<String>.from(projectData['SkillReq'] ?? []);
+                    List<String> skillNames = [];
+
+                      for (var skill in skills) {
+                        skillNames.add(skill.toLowerCase());
+                      }
+
+                      if (filter.every((skill) => skillNames.contains(skill.toLowerCase()))) {
+                    final oneProject = ProjectSearch(projectData, projectId);
+                    projectlist.add(oneProject);
+                      }
+                  }
+              
+                  return ListView(
+                    children: projectlist,
+                  );
+                },
+              ),
+            )
+
           ],
         ),
       ),
