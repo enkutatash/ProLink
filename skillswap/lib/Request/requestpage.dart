@@ -133,6 +133,12 @@ class _RequestPageState extends State<RequestPage> {
                   width * 0.45, height * 0.05, 17, () {
                 sendrequest(widget.projectdata['userid'], message.text,
                     widget.projectid, widget.projectdata['ProjectTitle'],selectedSkills);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Request sent!'),
+                        duration: Duration(seconds: 2), // Adjust the duration as needed
+                      ),
+                    );
                 Navigator.pop(context);
               }),
             )

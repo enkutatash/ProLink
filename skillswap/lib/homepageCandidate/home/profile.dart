@@ -53,63 +53,64 @@ class ProfilePage extends StatelessWidget {
       );
     }
 
-Future<Widget> completedProject(String projectid, int rate) async {
-  DocumentSnapshot snapshot = await FirebaseFirestore.instance
-      .collection('CompletedProjects')
-      .doc(projectid)
-      .get();
-  Map<String, dynamic> projectdata =
-      snapshot.data() as Map<String, dynamic>;
-  final height = MediaQuery.of(context).size.height;
-  final width = MediaQuery.of(context).size.width;
-  return Container(
-    width: width * 0.4,
-    height: height * 0.1,
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        CachedNetworkImage(
-          imageUrl: projectdata['Projectimg'],
-          imageBuilder: (context, imageProvider) => Container(
-            width: 70.0,
-            height: 70.0,
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              image:
-                  DecorationImage(image: imageProvider, fit: BoxFit.cover),
+    Future<Widget> completedProject(String projectid, int rate) async {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('CompletedProjects')
+          .doc(projectid)
+          .get();
+      Map<String, dynamic> projectdata =
+          snapshot.data() as Map<String, dynamic>;
+      final height = MediaQuery.of(context).size.height;
+      final width = MediaQuery.of(context).size.width;
+      return Container(
+        width: width * 0.4,
+        height: height * 0.1,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            CachedNetworkImage(
+              imageUrl: projectdata['Projectimg'],
+              imageBuilder: (context, imageProvider) => Container(
+                width: 70.0,
+                height: 70.0,
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  image:
+                      DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                ),
+              ),
+              errorWidget: (context, url, error) => Icon(Icons.error),
             ),
-          ),
-          errorWidget: (context, url, error) => Icon(Icons.error),
+            Text(
+              projectdata['ProjectTitle'],
+              style: TextStyle(fontSize: 20),
+            ),
+            SizedBox(height: 8),
+            rate != 6
+                ? Row(
+                    children: List.generate(5, (index) {
+                      if (index < rate) {
+                        // Render golden star
+                        return Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                          size: 24,
+                        );
+                      } else {
+                        // Render empty star
+                        return Icon(
+                          Icons.star_border,
+                          color: Colors.grey,
+                          size: 24,
+                        );
+                      }
+                    }),
+                  )
+                : Text("Owner")
+          ],
         ),
-        Text(
-          projectdata['ProjectTitle'],
-          style: TextStyle(fontSize: 20),
-        ),
-        SizedBox(height: 8),
-        rate != 6?Row(
-          children: List.generate(5, (index) {
-            if (index < rate) {
-              // Render golden star
-              return Icon(
-                Icons.star,
-                color: Colors.amber,
-                size: 24,
-              );
-            } else {
-              // Render empty star
-              return Icon(
-                Icons.star_border,
-                color: Colors.grey,
-                size: 24,
-              );
-            }
-          }),
-        ):Text("Owner")
-
-      ],
-    ),
-  );
-}
+      );
+    }
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -139,7 +140,7 @@ Future<Widget> completedProject(String projectid, int rate) async {
                     width: width * 0.08,
                   ),
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
                         "${userController.userdata['First']} ${userController.userdata['Last']}",
@@ -163,6 +164,55 @@ Future<Widget> completedProject(String projectid, int rate) async {
                     ],
                   )
                 ],
+              ),
+              SizedBox(height: height * 0.03),
+              Align(
+                alignment: Alignment.topCenter,
+                child: SizedBox(
+                  height: 20,
+                  child: Expanded(
+                    child: StreamBuilder<DocumentSnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('Users')
+                          .doc(_authentication.currentUser!.uid)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return Text('Something went wrong');
+                        }
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Text("Loading");
+                        }
+
+                        Map<String, dynamic> data =
+                            snapshot.data!.data()! as Map<String, dynamic>;
+                        var stars = data['Star'] as List<dynamic>?;
+                        print(stars);
+                        // Calculate average of stars
+                        double averageStar = stars != null && stars.isNotEmpty
+                            ? stars.reduce((a, b) => a + b) / stars.length
+                            : 0;
+
+                        return ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 5,
+                          itemExtent: 20,
+                          itemBuilder: (context, index) {
+                            if (index < averageStar.floor()) {
+                              // If index is less than the floor of averageStar, paint the star golden
+                              return Icon(Icons.star, color: Colors.amber);
+                            } else {
+                              // Otherwise, paint the star grey
+                              return Icon(Icons.star_border,
+                                  color: Colors.grey);
+                            }
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ),
               ),
               SizedBox(height: height * 0.03),
               Container(
@@ -471,8 +521,9 @@ Future<Widget> completedProject(String projectid, int rate) async {
                         itemCount: projects.length,
                         itemBuilder: (context, index) {
                           return FutureBuilder(
-                            future:
-                                completedProject(projects[index]['projectId'],projects[index]['rate']),
+                            future: completedProject(
+                                projects[index]['projectId'],
+                                projects[index]['rate']),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {

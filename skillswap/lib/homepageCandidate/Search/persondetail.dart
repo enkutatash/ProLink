@@ -174,6 +174,55 @@ class PersonalDetail extends StatelessWidget {
                   )
                 ],
               ),
+              SizedBox(height: height*0.03,),
+                Align(
+                alignment: Alignment.topCenter,
+                child: SizedBox(
+                  height: 20,
+                  child: Expanded(
+                    child: StreamBuilder<DocumentSnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('Users')
+                          .doc(userid)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return Text('Something went wrong');
+                        }
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Text("Loading");
+                        }
+
+                        Map<String, dynamic> data =
+                            snapshot.data!.data()! as Map<String, dynamic>;
+                        var stars = data['Star'] as List<dynamic>?;
+                        print(stars);
+                        // Calculate average of stars
+                        double averageStar = stars != null && stars.isNotEmpty
+                            ? stars.reduce((a, b) => a + b) / stars.length
+                            : 0;
+
+                        return ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 5,
+                          itemExtent: 20,
+                          itemBuilder: (context, index) {
+                            if (index < averageStar.floor()) {
+                              // If index is less than the floor of averageStar, paint the star golden
+                              return Icon(Icons.star, color: Colors.amber);
+                            } else {
+                              // Otherwise, paint the star grey
+                              return Icon(Icons.star_border,
+                                  color: Colors.grey);
+                            }
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
               SizedBox(height: height * 0.03),
               Container(
                 padding: const EdgeInsets.all(10),

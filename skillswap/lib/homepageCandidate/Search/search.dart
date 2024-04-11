@@ -27,42 +27,42 @@ class _Search_ScreenState extends State<Search_Screen> {
   List _searchResult = [];
   bool _isLoading = false;
 
- allUser() {
-  setState(() {
-    _isLoading = true; // Set isLoading to true before performing search
-  });
-  FirebaseFirestore.instance
-      .collection('Users')
-      .orderBy('First')
-      .snapshots()
-      .listen((QuerySnapshot snapshot) {
+  allUser() {
     setState(() {
-      _allUser = snapshot.docs;
-      _allUser.removeWhere((doc) => doc.id == userController.userid);
-      searchResult(); // Move this inside setState
+      _isLoading = true; // Set isLoading to true before performing search
     });
-  });
-}
+    FirebaseFirestore.instance
+        .collection('Users')
+        .orderBy('First')
+        .snapshots()
+        .listen((QuerySnapshot snapshot) {
+      setState(() {
+        _allUser = snapshot.docs;
+        _allUser.removeWhere((doc) => doc.id == userController.userid);
+        searchResult(); // Move this inside setState
+      });
+     
+    });
+  }
 
-allProject() {
-  setState(() {
-    _isLoading = true; // Set isLoading to true before performing search
-  });
-  FirebaseFirestore.instance
-      .collection('Project')
-      .orderBy('TimeStamp')
-      .snapshots()
-      .listen((QuerySnapshot snapshot) {
+  allProject() {
     setState(() {
-      _allProject = snapshot.docs;
-      // Remove unwanted elements from _allProject
-      _allProject.removeWhere(
-          (doc) => userController.userdata['MyProjects'].contains(doc.id));
-      searchResult(); // Move this inside setState
+      _isLoading = true; // Set isLoading to true before performing search
     });
-  });
-}
-
+    FirebaseFirestore.instance
+        .collection('Project')
+        .orderBy('TimeStamp')
+        .snapshots()
+        .listen((QuerySnapshot snapshot) {
+      setState(() {
+        _allProject = snapshot.docs;
+        // Remove unwanted elements from _allProject
+        _allProject.removeWhere(
+            (doc) => userController.userdata['MyProjects'].contains(doc.id));
+        searchResult(); // Move this inside setState
+      });
+    });
+  }
 
   searchResult() {
     setState(() {
@@ -131,8 +131,8 @@ allProject() {
           // }
 
           if (name.contains(_search.text.toLowerCase())) {
-          showResult.add(project);
-        }
+            showResult.add(project);
+          }
         }
       }
     } else {
@@ -285,7 +285,8 @@ allProject() {
                               }
                               return Column(
                                 children: [
-                                  ProjectSearch(projectdata,_searchResult[index].id),
+                                  ProjectSearch(
+                                      projectdata, _searchResult[index].id),
                                   Divider()
                                 ],
                               );
