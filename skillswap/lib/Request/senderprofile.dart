@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillswap/Datas/projectcontroller.dart';
 import 'package:skillswap/Datas/userdata.dart';
+import 'package:skillswap/Request/completedProjects.dart';
 import 'package:skillswap/pages/contact.dart';
 import 'package:skillswap/pages/setting.dart';
 import 'package:skillswap/widgets/skillimg.dart';
@@ -12,7 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 class SenderProfile extends StatelessWidget {
   Map<String, dynamic> data;
   String sender;
-  SenderProfile(this.data,this.sender, {super.key});
+  SenderProfile(this.data, this.sender, {super.key});
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -27,52 +28,60 @@ class SenderProfile extends StatelessWidget {
           snapshot.data() as Map<String, dynamic>;
       final height = MediaQuery.of(context).size.height;
       final width = MediaQuery.of(context).size.width;
-      return Container(
-        width: width * 0.4,
-        height: height * 0.1,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            CachedNetworkImage(
-              imageUrl: projectdata['Projectimg'],
-              imageBuilder: (context, imageProvider) => Container(
-                width: 70.0,
-                height: 70.0,
-                decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  image:
-                      DecorationImage(image: imageProvider, fit: BoxFit.cover),
+      return InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CompletedProDetail(projectdata)));
+        },
+        child: Container(
+          width: width * 0.4,
+          height: height * 0.1,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              CachedNetworkImage(
+                imageUrl: projectdata['Projectimg'],
+                imageBuilder: (context, imageProvider) => Container(
+                  width: 70.0,
+                  height: 70.0,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    image: DecorationImage(
+                        image: imageProvider, fit: BoxFit.cover),
+                  ),
                 ),
+                errorWidget: (context, url, error) => Icon(Icons.error),
               ),
-              errorWidget: (context, url, error) => Icon(Icons.error),
-            ),
-            Text(
-              projectdata['ProjectTitle'],
-              style: TextStyle(fontSize: 20),
-            ),
-            SizedBox(height: 8),
-            rate != 6
-                ? Row(
-                    children: List.generate(5, (index) {
-                      if (index < rate) {
-                        // Render golden star
-                        return Icon(
-                          Icons.star,
-                          color: Colors.amber,
-                          size: 24,
-                        );
-                      } else {
-                        // Render empty star
-                        return Icon(
-                          Icons.star_border,
-                          color: Colors.grey,
-                          size: 24,
-                        );
-                      }
-                    }),
-                  )
-                : Text("Owner")
-          ],
+              Text(
+                projectdata['ProjectTitle'],
+                style: TextStyle(fontSize: 20),
+              ),
+              SizedBox(height: 8),
+              rate != 6
+                  ? Row(
+                      children: List.generate(5, (index) {
+                        if (index < rate) {
+                          // Render golden star
+                          return Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                            size: 24,
+                          );
+                        } else {
+                          // Render empty star
+                          return Icon(
+                            Icons.star_border,
+                            color: Colors.grey,
+                            size: 24,
+                          );
+                        }
+                      }),
+                    )
+                  : Text("Owner")
+            ],
+          ),
         ),
       );
     }
@@ -163,8 +172,7 @@ class SenderProfile extends StatelessWidget {
                   )
                 ],
               ),
-
-    Align(
+              Align(
                 alignment: Alignment.topCenter,
                 child: SizedBox(
                   height: 20,
@@ -212,7 +220,6 @@ class SenderProfile extends StatelessWidget {
                   ),
                 ),
               ),
-
               SizedBox(height: height * 0.03),
               Container(
                 padding: const EdgeInsets.all(10),
@@ -457,14 +464,13 @@ class SenderProfile extends StatelessWidget {
               data['MyProjects'].length == 0
                   ? Text("No Project")
                   : RawScrollbar(
-                    thickness: 5,
-                    thumbColor: Colors.red,
-                    child: SizedBox(
+                      thickness: 5,
+                      thumbColor: Colors.red,
+                      child: SizedBox(
                         height: 100,
                         child: Expanded(
                             child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                          
+                                scrollDirection: Axis.horizontal,
                                 itemCount: data['MyProjects'].length,
                                 itemBuilder: (context, index) {
                                   return FutureBuilder(
@@ -483,7 +489,7 @@ class SenderProfile extends StatelessWidget {
                                   );
                                 })),
                       ),
-                  ),
+                    ),
               SizedBox(
                 height: height * 0.02,
               ),
