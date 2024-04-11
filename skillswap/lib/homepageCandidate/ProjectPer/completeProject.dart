@@ -126,47 +126,53 @@ class _CompleteProjectState extends State<CompleteProject> {
   }
 
   void rateTeams() async {
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  final proRef = firestore.collection('Project').doc(widget.projectid);
-  final userRef = firestore.collection('Users');
-  final completedRef = firestore.collection('CompletedProjects'); 
+    final proRef = firestore.collection('Project').doc(widget.projectid);
+    final userRef = firestore.collection('Users');
+    final completedRef = firestore.collection('CompletedProjects');
 
-  final docSnapshot = await proRef.get();
-  final data = docSnapshot.data();
+    final docSnapshot = await proRef.get();
+    final data = docSnapshot.data();
 
-  await firestore.collection("CompletedProjects").doc(widget.projectid).set(data!);
-  firestore.collection('Project').doc(widget.projectid).delete(); 
+    await firestore
+        .collection("CompletedProjects")
+        .doc(widget.projectid)
+        .set(data!);
+    firestore.collection('Project').doc(widget.projectid).delete();
 
-  ratings.forEach((key, value) async {
-    await userRef.doc(key).update({
-      'WorkingOnPro': FieldValue.arrayRemove([widget.projectid])
+    ratings.forEach((key, value) async {
+      await userRef.doc(key).update({
+        'WorkingOnPro': FieldValue.arrayRemove([widget.projectid]),
+      });
+
+      await userRef.doc(key).update({
+        'CompletedProject': FieldValue.arrayUnion([
+          {'projectId': widget.projectid, 'rate': value}
+        ])
+      });
+
+      DocumentSnapshot snapshot = await userRef.doc(key).get();
+      if (snapshot.exists) {
+        Map<String, dynamic> userdata = snapshot.data() as Map<String, dynamic>;
+        int currentStar = userdata['Star'] ?? 0;
+        await userRef.doc(key).update({'Star': currentStar + value});
+      }
     });
 
-    await userRef.doc(key).update({
+    // Remove from the owner's WorkingOnPro list
+    await userRef.doc(_authentication.currentUser!.uid).update({
+      'MyProjects': FieldValue.arrayRemove([widget.projectid])
+    });
+
+    // Add to the owner's CompletedProject list
+    await userRef.doc(_authentication.currentUser!.uid).update({
       'CompletedProject': FieldValue.arrayUnion([
         {
           'projectId': widget.projectid,
-          'rate': value
+          'rate': 6 // Assuming 6 is the owner's rating
         }
       ])
     });
-  });
-
-  // Remove from the owner's WorkingOnPro list
-  await userRef.doc(_authentication.currentUser!.uid).update({
-    'MyProjects': FieldValue.arrayRemove([widget.projectid])
-  });
-
-  // Add to the owner's CompletedProject list
-  await userRef.doc(_authentication.currentUser!.uid).update({
-    'CompletedProject': FieldValue.arrayUnion([
-      {
-        'projectId': widget.projectid,
-        'rate': 6 // Assuming 6 is the owner's rating
-      }
-    ])
-  });
-}
-
+  }
 }

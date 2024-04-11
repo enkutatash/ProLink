@@ -385,7 +385,9 @@ class PersonalDetail extends StatelessWidget {
                 child: SizedBox(
                   height: 300,
                   child: Expanded(
-                      child: GridView.builder(
+                      child:
+                       !(userdata['WorkingOnPro'].length == 0 || userdata['WorkingOnPro'].isEmpty)?
+                       GridView.builder(
                           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                           ),
@@ -405,7 +407,8 @@ class PersonalDetail extends StatelessWidget {
                                 }
                               },
                             );
-                          })),
+                          }):Text("No Project Available")
+                          ),
                 ),
               ),
               SizedBox(
@@ -427,12 +430,14 @@ class PersonalDetail extends StatelessWidget {
               SizedBox(
                 height: 300,
                 child: Expanded(
-                    child: GridView.builder(
+                    child:!(userdata['MyProjects'].length == 0 || userdata['MyProjects'].isEmpty)? GridView.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                         ),
                         itemCount: userdata['MyProjects'].length,
                         itemBuilder: (context, index) {
+                           
+
                           return FutureBuilder(
                             future:
                                 workingonProject(userdata['MyProjects'][index]),
@@ -447,7 +452,7 @@ class PersonalDetail extends StatelessWidget {
                               }
                             },
                           );
-                        })),
+                        }):Text("No Project Available")),
               ),
               Align(
                 alignment: Alignment.centerLeft,
