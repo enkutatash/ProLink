@@ -71,7 +71,7 @@ class ProfilePage extends StatelessWidget {
                   builder: (context) => CompletedProDetail(projectdata)));},
         child: Container(
           width: width * 0.4,
-          height: height * 0.1,
+          height: height * 0.2,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -455,11 +455,9 @@ class ProfilePage extends StatelessWidget {
                     }
                 
                     return SizedBox(
-                      height: 300,
-                      child: GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                        ),
+                      height: height*0.2,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
                         itemCount: projects.length,
                         itemBuilder: (context, index) {
                           return FutureBuilder(
@@ -495,6 +493,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
               ),
+              SizedBox(height: height*0.03,),
 
               RawScrollbar(
                 thickness: 5,
@@ -521,11 +520,9 @@ class ProfilePage extends StatelessWidget {
                     }
                 
                     return SizedBox(
-                      height: 300,
-                      child: GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                        ),
+                      height: height*0.2,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
                         itemCount: projects.length,
                         itemBuilder: (context, index) {
                           return FutureBuilder(

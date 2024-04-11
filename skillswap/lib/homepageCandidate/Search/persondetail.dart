@@ -436,38 +436,59 @@ class PersonalDetail extends StatelessWidget {
               SizedBox(
                 height: height * 0.02,
               ),
+              
               RawScrollbar(
+                thumbVisibility: true,
                 thickness: 5,
                 thumbColor: Color(0XFF2E307A),
-                child: Expanded(
-                    child:
-                     !(userdata['WorkingOnPro'].length == 0 || userdata['WorkingOnPro'].isEmpty)?
-                     SizedBox(
-                      height: 300,
-                       child: GridView.builder(
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                          ),
-                          itemCount: userdata['WorkingOnPro'].length,
-                          itemBuilder: (context, index) {
-                            return FutureBuilder(
-                              future: workingonProject(
-                                  userdata['WorkingOnPro'][index]),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return Container(); // Or any loading indicator
-                                } else if (snapshot.hasError) {
-                                  return Text('Error: ${snapshot.error}');
-                                } else {
-                                  return snapshot.data;
-                                }
-                              },
-                            );
-                          }),
-                     ):Text("No Project Available")
-                        ),
+                child: StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('Users')
+                      .doc(userid)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return const Text('Something went wrong');
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Text("Loading");
+                    }
+
+                    Map<String, dynamic> data =
+                        snapshot.data!.data()! as Map<String, dynamic>;
+                    var projects = data['WorkingOnPro'] as List<dynamic>?;
+
+                    if (projects == null || projects.isEmpty) {
+                      return const Text('No projects available');
+                    }
+
+                    return SizedBox(
+                      height: height*0.2,
+                      child: ListView.builder(
+                       scrollDirection: Axis.horizontal,
+                        itemCount: projects.length,
+                        itemBuilder: (context, index) {
+                          return FutureBuilder(
+                            future: workingonProject(
+                                        data['WorkingOnPro'][index]),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Container(); // Or any loading indicator
+                              } else if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              } else {
+                                return snapshot.data!;
+                              }
+                            },
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
               ),
+             
               SizedBox(
                 height: height * 0.02,
               ),
@@ -484,33 +505,57 @@ class PersonalDetail extends StatelessWidget {
               SizedBox(
                 height: height * 0.02,
               ),
-            !(userdata['MyProjects'].length == 0 || userdata['MyProjects'].isEmpty)?  SizedBox(
-                height: 300,
-                child: Expanded(
-                    child: GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                        ),
-                        itemCount: userdata['MyProjects'].length,
-                        itemBuilder: (context, index) {
-                           
+             RawScrollbar(
+                thumbVisibility: true,
+                thickness: 5,
+                thumbColor: Color(0XFF2E307A),
+                child: StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('Users')
+                      .doc(userid)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return const Text('Something went wrong');
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Text("Loading");
+                    }
 
+                    Map<String, dynamic> data =
+                        snapshot.data!.data()! as Map<String, dynamic>;
+                    var projects = data['MyProjects'] as List<dynamic>?;
+
+                    if (projects == null || projects.isEmpty) {
+                      return const Text('No projects available');
+                    }
+
+                    return SizedBox(
+                      height: height*0.2,
+                      child: ListView.builder(
+                       scrollDirection: Axis.horizontal,
+                        itemCount: projects.length,
+                        itemBuilder: (context, index) {
                           return FutureBuilder(
-                            future:
-                                workingonProject(userdata['MyProjects'][index]),
+                            future: workingonProject(
+                                        data['MyProjects'][index]),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
-                                return Container();
+                                return Container(); // Or any loading indicator
                               } else if (snapshot.hasError) {
                                 return Text('Error: ${snapshot.error}');
                               } else {
-                                return snapshot.data;
+                                return snapshot.data!;
                               }
                             },
                           );
-                        })),
-              ):Text("No Project"),
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -525,6 +570,7 @@ class PersonalDetail extends StatelessWidget {
                 height: height * 0.02,
               ),
             RawScrollbar(
+              thumbVisibility: true,
                 thickness: 5,
                 thumbColor: Color(0XFF2E307A),
                 child: StreamBuilder<DocumentSnapshot>(
@@ -549,11 +595,9 @@ class PersonalDetail extends StatelessWidget {
                     }
                 
                     return SizedBox(
-                      height: 300,
-                      child: GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                        ),
+                      height: height*0.2,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
                         itemCount: projects.length,
                         itemBuilder: (context, index) {
                           return FutureBuilder(
