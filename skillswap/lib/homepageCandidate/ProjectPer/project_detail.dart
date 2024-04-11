@@ -41,7 +41,7 @@ class ProjectDetailPage extends StatelessWidget {
                       DecorationImage(image: imageProvider, fit: BoxFit.cover),
                 ),
               ),
-              placeholder: (context, url) => CircularProgressIndicator(),
+              placeholder: (context, url) => Center(child: CircularProgressIndicator()),
               errorWidget: (context, url, error) => Icon(Icons.error),
             ),
             const SizedBox(height: 40),
@@ -117,7 +117,7 @@ class ProjectDetailPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      RawScrollbar(
+                     projectdata['Teams'].length == 0?Text("No Teams"): RawScrollbar(
                         thickness: 20.0,
                         thumbVisibility: true,
                         thumbColor: Color(0XFF2E307A),
@@ -127,7 +127,8 @@ class ProjectDetailPage extends StatelessWidget {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            child: ListView.builder(
+                            child:    
+                         ListView.builder(
                                 itemCount: projectdata['Teams'].length,
                                 itemBuilder: (context, index) {
                                   return StreamBuilder<DocumentSnapshot>(

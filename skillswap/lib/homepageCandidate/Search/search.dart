@@ -29,7 +29,7 @@ class _Search_ScreenState extends State<Search_Screen> {
 
   allUser() {
     setState(() {
-      _isLoading = true; // Set isLoading to true before performing search
+      _isLoading = true; 
     });
     FirebaseFirestore.instance
         .collection('Users')

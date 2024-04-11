@@ -131,7 +131,9 @@ class Firebase_Service {
       'Linkedin': linkedin,
       'Github': github,
       'MyProjects': [],
-      'WorkingOnPro': []
+      'WorkingOnPro': [],
+      'Star':[],
+      'CompletedProject':[]
     });
   }
 

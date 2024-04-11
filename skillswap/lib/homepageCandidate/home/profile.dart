@@ -188,7 +188,7 @@ class ProfilePage extends StatelessWidget {
                         Map<String, dynamic> data =
                             snapshot.data!.data()! as Map<String, dynamic>;
                         var stars = data['Star'] as List<dynamic>?;
-                        print(stars);
+
                         // Calculate average of stars
                         double averageStar = stars != null && stars.isNotEmpty
                             ? stars.reduce((a, b) => a + b) / stars.length
@@ -425,30 +425,30 @@ class ProfilePage extends StatelessWidget {
               RawScrollbar(
                 thickness: 5,
                 thumbColor: Color(0XFF2E307A),
-                child: SizedBox(
-                  height: 300,
-                  child: StreamBuilder<DocumentSnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('Users')
-                        .doc(_authentication.currentUser!.uid)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        return const Text('Something went wrong');
-                      }
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Text("Loading");
-                      }
-
-                      Map<String, dynamic> data =
-                          snapshot.data!.data()! as Map<String, dynamic>;
-                      var projects = data['WorkingOnPro'] as List<dynamic>?;
-
-                      if (projects == null || projects.isEmpty) {
-                        return const Text('No projects available');
-                      }
-
-                      return GridView.builder(
+                child: StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('Users')
+                      .doc(_authentication.currentUser!.uid)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return const Text('Something went wrong');
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Text("Loading");
+                    }
+                
+                    Map<String, dynamic> data =
+                        snapshot.data!.data()! as Map<String, dynamic>;
+                    var projects = data['WorkingOnPro'] as List<dynamic>?;
+                
+                    if (projects == null || projects.isEmpty) {
+                      return const Text('No projects available');
+                    }
+                
+                    return SizedBox(
+                      height: 300,
+                      child: GridView.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                         ),
@@ -468,9 +468,9 @@ class ProfilePage extends StatelessWidget {
                             },
                           );
                         },
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
               ),
 
@@ -491,30 +491,30 @@ class ProfilePage extends StatelessWidget {
               RawScrollbar(
                 thickness: 5,
                 thumbColor: Color(0XFF2E307A),
-                child: SizedBox(
-                  height: 300,
-                  child: StreamBuilder<DocumentSnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('Users')
-                        .doc(_authentication.currentUser!.uid)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        return const Text('Something went wrong');
-                      }
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Text("Loading");
-                      }
-
-                      Map<String, dynamic> data =
-                          snapshot.data!.data()! as Map<String, dynamic>;
-                      var projects = data['CompletedProject'] as List<dynamic>?;
-
-                      if (projects == null || projects.isEmpty) {
-                        return const Text('No projects available');
-                      }
-
-                      return GridView.builder(
+                child: StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('Users')
+                      .doc(_authentication.currentUser!.uid)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return const Text('Something went wrong');
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Text("Loading");
+                    }
+                
+                    Map<String, dynamic> data =
+                        snapshot.data!.data()! as Map<String, dynamic>;
+                    var projects = data['CompletedProject'] as List<dynamic>?;
+                
+                    if (projects == null || projects.isEmpty) {
+                      return const Text('No projects available');
+                    }
+                
+                    return SizedBox(
+                      height: 300,
+                      child: GridView.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                         ),
@@ -536,9 +536,9 @@ class ProfilePage extends StatelessWidget {
                             },
                           );
                         },
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
               ),
 

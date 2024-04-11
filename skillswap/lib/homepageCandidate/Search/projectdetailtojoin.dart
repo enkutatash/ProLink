@@ -1,18 +1,25 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:skillswap/Datas/userdata.dart';
 import 'package:skillswap/Request/requestpage.dart';
+import 'package:skillswap/homepageCandidate/ProjectPer/teamsprofile.dart';
 import 'package:skillswap/widgets/buttons.dart';
 
 class ProjectDetailJoin extends StatefulWidget {
   Map<String, dynamic> projectdata;
   String projectid;
-  ProjectDetailJoin({super.key, required this.projectdata,required this.projectid});
+  ProjectDetailJoin(
+      {super.key, required this.projectdata, required this.projectid});
 
   @override
   State<ProjectDetailJoin> createState() => _ProjectDetailJoinState();
 }
 
 class _ProjectDetailJoinState extends State<ProjectDetailJoin> {
+  final UserController userController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     // Fetch project details based on the profileId here
@@ -104,8 +111,62 @@ class _ProjectDetailJoinState extends State<ProjectDetailJoin> {
                                       return Text(
                                           '${widget.projectdata['SkillReq'][index]}');
                                     })),
+
                           ],
                         ),
+                      ),
+
+                       Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Text(
+                                  "Teams",
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ),
+                            ),
+                      widget.projectdata['Teams'].length == 0?Text("No Teams"): RawScrollbar(
+                        thickness: 20.0,
+                        thumbVisibility: true,
+                        thumbColor: Color(0XFF2E307A),
+                        child: Container(
+                            padding: EdgeInsets.all(10),
+                            height: 400,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child:    
+                         ListView.builder(
+                                itemCount: widget.projectdata['Teams'].length,
+                                itemBuilder: (context, index) {
+                                  return StreamBuilder<DocumentSnapshot>(
+                                    stream: userController.getuserdata(
+                                        widget.projectdata['Teams'][index]),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return CircularProgressIndicator(); // Show a loading indicator while fetching data
+                                      } else if (snapshot.hasError) {
+                                        return Text(
+                                            'Error: ${snapshot.error}'); // Show an error message if something goes wrong
+                                      } else {
+                                        if (snapshot.hasData &&
+                                            snapshot.data!.exists) {
+                                          // Document exists, use its data
+
+                                          var userData = snapshot.data!.data();
+                                          return TeamsProfile(
+                                              userData as Map<String, dynamic>,
+                                              widget.projectdata['Teams'][index]);
+                                        } else {
+                                          // Document doesn't exist
+                                          return Text('User data not found');
+                                        }
+                                      }
+                                    },
+                                  );
+                                })),
                       ),
                     ]))
           ])),

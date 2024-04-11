@@ -65,6 +65,12 @@ class _CompleteProjectState extends State<CompleteProject> {
             ),
             ButtonTwo("Rate", Colors.white, Color(0XFF2E307A), 100, 40, 20, () {
               rateTeams();
+              ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Project Completed!'),
+                        duration: Duration(seconds: 2), // Adjust the duration as needed
+                      ),
+                    );
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
@@ -189,19 +195,20 @@ class _CompleteProjectState extends State<CompleteProject> {
     firestore.collection('Project').doc(widget.projectid).delete();
 
     ratings.forEach((key, value) async {
-      // DocumentSnapshot doc = await userRef.doc(key).get();
-      // List<dynamic> starsList = doc['Star'];
+      DocumentSnapshot doc = await userRef.doc(key).get();
+      List<dynamic> starsList = doc['Star']?? [];
 
-      // // Calculate the average of the stars
-      // double totalStars = 0;
-      // for (var star in starsList) {
-      //   totalStars += star;
-      // }
-      // totalStars += value;
-      // double averageStars = totalStars / (starsList.length+1);
+      // Calculate the average of the stars
+      double totalStars = 0;
+      for (var star in starsList) {
+        totalStars += star;
+      }
+      totalStars += value;
+      double averageStars = totalStars / (starsList.length+1);
       await userRef.doc(key).update({
         'WorkingOnPro': FieldValue.arrayRemove([widget.projectid]),
         'Star': FieldValue.arrayUnion([value]),
+        'Rate':averageStars
       });
 
       String? chatRoomId =

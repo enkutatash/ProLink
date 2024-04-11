@@ -115,6 +115,7 @@ class ProjectSearch extends StatelessWidget {
                             ],
                           ),
                         ),
+                        
                         ButtonTwo("Join", Colors.white, Color(0XFF2E307A),
                             width * 0.08, height * 0.05, 12, () {
                           // _showBottomSheet(context,projectdata['SkillReq']);

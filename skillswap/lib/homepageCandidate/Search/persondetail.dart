@@ -431,12 +431,12 @@ class PersonalDetail extends StatelessWidget {
               RawScrollbar(
                 thickness: 5,
                 thumbColor: Color(0XFF2E307A),
-                child: SizedBox(
-                  height: 300,
-                  child: Expanded(
-                      child:
-                       !(userdata['WorkingOnPro'].length == 0 || userdata['WorkingOnPro'].isEmpty)?
-                       GridView.builder(
+                child: Expanded(
+                    child:
+                     !(userdata['WorkingOnPro'].length == 0 || userdata['WorkingOnPro'].isEmpty)?
+                     SizedBox(
+                      height: 300,
+                       child: GridView.builder(
                           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                           ),
@@ -448,7 +448,7 @@ class PersonalDetail extends StatelessWidget {
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
-                                  return CircularProgressIndicator(); // Or any loading indicator
+                                  return Container(); // Or any loading indicator
                                 } else if (snapshot.hasError) {
                                   return Text('Error: ${snapshot.error}');
                                 } else {
@@ -456,9 +456,9 @@ class PersonalDetail extends StatelessWidget {
                                 }
                               },
                             );
-                          }):Text("No Project Available")
-                          ),
-                ),
+                          }),
+                     ):Text("No Project Available")
+                        ),
               ),
               SizedBox(
                 height: height * 0.02,
@@ -476,10 +476,10 @@ class PersonalDetail extends StatelessWidget {
               SizedBox(
                 height: height * 0.02,
               ),
-              SizedBox(
+            !(userdata['MyProjects'].length == 0 || userdata['MyProjects'].isEmpty)?  SizedBox(
                 height: 300,
                 child: Expanded(
-                    child:!(userdata['MyProjects'].length == 0 || userdata['MyProjects'].isEmpty)? GridView.builder(
+                    child: GridView.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                         ),
@@ -493,7 +493,7 @@ class PersonalDetail extends StatelessWidget {
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
-                                return CircularProgressIndicator(); // Or any loading indicator
+                                return Container();
                               } else if (snapshot.hasError) {
                                 return Text('Error: ${snapshot.error}');
                               } else {
@@ -501,8 +501,8 @@ class PersonalDetail extends StatelessWidget {
                               }
                             },
                           );
-                        }):Text("No Project Available")),
-              ),
+                        })),
+              ):Text("No Project"),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -519,30 +519,30 @@ class PersonalDetail extends StatelessWidget {
             RawScrollbar(
                 thickness: 5,
                 thumbColor: Color(0XFF2E307A),
-                child: SizedBox(
-                  height: 300,
-                  child: StreamBuilder<DocumentSnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('Users')
-                        .doc(userid)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        return const Text('Something went wrong');
-                      }
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Text("Loading");
-                      }
-
-                      Map<String, dynamic> data =
-                          snapshot.data!.data()! as Map<String, dynamic>;
-                      var projects = data['CompletedProject'] as List<dynamic>?;
-
-                      if (projects == null || projects.isEmpty) {
-                        return const Text('No projects available');
-                      }
-
-                      return GridView.builder(
+                child: StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('Users')
+                      .doc(userid)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return const Text('Something went wrong');
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Text("Loading");
+                    }
+                
+                    Map<String, dynamic> data =
+                        snapshot.data!.data()! as Map<String, dynamic>;
+                    var projects = data['CompletedProject'] as List<dynamic>?;
+                
+                    if (projects == null || projects.isEmpty) {
+                      return const Text('No projects available');
+                    }
+                
+                    return SizedBox(
+                      height: 300,
+                      child: GridView.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                         ),
@@ -563,9 +563,9 @@ class PersonalDetail extends StatelessWidget {
                             },
                           );
                         },
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],

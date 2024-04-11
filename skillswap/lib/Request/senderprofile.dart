@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillswap/Datas/projectcontroller.dart';
@@ -8,46 +9,107 @@ import 'package:skillswap/pages/setting.dart';
 import 'package:skillswap/widgets/skillimg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 class SenderProfile extends StatelessWidget {
   Map<String, dynamic> data;
-  SenderProfile(this.data,{super.key});
+  String sender;
+  SenderProfile(this.data,this.sender, {super.key});
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
-  Future workingonProject(String projectid) async {
-  ProjectController projectController = Get.find();
-  Map<String, dynamic> projectdata =
-      await projectController.ProjectData(projectid);
+    Future<Widget> completedProject(String projectid, int rate) async {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('CompletedProjects')
+          .doc(projectid)
+          .get();
+      Map<String, dynamic> projectdata =
+          snapshot.data() as Map<String, dynamic>;
       final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-  return Container(
-    width: width*0.4 ,
-    height: height*0.1,
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        CachedNetworkImage(
-          imageUrl: projectdata['Projectimg'],
-          imageBuilder: (context, imageProvider) => Container(
-            width: 70.0,
-            height: 70.0,
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+      final width = MediaQuery.of(context).size.width;
+      return Container(
+        width: width * 0.4,
+        height: height * 0.1,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            CachedNetworkImage(
+              imageUrl: projectdata['Projectimg'],
+              imageBuilder: (context, imageProvider) => Container(
+                width: 70.0,
+                height: 70.0,
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  image:
+                      DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                ),
+              ),
+              errorWidget: (context, url, error) => Icon(Icons.error),
             ),
-          ),
-          errorWidget: (context, url, error) => Icon(Icons.error),
+            Text(
+              projectdata['ProjectTitle'],
+              style: TextStyle(fontSize: 20),
+            ),
+            SizedBox(height: 8),
+            rate != 6
+                ? Row(
+                    children: List.generate(5, (index) {
+                      if (index < rate) {
+                        // Render golden star
+                        return Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                          size: 24,
+                        );
+                      } else {
+                        // Render empty star
+                        return Icon(
+                          Icons.star_border,
+                          color: Colors.grey,
+                          size: 24,
+                        );
+                      }
+                    }),
+                  )
+                : Text("Owner")
+          ],
         ),
-        
-            Text(projectdata['ProjectTitle'],style: TextStyle(fontSize: 20),),
-        
-      ],
-    ),
-  );
-}
+      );
+    }
+
+    Future workingonProject(String projectid) async {
+      ProjectController projectController = Get.find();
+      Map<String, dynamic> projectdata =
+          await projectController.ProjectData(projectid);
+      final height = MediaQuery.of(context).size.height;
+      final width = MediaQuery.of(context).size.width;
+      return Container(
+        width: width * 0.4,
+        height: height * 0.1,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            CachedNetworkImage(
+              imageUrl: projectdata['Projectimg'],
+              imageBuilder: (context, imageProvider) => Container(
+                width: 70.0,
+                height: 70.0,
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  image:
+                      DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                ),
+              ),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+            ),
+            Text(
+              projectdata['ProjectTitle'],
+              style: TextStyle(fontSize: 20),
+            ),
+          ],
+        ),
+      );
+    }
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -60,19 +122,19 @@ class SenderProfile extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CachedNetworkImage(
-                          imageUrl: data['profilePic'],
-                          imageBuilder: (context, imageProvider) => Container(
-                            width: 80.0,
-                            height: 80.0,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: imageProvider, fit: BoxFit.cover),
-                            ),
-                          ),
-                          placeholder: (context, url) => CircularProgressIndicator(),
-                          errorWidget: (context, url, error) => Icon(Icons.error),
-                        ),
+                    imageUrl: data['profilePic'],
+                    imageBuilder: (context, imageProvider) => Container(
+                      width: 80.0,
+                      height: 80.0,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            image: imageProvider, fit: BoxFit.cover),
+                      ),
+                    ),
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
                   SizedBox(
                     width: width * 0.08,
                   ),
@@ -88,7 +150,7 @@ class SenderProfile extends StatelessWidget {
                       ),
                       SizedBox(height: 5.0),
                       GestureDetector(
-                        onTap:()=>_launchInEmailApp(data['Email']),
+                        onTap: () => _launchInEmailApp(data['Email']),
                         child: Text(
                           data['Email'],
                           style: TextStyle(
@@ -101,12 +163,62 @@ class SenderProfile extends StatelessWidget {
                   )
                 ],
               ),
+
+    Align(
+                alignment: Alignment.topCenter,
+                child: SizedBox(
+                  height: 20,
+                  child: Expanded(
+                    child: StreamBuilder<DocumentSnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('Users')
+                          .doc(sender)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return Text('Something went wrong');
+                        }
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Text("Loading");
+                        }
+
+                        Map<String, dynamic> data =
+                            snapshot.data!.data()! as Map<String, dynamic>;
+                        var stars = data['Star'] as List<dynamic>?;
+
+                        // Calculate average of stars
+                        double averageStar = stars != null && stars.isNotEmpty
+                            ? stars.reduce((a, b) => a + b) / stars.length
+                            : 0;
+
+                        return ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 5,
+                          itemExtent: 20,
+                          itemBuilder: (context, index) {
+                            if (index < averageStar.floor()) {
+                              // If index is less than the floor of averageStar, paint the star golden
+                              return Icon(Icons.star, color: Colors.amber);
+                            } else {
+                              // Otherwise, paint the star grey
+                              return Icon(Icons.star_border,
+                                  color: Colors.grey);
+                            }
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+
               SizedBox(height: height * 0.03),
               Container(
                 padding: const EdgeInsets.all(10),
                 width: width * 0.9,
                 child: Column(
-                   crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Align(
                       alignment: Alignment.centerLeft,
@@ -139,8 +251,8 @@ class SenderProfile extends StatelessWidget {
                                       8, // Adjust the spacing between items as needed
                                   runSpacing:
                                       8, // Adjust the spacing between lines as needed
-                                  children: List.generate(
-                                      data['Skills'].length, (index) {
+                                  children: List.generate(data['Skills'].length,
+                                      (index) {
                                     Map<String, dynamic> skill =
                                         data['Skills'][index];
 
@@ -152,7 +264,9 @@ class SenderProfile extends StatelessWidget {
                                               builder: (BuildContext context) {
                                                 return AlertDialog(
                                                   content: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                     children: [
                                                       Text(skill['skill']),
                                                       Text(skill['level'])
@@ -175,7 +289,9 @@ class SenderProfile extends StatelessWidget {
                                               builder: (BuildContext context) {
                                                 return AlertDialog(
                                                   content: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                     children: [
                                                       Text(skill['skill']),
                                                       Text(skill['level'])
@@ -185,8 +301,8 @@ class SenderProfile extends StatelessWidget {
                                               });
                                         },
                                         child: CircleAvatar(
-                                          backgroundColor:
-                                              Color.fromARGB(255, 237, 241, 245),
+                                          backgroundColor: Color.fromARGB(
+                                              255, 237, 241, 245),
                                           radius: 30,
                                           child: Text(
                                             skill['skill'],
@@ -237,56 +353,53 @@ class SenderProfile extends StatelessWidget {
               SizedBox(height: height * 0.03),
               data['Linkedin'] != null && data['Linkedin'] != ''
                   ? Row(
-                    children: [
-                       Image.asset(
-                      logomap['linkedin']!,
-                      width: width * 0.12,
-                      height: height * 0.04,
-                    ),
-                    InkWell(
-                      onTap: () => _launchInBrowser(
-                          'https://linkedin.com/in/', data['Linkedin']),
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        // decoration: BoxDecoration(
-                        //   borderRadius: BorderRadius.circular(10),
-                        //  color: Color.fromARGB(255, 237, 241, 245),
-                        // ),
-                        width: width * 0.76,
-                        child: Text(data['Linkedin']),
-                      ),
+                      children: [
+                        Image.asset(
+                          logomap['linkedin']!,
+                          width: width * 0.12,
+                          height: height * 0.04,
+                        ),
+                        InkWell(
+                          onTap: () => _launchInBrowser(
+                              'https://linkedin.com/in/', data['Linkedin']),
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            // decoration: BoxDecoration(
+                            //   borderRadius: BorderRadius.circular(10),
+                            //  color: Color.fromARGB(255, 237, 241, 245),
+                            // ),
+                            width: width * 0.76,
+                            child: Text(data['Linkedin']),
+                          ),
+                        )
+                      ],
                     )
-                    ],
-                  )
                   : Container(),
-             
               SizedBox(height: height * 0.03),
-
-data['Github'] != null && data['Github'] != ''
+              data['Github'] != null && data['Github'] != ''
                   ? Row(
-                    children: [
-                       Image.asset(
-                      logomap['github']!,
-                      width: width * 0.12,
-                      height: height * 0.04,
-                    ),
-                    InkWell(
-                      onTap: () => _launchInBrowser(
-                          'https://github.com/',data['Github']),
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        // decoration: BoxDecoration(
-                        //   borderRadius: BorderRadius.circular(10),
-                        //  color: Color.fromARGB(255, 237, 241, 245),
-                        // ),
-                        width: width * 0.76,
-                        child: Text(data['Github']),
-                      ),
+                      children: [
+                        Image.asset(
+                          logomap['github']!,
+                          width: width * 0.12,
+                          height: height * 0.04,
+                        ),
+                        InkWell(
+                          onTap: () => _launchInBrowser(
+                              'https://github.com/', data['Github']),
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            // decoration: BoxDecoration(
+                            //   borderRadius: BorderRadius.circular(10),
+                            //  color: Color.fromARGB(255, 237, 241, 245),
+                            // ),
+                            width: width * 0.76,
+                            child: Text(data['Github']),
+                          ),
+                        )
+                      ],
                     )
-                    ],
-                  )
                   : Container(),
-
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -300,31 +413,34 @@ data['Github'] != null && data['Github'] != ''
               SizedBox(
                 height: height * 0.02,
               ),
-              SizedBox(
-                height: 300,
-                child: Expanded(
-                    child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                      ),
-                        itemCount:
-                            data['WorkingOnPro'].length,
-                        itemBuilder: (context, index){
-                           return FutureBuilder(
-                              future: workingonProject(data['WorkingOnPro'][index]),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState == ConnectionState.waiting) {
-                                  return CircularProgressIndicator(); // Or any loading indicator
-                                } else if (snapshot.hasError) {
-                                  return Text('Error: ${snapshot.error}');
-                                } else {
-                                  return snapshot.data;
-                                }
-                              },
-                            );
-                        })),
-              ),
-
+              data['WorkingOnPro'].length == 0
+                  ? Text("No Project")
+                  : SizedBox(
+                      height: 300,
+                      child: Expanded(
+                          child: GridView.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                              ),
+                              itemCount: data['WorkingOnPro'].length,
+                              itemBuilder: (context, index) {
+                                return FutureBuilder(
+                                  future: workingonProject(
+                                      data['WorkingOnPro'][index]),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return CircularProgressIndicator(); // Or any loading indicator
+                                    } else if (snapshot.hasError) {
+                                      return Text('Error: ${snapshot.error}');
+                                    } else {
+                                      return snapshot.data;
+                                    }
+                                  },
+                                );
+                              })),
+                    ),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -338,38 +454,110 @@ data['Github'] != null && data['Github'] != ''
               SizedBox(
                 height: height * 0.02,
               ),
-              SizedBox(
-                height: 300,
-                child: Expanded(
-                    child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
+              data['MyProjects'].length == 0
+                  ? Text("No Project")
+                  : RawScrollbar(
+                    thickness: 5,
+                    thumbColor: Colors.red,
+                    child: SizedBox(
+                        height: 100,
+                        child: Expanded(
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                          
+                                itemCount: data['MyProjects'].length,
+                                itemBuilder: (context, index) {
+                                  return FutureBuilder(
+                                    future: workingonProject(
+                                        data['MyProjects'][index]),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return CircularProgressIndicator(); // Or any loading indicator
+                                      } else if (snapshot.hasError) {
+                                        return Text('Error: ${snapshot.error}');
+                                      } else {
+                                        return snapshot.data;
+                                      }
+                                    },
+                                  );
+                                })),
                       ),
-                        itemCount:
-                            data['MyProjects'].length,
-                        itemBuilder: (context, index){
-                           return FutureBuilder(
-                              future: workingonProject(data['MyProjects'][index]),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState == ConnectionState.waiting) {
-                                  return CircularProgressIndicator(); // Or any loading indicator
-                                } else if (snapshot.hasError) {
-                                  return Text('Error: ${snapshot.error}');
-                                } else {
-                                  return snapshot.data;
-                                }
-                              },
-                            );
-                        })),
+                  ),
+              SizedBox(
+                height: height * 0.02,
               ),
-             
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Completed Projects",
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              RawScrollbar(
+                thickness: 5,
+                thumbColor: Color(0XFF2E307A),
+                child: StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('Users')
+                      .doc(sender)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return const Text('Something went wrong');
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Text("Loading");
+                    }
+
+                    Map<String, dynamic> data =
+                        snapshot.data!.data()! as Map<String, dynamic>;
+                    var projects = data['CompletedProject'] as List<dynamic>?;
+
+                    if (projects == null || projects.isEmpty) {
+                      return const Text('No projects available');
+                    }
+
+                    return SizedBox(
+                      height: 300,
+                      child: GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                        ),
+                        itemCount: projects.length,
+                        itemBuilder: (context, index) {
+                          return FutureBuilder(
+                            future: completedProject(
+                                projects[index]['projectId'],
+                                projects[index]['rate']),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Container(); // Or any loading indicator
+                              } else if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              } else {
+                                return snapshot.data!;
+                              }
+                            },
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
   }
-    Future<void> _launchInBrowser(String app, String url) async {
+
+  Future<void> _launchInBrowser(String app, String url) async {
     final Uri toLaunch = Uri.parse('$app$url');
     if (!await launchUrl(
       toLaunch,
@@ -378,14 +566,14 @@ data['Github'] != null && data['Github'] != ''
       throw Exception('Could not launch $url');
     }
   }
+
   Future<void> _launchInEmailApp(String email) async {
-  final Uri toLaunch = Uri.parse('mailto:$email');
-  if (!await launchUrl(
-    toLaunch,
-    mode: LaunchMode.externalApplication,
-  )) {
-    throw Exception('Could not launch email to $email');
+    final Uri toLaunch = Uri.parse('mailto:$email');
+    if (!await launchUrl(
+      toLaunch,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch email to $email');
+    }
   }
 }
-}
-

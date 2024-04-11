@@ -186,6 +186,12 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                   _requiredSkills,
                   []);
           userController.userdata['MyProjects'].add(projectUid);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Project Created!'),
+                        duration: Duration(seconds: 2), // Adjust the duration as needed
+                      ),
+                    );
                 
               Navigator.pop(context);
             },)

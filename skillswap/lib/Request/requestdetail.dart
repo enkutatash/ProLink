@@ -89,7 +89,7 @@ class RequestDetail extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  SenderProfile(data['UserData'])));
+                                  SenderProfile(data['UserData'],data['senderId'])));
                     },
                     child: CachedNetworkImage(
                       imageUrl: data['UserData']['profilePic'],
@@ -176,6 +176,34 @@ class RequestDetail extends StatelessWidget {
                 ),
               ),
               SizedBox(height: height * 0.03),
+               IconButton(
+                      onPressed: () async {
+                        String? chatRoomId = await fetchOrCreateChatRoomId(
+                            data['senderId'],
+                            _authentication.currentUser!.uid);
+                        if (chatRoomId != null) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChatDetailPage(
+                                currentUserUid:
+                                    _authentication.currentUser!.uid,
+                                chatRoomId: chatRoomId,
+                                recipientUid: data['senderId'],
+                              ),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  'Error creating or fetching chat room!'),
+                            ),
+                          );
+                        }
+                      },
+                      icon: Image.asset(
+                          width: 30, height: 30, "asset/send.png")),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -197,119 +225,95 @@ class RequestDetail extends StatelessWidget {
                       itemBuilder: (context, index) {
                         return Text('${data['Skill'][index]}');
                       })),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Row(
-                  children: [
-                    IconButton(
-                      onPressed: () async {
-                        String? chatRoomId = await fetchOrCreateChatRoomId(
-                            data['senderId'], _authentication.currentUser!.uid);
-                        FirebaseFirestore.instance
-                            .collection("Requests")
-                            .doc(_authentication.currentUser!.uid)
-                            .collection('messages')
-                            .doc(requestId)
-                            .delete();
-                        // send rejection message
-                        // _chat.sendmessage(
-                        //     data['senderId'], "User request has rejected",chatRoomId!);
-                        sendMessage(
-                            "I hope this letter finds you well. I want to extend my sincere gratitude for your interest in collaborating with me on ${data['Title']} Project. I have carefully reviewed your proposal and deliberated on the potential synergies that could arise from such a collaboration.\After thoughtful consideration, however, I regret to inform you that I am unable to accept your request for collaboration at this time.",
-                            chatRoomId!);
-                      },
-                      icon: Icon(
-                        CupertinoIcons.clear_circled,
-                        size: 45,
-                        color: Colors.red,
-                      ),
-                    ),
-                    SizedBox(width: 8.0),
-                    IconButton(
-                      onPressed: () async {
-                        String? chatRoomId = await fetchOrCreateChatRoomId(
-                            data['senderId'], _authentication.currentUser!.uid);
-                        FirebaseFirestore.instance
-                            .collection("Requests")
-                            .doc(_authentication.currentUser!.uid)
-                            .collection('messages')
-                            .doc(requestId)
-                            .delete();
-                        // send rejection message
-                        // _chat.sendmessage(data['senderId'],
-                        //     "User request has Accepted", chatRoomId!);
-                        sendMessage(
-                            "I am delighted to accept your invitation to collaborate on ${data['Title']} Project. It is truly an honor to have the opportunity to work together and contribute to the success of this initiative.",
-                            chatRoomId!);
-                        // add project to working on projects
-                        FirebaseFirestore.instance
-                            .collection("Users")
-                            .doc(data['senderId'])
-                            .update({
-                          'WorkingOnPro':
-                              FieldValue.arrayUnion([data['projectId']])
-                        }).then((value) {
-                          print(
-                              "Element added to the working list successfully.");
-                        }).catchError((error) {
-                          print(
-                              "Failed to add element to the working list: $error");
-                        });
-                       
-                        FirebaseFirestore.instance
-                            .collection("Project")
-                            .doc(data['projectId'])
-                            .update({
-                          'Teams': FieldValue.arrayUnion([data['senderId']])
-                        }).then((value) {
-                          print(
-                              "Element added to the Myproject teams list successfully.");
-                        }).catchError((error) {
-                          print(
-                              "Failed to add element to the working list: $error");
-                        });
-                      },
-                      icon: Icon(
-                        CupertinoIcons.check_mark_circled,
-                        size: 45,
-                        color: Colors.green,
-                      ),
-                    ),
-                    IconButton(
-                        onPressed: () async {
-                          String? chatRoomId = await fetchOrCreateChatRoomId(
-                              data['senderId'],
-                              _authentication.currentUser!.uid);
-                          if (chatRoomId != null) {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ChatDetailPage(
-                                  currentUserUid:
-                                      _authentication.currentUser!.uid,
-                                  chatRoomId: chatRoomId,
-                                  recipientUid: data['senderId'],
-                                ),
-                              ),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                    'Error creating or fetching chat room!'),
-                              ),
-                            );
-                          }
-                        },
-                        icon: Image.asset(
-                            width: 30, height: 30, "asset/send.png"))
-                  ],
-                ),
-              ),
+
+                      
+              
             ],
           ),
         ),
       ),
+      bottomNavigationBar: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: () async {
+                      String? chatRoomId = await fetchOrCreateChatRoomId(
+                          data['senderId'], _authentication.currentUser!.uid);
+                      FirebaseFirestore.instance
+                          .collection("Requests")
+                          .doc(_authentication.currentUser!.uid)
+                          .collection('messages')
+                          .doc(requestId)
+                          .delete();
+                      // send rejection message
+                      // _chat.sendmessage(
+                      //     data['senderId'], "User request has rejected",chatRoomId!);
+                      sendMessage(
+                          "I hope this letter finds you well. I want to extend my sincere gratitude for your interest in collaborating with me on ${data['Title']} Project. I have carefully reviewed your proposal and deliberated on the potential synergies that could arise from such a collaboration.\After thoughtful consideration, however, I regret to inform you that I am unable to accept your request for collaboration at this time.",
+                          chatRoomId!);
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      CupertinoIcons.clear_circled,
+                      size: 70,
+                      color: Colors.red,
+                    ),
+                  ),
+                  SizedBox(width: 8.0),
+                  IconButton(
+                    onPressed: () async {
+                      String? chatRoomId = await fetchOrCreateChatRoomId(
+                          data['senderId'], _authentication.currentUser!.uid);
+                      FirebaseFirestore.instance
+                          .collection("Requests")
+                          .doc(_authentication.currentUser!.uid)
+                          .collection('messages')
+                          .doc(requestId)
+                          .delete();
+                      // send rejection message
+                      // _chat.sendmessage(data['senderId'],
+                      //     "User request has Accepted", chatRoomId!);
+                      sendMessage(
+                          "I am delighted to accept your invitation to collaborate on ${data['Title']} Project. It is truly an honor to have the opportunity to work together and contribute to the success of this initiative.",
+                          chatRoomId!);
+                      // add project to working on projects
+                      FirebaseFirestore.instance
+                          .collection("Users")
+                          .doc(data['senderId'])
+                          .update({
+                        'WorkingOnPro':
+                            FieldValue.arrayUnion([data['projectId']])
+                      }).then((value) {
+                        print(
+                            "Element added to the working list successfully.");
+                      }).catchError((error) {
+                        print(
+                            "Failed to add element to the working list: $error");
+                      });
+              
+                      FirebaseFirestore.instance
+                          .collection("Project")
+                          .doc(data['projectId'])
+                          .update({
+                        'Teams': FieldValue.arrayUnion([data['senderId']])
+                      }).then((value) {
+                        print(
+                            "Element added to the Myproject teams list successfully.");
+                      }).catchError((error) {
+                        print(
+                            "Failed to add element to the working list: $error");
+                      });
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      CupertinoIcons.check_mark_circled,
+                      size: 70,
+                      color: Colors.green,
+                    ),
+                  ),
+                 
+                ],
+              ),
     );
   }
 
