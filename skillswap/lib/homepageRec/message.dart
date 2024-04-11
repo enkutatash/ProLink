@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:skillswap/homepageCandidate/chatDetailPage.dart';
+// import 'package:skillswap/homepageCandidate/chatDetailPage.dart';
 
 List<Map<String, dynamic>> messages = [
   {

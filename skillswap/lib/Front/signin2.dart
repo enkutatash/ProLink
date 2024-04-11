@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillswap/Front/signup.dart';
 import 'package:skillswap/Front/signup2.dart';
-import 'package:skillswap/Project/projectcontroller.dart';
-import 'package:skillswap/Project/userdata.dart';
+import 'package:skillswap/Datas/projectcontroller.dart';
+import 'package:skillswap/Datas/userdata.dart';
 import 'package:skillswap/firebase/firebase.dart';
-import 'package:skillswap/homepageCandidate/homepage.dart';
 import 'package:skillswap/homepageRec/homepagerec.dart';
 import 'package:skillswap/widgets/buttons.dart';
 

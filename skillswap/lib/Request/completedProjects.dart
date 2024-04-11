@@ -3,32 +3,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillswap/Datas/userdata.dart';
-import 'package:skillswap/Request/requestpage.dart';
 import 'package:skillswap/homepageCandidate/ProjectPer/teamsprofile.dart';
-import 'package:skillswap/widgets/buttons.dart';
 
-class ProjectDetailJoin extends StatefulWidget {
-  Map<String, dynamic> projectdata;
-  String projectid;
-  ProjectDetailJoin(
-      {super.key, required this.projectdata, required this.projectid});
-
-  @override
-  State<ProjectDetailJoin> createState() => _ProjectDetailJoinState();
-}
-
-class _ProjectDetailJoinState extends State<ProjectDetailJoin> {
-  final UserController userController = Get.find();
+class CompletedProDetail extends StatelessWidget {
+  final Map<String, dynamic> detail;
+  const CompletedProDetail(this.detail,{super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Fetch project details based on the profileId here
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-
+    final UserController userController = Get.find();
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.projectdata['ProjectTitle']}'),
+        title: Text('${detail['ProjectTitle']}'),
         centerTitle: true,
         backgroundColor: Colors.white,
       ),
@@ -37,7 +25,7 @@ class _ProjectDetailJoinState extends State<ProjectDetailJoin> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             CachedNetworkImage(
-              imageUrl: widget.projectdata['Projectimg'],
+              imageUrl: detail['Projectimg'],
               imageBuilder: (context, imageProvider) => Container(
                 height: height * 0.4,
                 width: width,
@@ -63,17 +51,17 @@ class _ProjectDetailJoinState extends State<ProjectDetailJoin> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        "${widget.projectdata['ProjectTitle']}",
+                        "${detail['ProjectTitle']}",
                         style: TextStyle(fontSize: 30),
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        '${widget.projectdata['TimeStamp']}',
+                        '${detail['TimeStamp']}',
                         style: TextStyle(fontSize: 13),
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        '${widget.projectdata['ProjectDes']}',
+                        '${detail['ProjectDes']}',
                         style: TextStyle(fontSize: 15),
                       ),
                       const SizedBox(height: 8),
@@ -106,10 +94,10 @@ class _ProjectDetailJoinState extends State<ProjectDetailJoin> {
                                 ),
                                 child: ListView.builder(
                                     itemCount:
-                                        widget.projectdata['SkillReq'].length,
+                                        detail['SkillReq'].length,
                                     itemBuilder: (context, index) {
                                       return Text(
-                                          '${widget.projectdata['SkillReq'][index]}');
+                                          '${detail['SkillReq'][index]}');
                                     })),
 
                           ],
@@ -126,7 +114,7 @@ class _ProjectDetailJoinState extends State<ProjectDetailJoin> {
                                 ),
                               ),
                             ),
-                      widget.projectdata['Teams'].length == 0?Text("No Teams"): RawScrollbar(
+                      detail['Teams'].length == 0?Text("No Teams"): RawScrollbar(
                         thickness: 20.0,
                         thumbVisibility: true,
                         thumbColor: Color(0XFF2E307A),
@@ -138,11 +126,11 @@ class _ProjectDetailJoinState extends State<ProjectDetailJoin> {
                             ),
                             child:    
                          ListView.builder(
-                                itemCount: widget.projectdata['Teams'].length,
+                                itemCount: detail['Teams'].length,
                                 itemBuilder: (context, index) {
                                   return StreamBuilder<DocumentSnapshot>(
                                     stream: userController.getuserdata(
-                                        widget.projectdata['Teams'][index]),
+                                        detail['Teams'][index]),
                                     builder: (context, snapshot) {
                                       if (snapshot.connectionState ==
                                           ConnectionState.waiting) {
@@ -158,7 +146,7 @@ class _ProjectDetailJoinState extends State<ProjectDetailJoin> {
                                           var userData = snapshot.data!.data();
                                           return TeamsProfile(
                                               userData as Map<String, dynamic>,
-                                              widget.projectdata['Teams'][index]);
+                                              detail['Teams'][index]);
                                         } else {
                                           // Document doesn't exist
                                           return Text('User data not found');
@@ -170,28 +158,6 @@ class _ProjectDetailJoinState extends State<ProjectDetailJoin> {
                       ),
                     ]))
           ])),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.all(20.0),
-        child: SizedBox(
-            width: double.infinity,
-            height: 50,
-            child: ButtonTwo(
-              "Join",
-              Colors.white,
-              Color(0XFF2E307A),
-              width * 0.9,
-              height * 0.06,
-              15,
-              () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            RequestPage(widget.projectdata, widget.projectid)));
-                // _showBottomSheet(context, widget.projectdata['SkillReq']);
-              },
-            )),
-      ),
     );
   }
 }

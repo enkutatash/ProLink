@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:skillswap/Project/userdata.dart';
+import 'package:skillswap/Datas/userdata.dart';
 import 'package:skillswap/firebase/firebase.dart';
 import 'package:skillswap/homepageCandidate/Search/projectsearch.dart';
 import 'package:skillswap/homepageCandidate/Search/usersearch.dart';
@@ -27,31 +27,40 @@ class _Search_ScreenState extends State<Search_Screen> {
   List _searchResult = [];
   bool _isLoading = false;
 
-  allUser() async {
-    var data = await FirebaseFirestore.instance
+  allUser() {
+    setState(() {
+      _isLoading = true; 
+    });
+    FirebaseFirestore.instance
         .collection('Users')
         .orderBy('First')
-        .get();
-    setState(() {
-      _allUser = data.docs;
+        .snapshots()
+        .listen((QuerySnapshot snapshot) {
+      setState(() {
+        _allUser = snapshot.docs;
+        _allUser.removeWhere((doc) => doc.id == userController.userid);
+        searchResult(); // Move this inside setState
+      });
+     
     });
-    _allUser.removeWhere((doc) => doc.id == userController.userid);
-    print("user uid");
-    print(userController.userid);
-    searchResult();
   }
 
-  allproject() async {
-    var data = await FirebaseFirestore.instance
+  allProject() {
+    setState(() {
+      _isLoading = true; // Set isLoading to true before performing search
+    });
+    FirebaseFirestore.instance
         .collection('Project')
         .orderBy('TimeStamp')
-        .get();
-    setState(() {
-      _allProject = data.docs;
-      // Remove unwanted elements from _allProject
-      _allProject.removeWhere(
-          (doc) => userController.userdata['MyProjects'].contains(doc.id));
-      searchResult(); // Move this inside setState
+        .snapshots()
+        .listen((QuerySnapshot snapshot) {
+      setState(() {
+        _allProject = snapshot.docs;
+        // Remove unwanted elements from _allProject
+        _allProject.removeWhere(
+            (doc) => userController.userdata['MyProjects'].contains(doc.id));
+        searchResult(); // Move this inside setState
+      });
     });
   }
 
@@ -99,9 +108,9 @@ class _Search_ScreenState extends State<Search_Screen> {
       else {
         // Search in projects
         for (var project in _allProject) {
-          // var name = project['ProjectTitle'].toString().toLowerCase();
+          var name = project['ProjectTitle'].toString().toLowerCase();
 
-          List<String> skills = List<String>.from(project['SkillReq'] ?? []);
+          // List<String> skills = List<String>.from(project['SkillReq'] ?? []);
 
           // search one by one skill
 
@@ -110,14 +119,18 @@ class _Search_ScreenState extends State<Search_Screen> {
           //     showResult.add(project);
           //   }
           // }
-          List<String> skillNames = [];
+          // List<String> skillNames = [];
 
-          for (var skill in skills) {
-            skillNames.add(skill.toLowerCase());
-          }
+          // for (var skill in skills) {
+          //   skillNames.add(skill.toLowerCase());
+          // }
 
-          if (searchthis
-              .every((skill) => skillNames.contains(skill.toLowerCase()))) {
+          // if (searchthis
+          //     .every((skill) => skillNames.contains(skill.toLowerCase()))) {
+          //   showResult.add(project);
+          // }
+
+          if (name.contains(_search.text.toLowerCase())) {
             showResult.add(project);
           }
         }
@@ -203,7 +216,7 @@ class _Search_ScreenState extends State<Search_Screen> {
                       setState(() {
                         _searchInProjects = true;
                       });
-                      allproject();
+                      allProject();
                     },
                     child: Text(
                       "Projects",
@@ -272,7 +285,8 @@ class _Search_ScreenState extends State<Search_Screen> {
                               }
                               return Column(
                                 children: [
-                                  ProjectSearch(projectdata,_searchResult[index].id),
+                                  ProjectSearch(
+                                      projectdata, _searchResult[index].id),
                                   Divider()
                                 ],
                               );

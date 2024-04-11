@@ -5,12 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:skillswap/Project/projectcontroller.dart';
-import 'package:skillswap/Project/userdata.dart';
+import 'package:skillswap/Datas/projectcontroller.dart';
+import 'package:skillswap/Datas/userdata.dart';
 import 'package:skillswap/firebase/firebase.dart';
 import 'package:skillswap/widgets/buttons.dart';
 import 'package:skillswap/widgets/skillsdropdown.dart';
-import 'package:skillswap/homepageCandidate/personalproject.dart';
 import 'package:random_string/random_string.dart';
 
 class CreateProjectPage extends StatefulWidget {
@@ -187,6 +186,12 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                   _requiredSkills,
                   []);
           userController.userdata['MyProjects'].add(projectUid);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Project Created!'),
+                        duration: Duration(seconds: 2), // Adjust the duration as needed
+                      ),
+                    );
                 
               Navigator.pop(context);
             },)

@@ -1,34 +1,28 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:skillswap/Datas/userdata.dart';
-import 'package:skillswap/Request/requestpage.dart';
+import 'package:skillswap/homepageCandidate/ProjectPer/completeProject.dart';
 import 'package:skillswap/homepageCandidate/ProjectPer/teamsprofile.dart';
 import 'package:skillswap/widgets/buttons.dart';
 
-class ProjectDetailJoin extends StatefulWidget {
-  Map<String, dynamic> projectdata;
-  String projectid;
-  ProjectDetailJoin(
+class ProjectDetailPage extends StatelessWidget {
+  final Map<String, dynamic> projectdata;
+  final String projectid;
+  const ProjectDetailPage(
       {super.key, required this.projectdata, required this.projectid});
-
-  @override
-  State<ProjectDetailJoin> createState() => _ProjectDetailJoinState();
-}
-
-class _ProjectDetailJoinState extends State<ProjectDetailJoin> {
-  final UserController userController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     // Fetch project details based on the profileId here
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    UserController userController = UserController();
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.projectdata['ProjectTitle']}'),
+        title: Text('${projectdata['ProjectTitle']}'),
         centerTitle: true,
         backgroundColor: Colors.white,
       ),
@@ -37,7 +31,7 @@ class _ProjectDetailJoinState extends State<ProjectDetailJoin> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             CachedNetworkImage(
-              imageUrl: widget.projectdata['Projectimg'],
+              imageUrl: projectdata['Projectimg'],
               imageBuilder: (context, imageProvider) => Container(
                 height: height * 0.4,
                 width: width,
@@ -47,7 +41,7 @@ class _ProjectDetailJoinState extends State<ProjectDetailJoin> {
                       DecorationImage(image: imageProvider, fit: BoxFit.cover),
                 ),
               ),
-              placeholder: (context, url) => CircularProgressIndicator(),
+              placeholder: (context, url) => Center(child: CircularProgressIndicator()),
               errorWidget: (context, url, error) => Icon(Icons.error),
             ),
             const SizedBox(height: 40),
@@ -63,17 +57,17 @@ class _ProjectDetailJoinState extends State<ProjectDetailJoin> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        "${widget.projectdata['ProjectTitle']}",
+                        "${projectdata['ProjectTitle']}",
                         style: TextStyle(fontSize: 30),
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        '${widget.projectdata['TimeStamp']}',
+                        '${projectdata['TimeStamp']}',
                         style: TextStyle(fontSize: 13),
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        '${widget.projectdata['ProjectDes']}',
+                        '${projectdata['ProjectDes']}',
                         style: TextStyle(fontSize: 15),
                       ),
                       const SizedBox(height: 8),
@@ -105,28 +99,25 @@ class _ProjectDetailJoinState extends State<ProjectDetailJoin> {
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: ListView.builder(
-                                    itemCount:
-                                        widget.projectdata['SkillReq'].length,
+                                    itemCount: projectdata['SkillReq'].length,
                                     itemBuilder: (context, index) {
                                       return Text(
-                                          '${widget.projectdata['SkillReq'][index]}');
+                                          '${projectdata['SkillReq'][index]}');
                                     })),
-
                           ],
                         ),
                       ),
-
-                       Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Text(
-                                  "Teams",
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              ),
-                            ),
-                      widget.projectdata['Teams'].length == 0?Text("No Teams"): RawScrollbar(
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Text(
+                            "Teams",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                      ),
+                     projectdata['Teams'].length == 0?Text("No Teams"): RawScrollbar(
                         thickness: 20.0,
                         thumbVisibility: true,
                         thumbColor: Color(0XFF2E307A),
@@ -138,11 +129,11 @@ class _ProjectDetailJoinState extends State<ProjectDetailJoin> {
                             ),
                             child:    
                          ListView.builder(
-                                itemCount: widget.projectdata['Teams'].length,
+                                itemCount: projectdata['Teams'].length,
                                 itemBuilder: (context, index) {
                                   return StreamBuilder<DocumentSnapshot>(
                                     stream: userController.getuserdata(
-                                        widget.projectdata['Teams'][index]),
+                                        projectdata['Teams'][index]),
                                     builder: (context, snapshot) {
                                       if (snapshot.connectionState ==
                                           ConnectionState.waiting) {
@@ -158,7 +149,7 @@ class _ProjectDetailJoinState extends State<ProjectDetailJoin> {
                                           var userData = snapshot.data!.data();
                                           return TeamsProfile(
                                               userData as Map<String, dynamic>,
-                                              widget.projectdata['Teams'][index]);
+                                              projectdata['Teams'][index]);
                                         } else {
                                           // Document doesn't exist
                                           return Text('User data not found');
@@ -170,28 +161,13 @@ class _ProjectDetailJoinState extends State<ProjectDetailJoin> {
                       ),
                     ]))
           ])),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.all(20.0),
-        child: SizedBox(
-            width: double.infinity,
-            height: 50,
-            child: ButtonTwo(
-              "Join",
-              Colors.white,
-              Color(0XFF2E307A),
-              width * 0.9,
-              height * 0.06,
-              15,
-              () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            RequestPage(widget.projectdata, widget.projectid)));
-                // _showBottomSheet(context, widget.projectdata['SkillReq']);
-              },
-            )),
-      ),
+      bottomNavigationBar: ButtonTwo("Complete", Colors.white,
+          Color(0XFF2E307A), width * 0.7, height * 0.07, 20, () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CompleteProject(projectdata['ProjectTitle'],projectdata['Teams'],projectid )));
+      }),
     );
   }
 }

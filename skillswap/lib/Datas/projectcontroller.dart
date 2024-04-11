@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 class ProjectController extends GetxController {
   final CollectionReference dbrefproject =
       FirebaseFirestore.instance.collection('Project');
+  final CollectionReference completedref =
+      FirebaseFirestore.instance.collection('CompletedProjects');
   var _Projects = <Map<String, dynamic>>[].obs;
 
   // ProjectController(List<dynamic> projectids) {
@@ -37,6 +39,8 @@ class ProjectController extends GetxController {
       return {}; // Return empty map if there's an error
     }
   }
+
+  
 
   void addProject(
       String projectimg,

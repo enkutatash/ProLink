@@ -3,16 +3,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillswap/Message/message.dart';
-import 'package:skillswap/Project/projectcontroller.dart';
-import 'package:skillswap/Project/userdata.dart';
-import 'package:skillswap/homepageCandidate/createProject.dart';
-import 'package:skillswap/homepageCandidate/homescreen.dart';
-import 'package:skillswap/homepageCandidate/message.dart';
-import 'package:skillswap/homepageCandidate/personalproject.dart';
-import 'package:skillswap/homepageCandidate/profile.dart';
+import 'package:skillswap/Datas/projectcontroller.dart';
+import 'package:skillswap/Datas/userdata.dart';
+import 'package:skillswap/homepageCandidate/ProjectPer/createProject.dart';
+import 'package:skillswap/homepageCandidate/ProjectPer/personalproject.dart';
+import 'package:skillswap/homepageCandidate/home/homescreen.dart';
+// import 'package:skillswap/homepageCandidate/homescreen.dart';
+import 'package:skillswap/Request/message.dart';
+import 'package:skillswap/homepageCandidate/home/profile.dart';
 import 'package:skillswap/homepageCandidate/Search/search.dart';
-import 'package:skillswap/homepageCandidate/recentproject.dart';
-import 'package:skillswap/homepageCandidate/sidebar.dart';
+// import 'package:skillswap/homepageCandidate/recentproject.dart';
+import 'package:skillswap/homepageCandidate/home/sidebar.dart';
 
 class Homepage extends StatefulWidget {
   final String userid;

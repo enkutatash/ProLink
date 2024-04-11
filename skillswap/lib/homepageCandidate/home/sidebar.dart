@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillswap/Front/recruiterORuser.dart';
 import 'package:skillswap/Front/signin.dart';
-import 'package:skillswap/Project/projectcontroller.dart';
-import 'package:skillswap/Project/userdata.dart';
+import 'package:skillswap/Datas/projectcontroller.dart';
+import 'package:skillswap/Datas/userdata.dart';
 import 'package:skillswap/pages/contact.dart';
 import 'package:skillswap/pages/setting.dart';
 

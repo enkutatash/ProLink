@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:skillswap/Front/signin.dart';
 import 'package:skillswap/Front/signin2.dart';
-import 'package:skillswap/Project/userdata.dart';
+import 'package:skillswap/Datas/userdata.dart';
 import 'package:skillswap/firebase/firebase.dart';
 import 'package:skillswap/widgets/buttons.dart';
 import 'package:skillswap/widgets/skillsdropdown.dart';

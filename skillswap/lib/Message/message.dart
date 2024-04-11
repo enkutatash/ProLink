@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:skillswap/Message/chatRoomTab.dart';
 import 'package:skillswap/Message/message.dart';
-import 'package:skillswap/homepageCandidate/message.dart';
+import 'package:skillswap/Request/message.dart';
 
 class MessagePage extends StatefulWidget {
   final String currentUserUid;

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillswap/Datas/projectcontroller.dart';
@@ -10,14 +11,48 @@ import 'package:skillswap/pages/setting.dart';
 import 'package:skillswap/widgets/skillimg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SenderProfile extends StatelessWidget {
-  Map<String, dynamic> data;
-  String sender;
-  SenderProfile(this.data, this.sender, {super.key});
+class ProfilePage extends StatelessWidget {
+  ProfilePage({super.key});
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    final UserController userController = Get.find();
+    final FirebaseAuth _authentication = FirebaseAuth.instance;
+    Future<Widget> workingonProject(String projectid) async {
+      ProjectController projectController = Get.find();
+
+      Map<String, dynamic> projectdata =
+          await projectController.ProjectData(projectid);
+      final height = MediaQuery.of(context).size.height;
+      final width = MediaQuery.of(context).size.width;
+      return Container(
+        width: width * 0.4,
+        height: height * 0.1,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            CachedNetworkImage(
+              imageUrl: projectdata['Projectimg'],
+              imageBuilder: (context, imageProvider) => Container(
+                width: 70.0,
+                height: 70.0,
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  image:
+                      DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                ),
+              ),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+            ),
+            Text(
+              projectdata['ProjectTitle'],
+              style: TextStyle(fontSize: 20),
+            ),
+          ],
+        ),
+      );
+    }
 
     Future<Widget> completedProject(String projectid, int rate) async {
       DocumentSnapshot snapshot = await FirebaseFirestore.instance
@@ -33,11 +68,10 @@ class SenderProfile extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => CompletedProDetail(projectdata)));
-        },
+                  builder: (context) => CompletedProDetail(projectdata)));},
         child: Container(
           width: width * 0.4,
-          height: height * 0.1,
+          height: height * 0.2,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -48,8 +82,8 @@ class SenderProfile extends StatelessWidget {
                   height: 70.0,
                   decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
-                    image: DecorationImage(
-                        image: imageProvider, fit: BoxFit.cover),
+                    image:
+                        DecorationImage(image: imageProvider, fit: BoxFit.cover),
                   ),
                 ),
                 errorWidget: (context, url, error) => Icon(Icons.error),
@@ -86,40 +120,6 @@ class SenderProfile extends StatelessWidget {
       );
     }
 
-    Future workingonProject(String projectid) async {
-      ProjectController projectController = Get.find();
-      Map<String, dynamic> projectdata =
-          await projectController.ProjectData(projectid);
-      final height = MediaQuery.of(context).size.height;
-      final width = MediaQuery.of(context).size.width;
-      return Container(
-        width: width * 0.4,
-        height: height * 0.1,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            CachedNetworkImage(
-              imageUrl: projectdata['Projectimg'],
-              imageBuilder: (context, imageProvider) => Container(
-                width: 70.0,
-                height: 70.0,
-                decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  image:
-                      DecorationImage(image: imageProvider, fit: BoxFit.cover),
-                ),
-              ),
-              errorWidget: (context, url, error) => Icon(Icons.error),
-            ),
-            Text(
-              projectdata['ProjectTitle'],
-              style: TextStyle(fontSize: 20),
-            ),
-          ],
-        ),
-      );
-    }
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -131,7 +131,7 @@ class SenderProfile extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CachedNetworkImage(
-                    imageUrl: data['profilePic'],
+                    imageUrl: userController.userdata['profilePic'],
                     imageBuilder: (context, imageProvider) => Container(
                       width: 80.0,
                       height: 80.0,
@@ -148,10 +148,10 @@ class SenderProfile extends StatelessWidget {
                     width: width * 0.08,
                   ),
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        "${data['First']} ${data['Last']}",
+                        "${userController.userdata['First']} ${userController.userdata['Last']}",
                         style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
@@ -159,9 +159,10 @@ class SenderProfile extends StatelessWidget {
                       ),
                       SizedBox(height: 5.0),
                       GestureDetector(
-                        onTap: () => _launchInEmailApp(data['Email']),
+                        onTap: () =>
+                            _launchInEmailApp(userController.userdata['Email']),
                         child: Text(
-                          data['Email'],
+                          userController.userdata['Email'],
                           style: TextStyle(
                             fontSize: 16.0,
                             color: Colors.grey,
@@ -172,6 +173,7 @@ class SenderProfile extends StatelessWidget {
                   )
                 ],
               ),
+              SizedBox(height: height * 0.03),
               Align(
                 alignment: Alignment.topCenter,
                 child: SizedBox(
@@ -180,7 +182,7 @@ class SenderProfile extends StatelessWidget {
                     child: StreamBuilder<DocumentSnapshot>(
                       stream: FirebaseFirestore.instance
                           .collection('Users')
-                          .doc(sender)
+                          .doc(_authentication.currentUser!.uid)
                           .snapshots(),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
@@ -258,10 +260,11 @@ class SenderProfile extends StatelessWidget {
                                       8, // Adjust the spacing between items as needed
                                   runSpacing:
                                       8, // Adjust the spacing between lines as needed
-                                  children: List.generate(data['Skills'].length,
+                                  children: List.generate(
+                                      userController.userdata['Skills'].length,
                                       (index) {
-                                    Map<String, dynamic> skill =
-                                        data['Skills'][index];
+                                    Map<String, dynamic> skill = userController
+                                        .userdata['Skills'][index];
 
                                     if (logomap.containsKey(skill['skill'])) {
                                       return GestureDetector(
@@ -353,12 +356,13 @@ class SenderProfile extends StatelessWidget {
                     SizedBox(
                       height: height * 0.01,
                     ),
-                    Text(data['Bio']),
+                    Text(userController.userdata['Bio']),
                   ],
                 ),
               ),
               SizedBox(height: height * 0.03),
-              data['Linkedin'] != null && data['Linkedin'] != ''
+              userController.userdata['Linkedin'] != null &&
+                      userController.userdata['Linkedin'] != ''
                   ? Row(
                       children: [
                         Image.asset(
@@ -368,7 +372,8 @@ class SenderProfile extends StatelessWidget {
                         ),
                         InkWell(
                           onTap: () => _launchInBrowser(
-                              'https://linkedin.com/in/', data['Linkedin']),
+                              'https://linkedin.com/in/',
+                              userController.userdata['Linkedin']),
                           child: Container(
                             padding: const EdgeInsets.all(10),
                             // decoration: BoxDecoration(
@@ -376,14 +381,15 @@ class SenderProfile extends StatelessWidget {
                             //  color: Color.fromARGB(255, 237, 241, 245),
                             // ),
                             width: width * 0.76,
-                            child: Text(data['Linkedin']),
+                            child: Text(userController.userdata['Linkedin']),
                           ),
                         )
                       ],
                     )
                   : Container(),
               SizedBox(height: height * 0.03),
-              data['Github'] != null && data['Github'] != ''
+              userController.userdata['Github'] != null &&
+                      userController.userdata['Github'] != ''
                   ? Row(
                       children: [
                         Image.asset(
@@ -392,8 +398,8 @@ class SenderProfile extends StatelessWidget {
                           height: height * 0.04,
                         ),
                         InkWell(
-                          onTap: () => _launchInBrowser(
-                              'https://github.com/', data['Github']),
+                          onTap: () => _launchInBrowser('https://github.com/',
+                              userController.userdata['Github']),
                           child: Container(
                             padding: const EdgeInsets.all(10),
                             // decoration: BoxDecoration(
@@ -401,12 +407,15 @@ class SenderProfile extends StatelessWidget {
                             //  color: Color.fromARGB(255, 237, 241, 245),
                             // ),
                             width: width * 0.76,
-                            child: Text(data['Github']),
+                            child: Text(userController.userdata['Github']),
                           ),
                         )
                       ],
                     )
                   : Container(),
+              SizedBox(
+                height: height * 0.02,
+              ),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -420,15 +429,14 @@ class SenderProfile extends StatelessWidget {
               SizedBox(
                 height: height * 0.02,
               ),
-              
+              //
               RawScrollbar(
-                thumbVisibility: true,
                 thickness: 5,
                 thumbColor: Color(0XFF2E307A),
                 child: StreamBuilder<DocumentSnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('Users')
-                      .doc(sender)
+                      .doc(_authentication.currentUser!.uid)
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
@@ -437,24 +445,23 @@ class SenderProfile extends StatelessWidget {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Text("Loading");
                     }
-
+                
                     Map<String, dynamic> data =
                         snapshot.data!.data()! as Map<String, dynamic>;
                     var projects = data['WorkingOnPro'] as List<dynamic>?;
-
+                
                     if (projects == null || projects.isEmpty) {
                       return const Text('No projects available');
                     }
-
+                
                     return SizedBox(
                       height: height*0.2,
                       child: ListView.builder(
-                       scrollDirection: Axis.horizontal,
+                        scrollDirection: Axis.horizontal,
                         itemCount: projects.length,
                         itemBuilder: (context, index) {
                           return FutureBuilder(
-                            future: workingonProject(
-                                        data['WorkingOnPro'][index]),
+                            future: workingonProject(projects[index]),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
@@ -472,73 +479,7 @@ class SenderProfile extends StatelessWidget {
                   },
                 ),
               ),
-             
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Personal Projects",
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: height * 0.02,
-              ),
 
-               RawScrollbar(
-                thumbVisibility: true,
-                thickness: 5,
-                thumbColor: Color(0XFF2E307A),
-                child: StreamBuilder<DocumentSnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('Users')
-                      .doc(sender)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return const Text('Something went wrong');
-                    }
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Text("Loading");
-                    }
-
-                    Map<String, dynamic> data =
-                        snapshot.data!.data()! as Map<String, dynamic>;
-                    var projects = data['MyProjects'] as List<dynamic>?;
-
-                    if (projects == null || projects.isEmpty) {
-                      return const Text('No projects available');
-                    }
-
-                    return SizedBox(
-                      height: height*0.2,
-                      child: ListView.builder(
-                       scrollDirection: Axis.horizontal,
-                        itemCount: projects.length,
-                        itemBuilder: (context, index) {
-                          return FutureBuilder(
-                            future: workingonProject(
-                                        data['MyProjects'][index]),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return Container(); // Or any loading indicator
-                              } else if (snapshot.hasError) {
-                                return Text('Error: ${snapshot.error}');
-                              } else {
-                                return snapshot.data!;
-                              }
-                            },
-                          );
-                        },
-                      ),
-                    );
-                  },
-                ),
-              ),
-              
               SizedBox(
                 height: height * 0.02,
               ),
@@ -552,14 +493,15 @@ class SenderProfile extends StatelessWidget {
                   ),
                 ),
               ),
+              SizedBox(height: height*0.03,),
+
               RawScrollbar(
-                thumbVisibility: true,
                 thickness: 5,
                 thumbColor: Color(0XFF2E307A),
                 child: StreamBuilder<DocumentSnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('Users')
-                      .doc(sender)
+                      .doc(_authentication.currentUser!.uid)
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
@@ -568,19 +510,19 @@ class SenderProfile extends StatelessWidget {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Text("Loading");
                     }
-
+                
                     Map<String, dynamic> data =
                         snapshot.data!.data()! as Map<String, dynamic>;
                     var projects = data['CompletedProject'] as List<dynamic>?;
-
+                
                     if (projects == null || projects.isEmpty) {
                       return const Text('No projects available');
                     }
-
+                
                     return SizedBox(
                       height: height*0.2,
                       child: ListView.builder(
-                       scrollDirection: Axis.horizontal,
+                        scrollDirection: Axis.horizontal,
                         itemCount: projects.length,
                         itemBuilder: (context, index) {
                           return FutureBuilder(
@@ -603,6 +545,10 @@ class SenderProfile extends StatelessWidget {
                     );
                   },
                 ),
+              ),
+
+              SizedBox(
+                height: height * 0.02,
               ),
             ],
           ),

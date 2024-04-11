@@ -7,7 +7,6 @@ import 'package:skillswap/Chat/chat.dart';
 import 'package:skillswap/Request/requestdetail.dart';
 import 'package:skillswap/Request/requestui.dart';
 import 'package:skillswap/Request/sendrequest.dart';
-import 'chatDetailPage.dart';
 
 class ChatPage extends StatefulWidget {
   @override
@@ -40,7 +39,7 @@ class _ChatPageState extends State<ChatPage> {
             return Text("Error" + snapshot.error.toString());
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Text("Loading ...");
+            return Center(child: const CircularProgressIndicator());
           }
 
           return SizedBox(
@@ -180,7 +179,7 @@ class _ChatPageState extends State<ChatPage> {
                                 // send rejection message
                                 // _chat.sendmessage(data['senderId'],
                                 //     "User request has rejected");
-                                sendMessage("I hope this letter finds you well. I want to extend my sincere gratitude for your interest in collaborating with me on ${data['Title']}. I have carefully reviewed your proposal and deliberated on the potential synergies that could arise from such a collaboration.\After thoughtful consideration, however, I regret to inform you that I am unable to accept your request for collaboration at this time.", chatRoomId!);
+                                sendMessage("I hope this letter finds you well. I want to extend my sincere gratitude for your interest in collaborating with me on ${data['Title']} Project. I have carefully reviewed your proposal and deliberated on the potential synergies that could arise from such a collaboration.\After thoughtful consideration, however, I regret to inform you that I am unable to accept your request for collaboration at this time.", chatRoomId!);
                                 // Navigator.pop(context);
                               },
                               icon: Icon(
@@ -223,7 +222,34 @@ class _ChatPageState extends State<ChatPage> {
                                   print(
                                       "Failed to add element to the working list: $error");
                                 });
-                                sendMessage("I hope this letter finds you well. I want to extend my sincere gratitude for your interest in collaborating with me on ${data['Title']}. I have carefully reviewed your proposal and deliberated on the potential synergies that could arise from such a collaboration.\After thoughtful consideration, however, I regret to inform you that I am unable to accept your request for collaboration at this time.", chatRoomId!);
+                                 FirebaseFirestore.instance
+                            .collection("Project")
+                            .doc(data['projectId'])
+                            .update({
+                          'Teams': FieldValue.arrayUnion([data['senderId']])
+                        }).then((value) {
+                          print(
+                              "Element added to the Myproject teams list successfully.");
+                        }).catchError((error) {
+                          print(
+                              "Failed to add element to the working list: $error");
+                        });
+
+                              FirebaseFirestore.instance
+                          .collection("Users")
+                          .doc( _authentication.currentUser!.uid)
+                          .update({
+                        'Teams':
+                            FieldValue.arrayUnion([data['senderId']])
+                      }).then((value) {
+                        print(
+                            "Element added to the Myproject teams list successfully.");
+                      }).catchError((error) {
+                        print(
+                            "Failed to add element to the working list: $error");
+                      });
+
+                                sendMessage("I hope this letter finds you well. I want to extend my sincere gratitude for your interest in collaborating with me on ${data['Title']} Project. I have carefully reviewed your proposal and deliberated on the potential synergies that could arise from such a collaboration.\After thoughtful consideration, however, I regret to inform you that I am unable to accept your request for collaboration at this time.", chatRoomId!);
                                 //  Navigator.pop(context);
                               },
                               icon: Icon(
