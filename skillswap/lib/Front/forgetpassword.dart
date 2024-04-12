@@ -59,11 +59,15 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Image.asset('asset/1.json'),
+            SizedBox(
+                  height: height * 0.2,
+                ),
             const Text(
               'Forget Password?',
               style: TextStyle(
@@ -72,14 +76,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                 color: Colors.black,
               ),
             ),
-            const Text('Enter your email',
-                style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w200,
-                    color: Colors.black)),
-            const SizedBox(
-              height: 10,
-            ),
+            FormText(text: "Email", alignment: Alignment.topLeft),
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
               child: CustomTextFormField(
