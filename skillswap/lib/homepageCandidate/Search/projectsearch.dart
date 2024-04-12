@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillswap/Datas/userdata.dart';
 import 'package:skillswap/firebase/firebase.dart';
+import 'package:skillswap/homepageCandidate/Search/persondetail.dart';
 import 'package:skillswap/homepageCandidate/Search/projectdetailtojoin.dart';
 import 'package:skillswap/Request/requestpage.dart';
 import 'package:skillswap/widgets/buttons.dart';
@@ -10,7 +12,7 @@ import 'package:skillswap/widgets/buttons.dart';
 class ProjectSearch extends StatelessWidget {
   Map<String, dynamic> projectdata;
   String projectid;
-  ProjectSearch(this.projectdata,this.projectid, {super.key});
+  ProjectSearch(this.projectdata, this.projectid, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +27,10 @@ class ProjectSearch extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                      ProjectDetailJoin(projectdata: projectdata,projectid: projectid,)));
+                  builder: (context) => ProjectDetailJoin(
+                        projectdata: projectdata,
+                        projectid: projectid,
+                      )));
         },
         child: Container(
             width: width,
@@ -71,41 +75,110 @@ class ProjectSearch extends StatelessWidget {
                               SizedBox(
                                 height: height * 0.02,
                               ),
-                              
-                              Row(
-                                children: [
-                                  CachedNetworkImage(
-                                    imageUrl: projectdata['Owner']
-                                        ['profilePic'],
-                                    imageBuilder: (context, imageProvider) =>
-                                        Container(
-                                      width: 30.0,
-                                      height: 30.0,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: DecorationImage(
-                                            image: imageProvider,
-                                            fit: BoxFit.cover),
-                                      ),
-                                    ),
-                                    // placeholder: (context, url) =>
-                                    //     CircularProgressIndicator(),
-                                    errorWidget: (context, url, error) =>
-                                        Icon(Icons.error),
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    '${projectdata['Owner']['First']} ${projectdata['Owner']['Last']}',
-                                    //  "Alice Bob",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ],
+                              SizedBox(
+                                height: 32,
+                                child: StreamBuilder<DocumentSnapshot>(
+                                    stream: FirebaseFirestore.instance
+                                        .collection('Users')
+                                        .doc(projectdata['userid'])
+                                        .snapshots(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return Scaffold(
+                                          body: Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                        );
+                                      }
+                                      if (snapshot.hasError) {
+                                        return Text('Error: ${snapshot.error}');
+                                      }
+
+                                      Map<String, dynamic> userdata =
+                                          snapshot.data!.data()!
+                                              as Map<String, dynamic>;
+                                      return InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PersonalDetail(
+                                                          userdata, projectdata['userid'])));
+                                        },
+                                        child: Row(
+                                          children: [
+                                            CachedNetworkImage(
+                                              imageUrl: userdata['profilePic'],
+                                              imageBuilder:
+                                                  (context, imageProvider) =>
+                                                      Container(
+                                                width: 30.0,
+                                                height: 30.0,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  image: DecorationImage(
+                                                      image: imageProvider,
+                                                      fit: BoxFit.cover),
+                                                ),
+                                              ),
+                                              // placeholder: (context, url) =>
+                                              //     CircularProgressIndicator(),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Icon(Icons.error),
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              '${userdata['First']} ${userdata['Last']}',
+                                              //  "Alice Bob",
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }),
                               ),
+                              // Row(
+                              //   children: [
+                              //     CachedNetworkImage(
+                              //       imageUrl: projectdata['Owner']
+                              //           ['profilePic'],
+                              //       imageBuilder: (context, imageProvider) =>
+                              //           Container(
+                              //         width: 30.0,
+                              //         height: 30.0,
+                              //         decoration: BoxDecoration(
+                              //           shape: BoxShape.circle,
+                              //           image: DecorationImage(
+                              //               image: imageProvider,
+                              //               fit: BoxFit.cover),
+                              //         ),
+                              //       ),
+                              //       // placeholder: (context, url) =>
+                              //       //     CircularProgressIndicator(),
+                              //       errorWidget: (context, url, error) =>
+                              //           Icon(Icons.error),
+                              //     ),
+                              //     SizedBox(
+                              //       width: 5,
+                              //     ),
+                              //     Text(
+                              //       '${projectdata['Owner']['First']} ${projectdata['Owner']['Last']}',
+                              //       //  "Alice Bob",
+                              //       style: TextStyle(
+                              //         color: Colors.black,
+                              //         fontSize: 16,
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
                               SizedBox(
                                 height: height * 0.02,
                               ),
@@ -116,7 +189,6 @@ class ProjectSearch extends StatelessWidget {
                             ],
                           ),
                         ),
-                        
                         ButtonTwo("Join", Colors.white, Color(0XFF2E307A),
                             width * 0.08, height * 0.05, 12, () {
                           // _showBottomSheet(context,projectdata['SkillReq']);
@@ -124,7 +196,7 @@ class ProjectSearch extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      RequestPage(projectdata,projectid)));
+                                      RequestPage(projectdata, projectid)));
                         }),
                       ],
                     ),
