@@ -59,6 +59,8 @@ class _Search_ScreenState extends State<Search_Screen> {
         // Remove unwanted elements from _allProject
         _allProject.removeWhere(
             (doc) => userController.userdata['MyProjects'].contains(doc.id));
+        _allProject.removeWhere(
+            (doc) => userController.userdata['WorkingOnPro'].contains(doc.id));
         searchResult(); // Move this inside setState
       });
     });

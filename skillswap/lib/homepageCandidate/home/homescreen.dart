@@ -7,6 +7,7 @@ import 'package:skillswap/homepageCandidate/Search/projectsearch.dart';
 import 'package:skillswap/homepageCandidate/Search/search.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:skillswap/homepageCandidate/home/Job/post.dart';
 
 List<String> items = [
   'Flutter',
@@ -269,12 +270,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator()); // Or any loading indicator
                   }
-
                   List<String> filter = [];
                   for (var skill in selectedItems) {
                     filter.add(skill.toLowerCase());
                   }
-                  List<ProjectSearch> projectlist = [];
+                  List<Widget> projectlist = [Jobs()];
                   final projects = snapshot.data!.docs.toList();
                   for (var pro in projects) {
                     Map<String, dynamic> projectData = pro.data() as Map<String, dynamic>;
@@ -286,7 +286,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         skillNames.add(skill.toLowerCase());
                       }
 
-                      if (filter.every((skill) => skillNames.contains(skill.toLowerCase())) && !userController.userdata['MyProjects'].contains(projectId)) {
+                      if (filter.every((skill) => skillNames.contains(skill.toLowerCase())) && !userController.userdata['MyProjects'].contains(projectId)&& !userController.userdata['WorkingOnPro'].contains(projectId)) {
                     final oneProject = ProjectSearch(projectData, projectId);
                     projectlist.add(oneProject);
                       }
