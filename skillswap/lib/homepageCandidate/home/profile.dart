@@ -1,11 +1,16 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:skillswap/Datas/projectcontroller.dart';
 import 'package:skillswap/Datas/userdata.dart';
 import 'package:skillswap/Request/completedProjects.dart';
+import 'package:skillswap/homepageCandidate/home/newskill.dart';
 import 'package:skillswap/pages/contact.dart';
 import 'package:skillswap/pages/setting.dart';
 import 'package:skillswap/widgets/skillimg.dart';
@@ -19,6 +24,38 @@ class ProfilePage extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final UserController userController = Get.find();
     final FirebaseAuth _authentication = FirebaseAuth.instance;
+
+Future<void> pickImage() async {
+   String? downloadUrl;
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (image == null) return;
+    // For mobile platforms, set the image directly
+    final imageTemp = File(image.path);
+    
+    final Reference storageReference = FirebaseStorage.instance
+        .ref()
+        .child('images')
+        .child('${DateTime.now()}.jpg');
+
+    try {
+      // Upload the image to Firebase Storage
+      await storageReference.putFile(imageTemp!);
+
+      // Retrieve the download URL of the uploaded image
+      downloadUrl = await storageReference.getDownloadURL();
+       DocumentReference docRef = FirebaseFirestore.instance
+                            .collection('Users')
+                            .doc(_authentication.currentUser!.uid);
+                        await docRef.update({
+                          'profilePic':downloadUrl
+                        });
+
+    } catch (e) {
+      // Handle any errors that occur during the upload process
+      print('Error uploading image: $e');
+    }
+  }
+
     Future<Widget> workingonProject(String projectid) async {
       ProjectController projectController = Get.find();
 
@@ -68,7 +105,8 @@ class ProfilePage extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => CompletedProDetail(projectdata)));},
+                  builder: (context) => CompletedProDetail(projectdata)));
+        },
         child: Container(
           width: width * 0.4,
           height: height * 0.2,
@@ -82,8 +120,8 @@ class ProfilePage extends StatelessWidget {
                   height: 70.0,
                   decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
-                    image:
-                        DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                    image: DecorationImage(
+                        image: imageProvider, fit: BoxFit.cover),
                   ),
                 ),
                 errorWidget: (context, url, error) => Icon(Icons.error),
@@ -120,441 +158,428 @@ class ProfilePage extends StatelessWidget {
       );
     }
 
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20.0, 50.0, 20.0, 30.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CachedNetworkImage(
-                    imageUrl: userController.userdata['profilePic'],
-                    imageBuilder: (context, imageProvider) => Container(
-                      width: 80.0,
-                      height: 80.0,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                            image: imageProvider, fit: BoxFit.cover),
-                      ),
-                    ),
-                    placeholder: (context, url) => CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
-                  ),
-                  SizedBox(
-                    width: width * 0.08,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "${userController.userdata['First']} ${userController.userdata['Last']}",
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 5.0),
-                      GestureDetector(
-                        onTap: () =>
-                            _launchInEmailApp(userController.userdata['Email']),
-                        child: Text(
-                          userController.userdata['Email'],
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-              SizedBox(height: height * 0.03),
-              Align(
-                alignment: Alignment.topCenter,
-                child: SizedBox(
-                  height: 20,
-                  child: Expanded(
-                    child: StreamBuilder<DocumentSnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection('Users')
-                          .doc(_authentication.currentUser!.uid)
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          return Text('Something went wrong');
-                        }
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Text("Loading");
-                        }
+    return StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('Users')
+            .doc(_authentication.currentUser!.uid)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Scaffold(body: Center(child: CircularProgressIndicator(),),);
+          }
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
 
-                        Map<String, dynamic> data =
-                            snapshot.data!.data()! as Map<String, dynamic>;
-                        var stars = data['Star'] as List<dynamic>?;
+          Map<String, dynamic> userdata =
+              snapshot.data!.data()! as Map<String, dynamic>;
+          var projects = userdata['WorkingOnPro'] as List<dynamic>?;
+          var completedProjects =
+              userdata['CompletedProject'] as List<dynamic>?;
+          var stars = userdata['Star'] as List<dynamic>?;
+          double averageStar = stars != null && stars.isNotEmpty
+              ? stars.reduce((a, b) => a + b) / stars.length
+              : 0;
 
-                        // Calculate average of stars
-                        double averageStar = stars != null && stars.isNotEmpty
-                            ? stars.reduce((a, b) => a + b) / stars.length
-                            : 0;
-
-                        return ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 5,
-                          itemExtent: 20,
-                          itemBuilder: (context, index) {
-                            if (index < averageStar.floor()) {
-                              // If index is less than the floor of averageStar, paint the star golden
-                              return Icon(Icons.star, color: Colors.amber);
-                            } else {
-                              // Otherwise, paint the star grey
-                              return Icon(Icons.star_border,
-                                  color: Colors.grey);
-                            }
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: height * 0.03),
-              Container(
-                padding: const EdgeInsets.all(10),
-                width: width * 0.9,
+          return Scaffold(
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20.0, 50.0, 20.0, 30.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Align(
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Stack(
+                          children:[ CachedNetworkImage(
+                            imageUrl: userdata['profilePic'],
+                            imageBuilder: (context, imageProvider) => Container(
+                              width: 80.0,
+                              height: 80.0,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: imageProvider, fit: BoxFit.cover),
+                              ),
+                            ),
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                          ),
+                           Positioned(
+                          top: 45,
+                          right: -10,
+                          child: IconButton(
+                              onPressed: pickImage,
+                              icon: Image.asset(
+                                width: 30,
+                                height: 30
+                                ,"asset/camera.png")
+                              )
+                              )
+                          ]
+                        ),
+                        SizedBox(
+                          width: width * 0.08,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "${userdata['First']} ${userdata['Last']}",
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                NameEdit(userdata['First'], userdata['Last'])
+                              ],
+                            ),
+                            SizedBox(height: 5.0),
+                            GestureDetector(
+                              onTap: () => _launchInEmailApp(userdata['Email']),
+                              child: Text(
+                                userdata['Email'],
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    SizedBox(height: height * 0.03),
+                    SizedBox(
+                      height: 20,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 5,
+                        itemExtent: 20,
+                        itemBuilder: (context, index) {
+                          if (index < averageStar.floor()) {
+                            // If index is less than the floor of averageStar, paint the star golden
+                            return Icon(Icons.star, color: Colors.amber);
+                          } else {
+                            // Otherwise, paint the star grey
+                            return Icon(Icons.star_border, color: Colors.grey);
+                          }
+                        },
+                      ),
+                    ),
+                    SizedBox(height: height * 0.03),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      width: width * 0.9,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Skills",
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            NewSkill(),
+                            ],
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Expanded(
+                              child: Column(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: RawScrollbar(
+                                      thumbVisibility: true,
+                                      thumbColor: Color(0XFF2E307A),
+                                      radius: Radius.circular(20),
+                                      thickness: 5,
+                                      child: Wrap(
+                                        spacing:
+                                            8, // Adjust the spacing between items as needed
+                                        runSpacing:
+                                            8, // Adjust the spacing between lines as needed
+                                        children: List.generate(
+                                            userdata['Skills'].length, (index) {
+                                          Map<String, dynamic> skill =
+                                              userdata['Skills'][index];
+
+                                          if (logomap
+                                              .containsKey(skill['skill'])) {
+                                            return GestureDetector(
+                                              onTap: () {
+                                                showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return AlertDialog(
+                                                        content: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                                skill['skill']),
+                                                            Text(skill['level'])
+                                                          ],
+                                                        ),
+                                                      );
+                                                    });
+                                              },
+                                              child: Image.asset(
+                                                logomap[skill['skill']]!,
+                                                width: width * 0.2,
+                                                height: height * 0.05,
+                                              ),
+                                            );
+                                          } else {
+                                            return GestureDetector(
+                                              onTap: () {
+                                                showDialog(
+                                                  
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return AlertDialog(
+                                                        content: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                                skill['skill']),
+                                                            Text(skill['level'])
+                                                          ],
+                                                        ),
+                                                      );
+                                                    });
+                                              },
+                                              child: CircleAvatar(
+                                                backgroundColor: Color.fromARGB(
+                                                    255, 237, 241, 245),
+                                                radius: 30,
+                                                child: Text(
+                                                  skill['skill'],
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        }),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: height * 0.03),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Color.fromARGB(255, 237, 241, 245),
+                      ),
+                      constraints: const BoxConstraints(
+                        minHeight: 100.0,
+                      ),
+                      width: width * 0.9,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                "Bio",
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              BioEdit(userdata['Bio']),
+                            ],
+                          ),
+                          SizedBox(
+                            height: height * 0.01,
+                          ),
+                          Text(userdata['Bio']),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: height * 0.03),
+                    userdata['Linkedin'] != null && userdata['Linkedin'] != ''
+                        ? Row(
+                            children: [
+                              Image.asset(
+                                logomap['linkedin']!,
+                                width: width * 0.12,
+                                height: height * 0.04,
+                              ),
+                              InkWell(
+                                onTap: () => _launchInBrowser(
+                                    'https://linkedin.com/in/',
+                                    userdata['Linkedin']),
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  // decoration: BoxDecoration(
+                                  //   borderRadius: BorderRadius.circular(10),
+                                  //  color: Color.fromARGB(255, 237, 241, 245),
+                                  // ),
+                                  width: width * 0.6,
+                                  child: Text(userdata['Linkedin']),
+                                ),
+                              ),
+                              LinkedInEdit(userdata['Linkedin'])
+                            ],
+                          )
+                        : Container(),
+                    SizedBox(height: height * 0.03),
+                    userdata['Github'] != null && userdata['Github'] != ''
+                        ? Row(
+                            children: [
+                              Image.asset(
+                                logomap['github']!,
+                                width: width * 0.12,
+                                height: height * 0.04,
+                              ),
+                              InkWell(
+                                onTap: () => _launchInBrowser(
+                                    'https://github.com/', userdata['Github']),
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  // decoration: BoxDecoration(
+                                  //   borderRadius: BorderRadius.circular(10),
+                                  //  color: Color.fromARGB(255, 237, 241, 245),
+                                  // ),
+                                  width: width * 0.6,
+                                  child: Text(userdata['Github']),
+                                ),
+                              ),
+                            //  SizedBox(width: width*0.5,),
+                               GitEdit(userdata['Github'])
+                              
+                            ],
+                          )
+                        : Container(),
+                    SizedBox(
+                      height: height * 0.02,
+                    ),
+                    Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        "Skills",
+                        "Working On Projects",
                         style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Expanded(
-                        child: Column(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: RawScrollbar(
-                                thumbVisibility: true,
-                                thumbColor: Color(0XFF2E307A),
-                                radius: Radius.circular(20),
-                                thickness: 5,
-                                child: Wrap(
-                                  spacing:
-                                      8, // Adjust the spacing between items as needed
-                                  runSpacing:
-                                      8, // Adjust the spacing between lines as needed
-                                  children: List.generate(
-                                      userController.userdata['Skills'].length,
-                                      (index) {
-                                    Map<String, dynamic> skill = userController
-                                        .userdata['Skills'][index];
-
-                                    if (logomap.containsKey(skill['skill'])) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  content: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(skill['skill']),
-                                                      Text(skill['level'])
-                                                    ],
-                                                  ),
-                                                );
-                                              });
-                                        },
-                                        child: Image.asset(
-                                          logomap[skill['skill']]!,
-                                          width: width * 0.2,
-                                          height: height * 0.05,
-                                        ),
-                                      );
-                                    } else {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  content: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(skill['skill']),
-                                                      Text(skill['level'])
-                                                    ],
-                                                  ),
-                                                );
-                                              });
-                                        },
-                                        child: CircleAvatar(
-                                          backgroundColor: Color.fromARGB(
-                                              255, 237, 241, 245),
-                                          radius: 30,
-                                          child: Text(
-                                            skill['skill'],
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                  }),
-                                ),
+                    SizedBox(
+                      height: height * 0.02,
+                    ),
+                    projects == null || projects.isEmpty
+                        ? Text('No projects available')
+                        : RawScrollbar(
+                            thumbVisibility: true,
+                            thickness: 5,
+                            thumbColor: Color(0XFF2E307A),
+                            child: SizedBox(
+                              height: height * 0.2,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: projects.length,
+                                itemBuilder: (context, index) {
+                                  return FutureBuilder(
+                                    future: workingonProject(projects[index]),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return Container(); // Or any loading indicator
+                                      } else if (snapshot.hasError) {
+                                        return Text('Error: ${snapshot.error}');
+                                      } else {
+                                        return snapshot.data!;
+                                      }
+                                    },
+                                  );
+                                },
                               ),
                             ),
-                          ],
+                          ),
+
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Completed Projects",
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: height * 0.03),
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Color.fromARGB(255, 237, 241, 245),
-                ),
-                constraints: const BoxConstraints(
-                  minHeight: 100.0,
-                ),
-                width: width * 0.9,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Bio",
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     SizedBox(
-                      height: height * 0.01,
+                      height: height * 0.03,
                     ),
-                    Text(userController.userdata['Bio']),
+                    completedProjects == null || completedProjects.isEmpty
+                        ? Text('No projects available')
+                        : RawScrollbar(
+                            thumbVisibility: true,
+                            thickness: 5,
+                            thumbColor: Color(0XFF2E307A),
+                            child: SizedBox(
+                              height: height * 0.2,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: completedProjects.length,
+                                itemBuilder: (context, index) {
+                                  return FutureBuilder(
+                                    future: completedProject(
+                                        completedProjects[index]['projectId'],
+                                        completedProjects[index]['rate']),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return Container(); // Or any loading indicator
+                                      } else if (snapshot.hasError) {
+                                        return Text('Error: ${snapshot.error}');
+                                      } else {
+                                        return snapshot.data!;
+                                      }
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
                   ],
                 ),
               ),
-              SizedBox(height: height * 0.03),
-              userController.userdata['Linkedin'] != null &&
-                      userController.userdata['Linkedin'] != ''
-                  ? Row(
-                      children: [
-                        Image.asset(
-                          logomap['linkedin']!,
-                          width: width * 0.12,
-                          height: height * 0.04,
-                        ),
-                        InkWell(
-                          onTap: () => _launchInBrowser(
-                              'https://linkedin.com/in/',
-                              userController.userdata['Linkedin']),
-                          child: Container(
-                            padding: const EdgeInsets.all(10),
-                            // decoration: BoxDecoration(
-                            //   borderRadius: BorderRadius.circular(10),
-                            //  color: Color.fromARGB(255, 237, 241, 245),
-                            // ),
-                            width: width * 0.76,
-                            child: Text(userController.userdata['Linkedin']),
-                          ),
-                        )
-                      ],
-                    )
-                  : Container(),
-              SizedBox(height: height * 0.03),
-              userController.userdata['Github'] != null &&
-                      userController.userdata['Github'] != ''
-                  ? Row(
-                      children: [
-                        Image.asset(
-                          logomap['github']!,
-                          width: width * 0.12,
-                          height: height * 0.04,
-                        ),
-                        InkWell(
-                          onTap: () => _launchInBrowser('https://github.com/',
-                              userController.userdata['Github']),
-                          child: Container(
-                            padding: const EdgeInsets.all(10),
-                            // decoration: BoxDecoration(
-                            //   borderRadius: BorderRadius.circular(10),
-                            //  color: Color.fromARGB(255, 237, 241, 245),
-                            // ),
-                            width: width * 0.76,
-                            child: Text(userController.userdata['Github']),
-                          ),
-                        )
-                      ],
-                    )
-                  : Container(),
-              SizedBox(
-                height: height * 0.02,
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Working On Projects",
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: height * 0.02,
-              ),
-              //
-              RawScrollbar(
-                thickness: 5,
-                thumbColor: Color(0XFF2E307A),
-                child: StreamBuilder<DocumentSnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('Users')
-                      .doc(_authentication.currentUser!.uid)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return const Text('Something went wrong');
-                    }
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Text("Loading");
-                    }
-                
-                    Map<String, dynamic> data =
-                        snapshot.data!.data()! as Map<String, dynamic>;
-                    var projects = data['WorkingOnPro'] as List<dynamic>?;
-                
-                    if (projects == null || projects.isEmpty) {
-                      return const Text('No projects available');
-                    }
-                
-                    return SizedBox(
-                      height: height*0.2,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: projects.length,
-                        itemBuilder: (context, index) {
-                          return FutureBuilder(
-                            future: workingonProject(projects[index]),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return Container(); // Or any loading indicator
-                              } else if (snapshot.hasError) {
-                                return Text('Error: ${snapshot.error}');
-                              } else {
-                                return snapshot.data!;
-                              }
-                            },
-                          );
-                        },
-                      ),
-                    );
-                  },
-                ),
-              ),
-
-              SizedBox(
-                height: height * 0.02,
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Completed Projects",
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: height*0.03,),
-
-              RawScrollbar(
-                thickness: 5,
-                thumbColor: Color(0XFF2E307A),
-                child: StreamBuilder<DocumentSnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('Users')
-                      .doc(_authentication.currentUser!.uid)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return const Text('Something went wrong');
-                    }
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Text("Loading");
-                    }
-                
-                    Map<String, dynamic> data =
-                        snapshot.data!.data()! as Map<String, dynamic>;
-                    var projects = data['CompletedProject'] as List<dynamic>?;
-                
-                    if (projects == null || projects.isEmpty) {
-                      return const Text('No projects available');
-                    }
-                
-                    return SizedBox(
-                      height: height*0.2,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: projects.length,
-                        itemBuilder: (context, index) {
-                          return FutureBuilder(
-                            future: completedProject(
-                                projects[index]['projectId'],
-                                projects[index]['rate']),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return Container(); // Or any loading indicator
-                              } else if (snapshot.hasError) {
-                                return Text('Error: ${snapshot.error}');
-                              } else {
-                                return snapshot.data!;
-                              }
-                            },
-                          );
-                        },
-                      ),
-                    );
-                  },
-                ),
-              ),
-
-              SizedBox(
-                height: height * 0.02,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
+        });
   }
 
   Future<void> _launchInBrowser(String app, String url) async {
@@ -577,3 +602,4 @@ class ProfilePage extends StatelessWidget {
     }
   }
 }
+
