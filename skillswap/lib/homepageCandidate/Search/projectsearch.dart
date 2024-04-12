@@ -71,6 +71,7 @@ class ProjectSearch extends StatelessWidget {
                               SizedBox(
                                 height: height * 0.02,
                               ),
+                              
                               Row(
                                 children: [
                                   CachedNetworkImage(

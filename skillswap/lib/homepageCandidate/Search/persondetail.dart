@@ -168,11 +168,15 @@ class PersonalDetail extends StatelessWidget {
                               width: width * 0.1,
                               height: height * 0.02,
                             ),
-                            Text(
-                              userdata['Email'],
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                color: Colors.grey,
+                            SizedBox(
+                              width: width*0.4,
+                              child: Text(
+                                userdata['Email'],
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  color: Colors.grey,
+                                  overflow: TextOverflow.ellipsis
+                                ),
                               ),
                             ),
                           ],

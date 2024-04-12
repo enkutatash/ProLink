@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillswap/Datas/userdata.dart';
 import 'package:skillswap/homepageCandidate/ProjectPer/teamsprofile.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 class CompletedProDetail extends StatelessWidget {
   final Map<String, dynamic> detail;
@@ -64,6 +66,21 @@ class CompletedProDetail extends StatelessWidget {
                         '${detail['ProjectDes']}',
                         style: TextStyle(fontSize: 15),
                       ),
+                      detail.containsKey('Url')?InkWell(
+                          onTap: () => _launchInBrowser(
+                              detail['Url']),
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            // decoration: BoxDecoration(
+                            //   borderRadius: BorderRadius.circular(10),
+                            //  color: Color.fromARGB(255, 237, 241, 245),
+                            // ),
+                            width: width * 0.76,
+                            child: Text("Click here to discover more about the Project",style: TextStyle(color: Colors.blue,fontSize: 15, decoration: TextDecoration.underline,),),
+                          ),
+                        ):Container(),
+
+                      
                       const SizedBox(height: 8),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -159,5 +176,14 @@ class CompletedProDetail extends StatelessWidget {
                     ]))
           ])),
     );
+  }
+  Future<void> _launchInBrowser(String url) async {
+    final Uri toLaunch = Uri.parse('$url');
+    if (!await launchUrl(
+      toLaunch,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
   }
 }

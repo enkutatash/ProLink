@@ -23,9 +23,12 @@ class _CompleteProjectState extends State<CompleteProject> {
   Map<String, int> ratings = {};
   final FirebaseAuth _authentication = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  TextEditingController url = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -36,6 +39,8 @@ class _CompleteProjectState extends State<CompleteProject> {
         padding: const EdgeInsets.all(15.0),
         child: Column(
           children: [
+            FormText(text: "Project Link", alignment: Alignment.centerLeft),
+            CustomTextFormField(width: width, height: height*0.07, hintText: "Project Link", controller: url),
             Expanded(
               child: ListView.builder(
                 itemCount: widget.teams.length,
@@ -45,7 +50,7 @@ class _CompleteProjectState extends State<CompleteProject> {
                     stream: userController.getuserdata(teamMemberId),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
+                        return Center(child: CircularProgressIndicator());
                       } else if (snapshot.hasError) {
                         return Text('Error: ${snapshot.error}');
                       } else {
@@ -63,7 +68,7 @@ class _CompleteProjectState extends State<CompleteProject> {
                 },
               ),
             ),
-            ButtonTwo("Rate", Colors.white, Color(0XFF2E307A), 100, 40, 20, () {
+            ButtonTwo("Rate", Colors.white, Color(0XFF2E307A), width * 0.7, height * 0.07, 16, () {
               rateTeams();
               ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -192,6 +197,17 @@ class _CompleteProjectState extends State<CompleteProject> {
         .collection("CompletedProjects")
         .doc(widget.projectid)
         .set(data!);
+
+        if(!url.text.isEmpty){
+          DocumentReference docRef = FirebaseFirestore.instance
+                            .collection('CompletedProjects')
+                            .doc(widget.projectid);
+          await docRef
+                    .update({
+                      'Url': url.text,
+                      });           
+        }
+
     firestore.collection('Project').doc(widget.projectid).delete();
 
     ratings.forEach((key, value) async {

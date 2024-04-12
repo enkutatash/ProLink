@@ -20,7 +20,7 @@ class Project extends StatelessWidget {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      ProjectDetailPage(projectdata: projectdata,projectid: projectid,)));
+                      ProjectDetailPage(projectid: projectid,)));
         },
         child: Container(
           width: width,

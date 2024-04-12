@@ -5,13 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:skillswap/Datas/userdata.dart';
 import 'package:skillswap/homepageCandidate/ProjectPer/completeProject.dart';
+import 'package:skillswap/homepageCandidate/ProjectPer/editor.dart';
 import 'package:skillswap/homepageCandidate/ProjectPer/projectedit.dart';
 import 'package:skillswap/homepageCandidate/ProjectPer/teamsprofile.dart';
 import 'package:skillswap/widgets/buttons.dart';
 
-class ProjectDetailPage extends StatelessWidget {
+class ProjectEdit extends StatelessWidget {
   final String projectid;
-  const ProjectDetailPage({super.key, required this.projectid});
+  const ProjectEdit({super.key, required this.projectid});
 
   @override
   Widget build(BuildContext context) {
@@ -48,11 +49,7 @@ class ProjectDetailPage extends StatelessWidget {
                 PopupMenuButton<String>(
                   onSelected: (value) {
                     if (value == 'edit') {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  ProjectEdit(projectid: projectid,)));
+                    
                     } else if (value == 'Delete') {}
                   },
                   itemBuilder: (BuildContext context) =>
@@ -105,9 +102,15 @@ class ProjectDetailPage extends StatelessWidget {
                                   //  color: Colors.black,
                                 ),
                                 const SizedBox(height: 8),
-                                Text(
-                                  "${projectdata['ProjectTitle']}",
-                                  style: TextStyle(fontSize: 30),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "${projectdata['ProjectTitle']}",
+                                      style: TextStyle(fontSize: 30),
+                                    ),
+                                    TitleEdit(projectdata['ProjectTitle'],projectid),
+                                  ],
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
@@ -115,6 +118,9 @@ class ProjectDetailPage extends StatelessWidget {
                                   style: TextStyle(fontSize: 13),
                                 ),
                                 const SizedBox(height: 8),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child:  DescriptionEdit(projectdata['ProjectDes'], projectid),),
                                 Text(
                                   '${projectdata['ProjectDes']}',
                                   style: TextStyle(fontSize: 15),
@@ -133,15 +139,14 @@ class ProjectDetailPage extends StatelessWidget {
                                         //  color: Colors.black,
                                       ),
                                       const SizedBox(height: 20),
-                                      Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: Text(
+                                      Row(
+                                        children: [
+                                          Text(
                                             "Required Skills",
                                             style: TextStyle(fontSize: 20),
                                           ),
-                                        ),
+                                          AddSkill(projectid),
+                                        ],
                                       ),
                                       Container(
                                           padding: EdgeInsets.all(10),
@@ -160,76 +165,8 @@ class ProjectDetailPage extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                                const Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Text(
-                                      "Teams",
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                  ),
-                                ),
-                                projectdata['Teams'].length == 0
-                                    ? Text("No Teams")
-                                    : RawScrollbar(
-                                        thickness: 20.0,
-                                        thumbVisibility: true,
-                                        thumbColor: Color(0XFF2E307A),
-                                        child: Container(
-                                            padding: EdgeInsets.all(10),
-                                            height: 400,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                            ),
-                                            child: ListView.builder(
-                                                itemCount:
-                                                    projectdata['Teams'].length,
-                                                itemBuilder: (context, index) {
-                                                  return StreamBuilder<
-                                                      DocumentSnapshot>(
-                                                    stream: userController
-                                                        .getuserdata(
-                                                            projectdata['Teams']
-                                                                [index]),
-                                                    builder:
-                                                        (context, snapshot) {
-                                                      if (snapshot
-                                                              .connectionState ==
-                                                          ConnectionState
-                                                              .waiting) {
-                                                        return CircularProgressIndicator(); // Show a loading indicator while fetching data
-                                                      } else if (snapshot
-                                                          .hasError) {
-                                                        return Text(
-                                                            'Error: ${snapshot.error}'); // Show an error message if something goes wrong
-                                                      } else {
-                                                        if (snapshot.hasData &&
-                                                            snapshot
-                                                                .data!.exists) {
-                                                          // Document exists, use its data
-
-                                                          var userData =
-                                                              snapshot.data!
-                                                                  .data();
-                                                          return TeamsProfile(
-                                                              userData as Map<
-                                                                  String,
-                                                                  dynamic>,
-                                                              projectdata[
-                                                                      'Teams']
-                                                                  [index]);
-                                                        } else {
-                                                          // Document doesn't exist
-                                                          return Text(
-                                                              'User data not found');
-                                                        }
-                                                      }
-                                                    },
-                                                  );
-                                                })),
-                                      ),
+                               
+                               
                               ])),
                       SizedBox(
                         height: height * 0.03,
