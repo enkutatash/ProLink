@@ -25,36 +25,34 @@ class ProfilePage extends StatelessWidget {
     final UserController userController = Get.find();
     final FirebaseAuth _authentication = FirebaseAuth.instance;
 
-Future<void> pickImage() async {
-   String? downloadUrl;
-    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (image == null) return;
-    // For mobile platforms, set the image directly
-    final imageTemp = File(image.path);
-    
-    final Reference storageReference = FirebaseStorage.instance
-        .ref()
-        .child('images')
-        .child('${DateTime.now()}.jpg');
+    Future<void> pickImage() async {
+      String? downloadUrl;
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+      // For mobile platforms, set the image directly
+      final imageTemp = File(image.path);
 
-    try {
-      // Upload the image to Firebase Storage
-      await storageReference.putFile(imageTemp!);
+      final Reference storageReference = FirebaseStorage.instance
+          .ref()
+          .child('images')
+          .child('${DateTime.now()}.jpg');
 
-      // Retrieve the download URL of the uploaded image
-      downloadUrl = await storageReference.getDownloadURL();
-       DocumentReference docRef = FirebaseFirestore.instance
-                            .collection('Users')
-                            .doc(_authentication.currentUser!.uid);
-                        await docRef.update({
-                          'profilePic':downloadUrl
-                        });
+      try {
+        // Upload the image to Firebase Storage
+        await storageReference.putFile(imageTemp!);
 
-    } catch (e) {
-      // Handle any errors that occur during the upload process
-      print('Error uploading image: $e');
+        // Retrieve the download URL of the uploaded image
+        downloadUrl = await storageReference.getDownloadURL();
+        DocumentReference docRef = FirebaseFirestore.instance
+            .collection('Users')
+            .doc(_authentication.currentUser!.uid);
+        await docRef.update({'profilePic': downloadUrl});
+        userController.userdata['profilePic'] = downloadUrl;
+      } catch (e) {
+        // Handle any errors that occur during the upload process
+        print('Error uploading image: $e');
+      }
     }
-  }
 
     Future<Widget> workingonProject(String projectid) async {
       ProjectController projectController = Get.find();
@@ -165,7 +163,11 @@ Future<void> pickImage() async {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Scaffold(body: Center(child: CircularProgressIndicator(),),);
+            return Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
           }
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
@@ -191,8 +193,8 @@ Future<void> pickImage() async {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Stack(
-                          children:[ CachedNetworkImage(
+                        Stack(children: [
+                          CachedNetworkImage(
                             imageUrl: userdata['profilePic'],
                             imageBuilder: (context, imageProvider) => Container(
                               width: 80.0,
@@ -208,19 +210,16 @@ Future<void> pickImage() async {
                             errorWidget: (context, url, error) =>
                                 Icon(Icons.error),
                           ),
-                           Positioned(
-                          top: 45,
-                          right: -10,
-                          child: IconButton(
-                              onPressed: pickImage,
-                              icon: Image.asset(
-                                width: 30,
-                                height: 30
-                                ,"asset/camera.png")
-                              )
-                              )
-                          ]
-                        ),
+                          Positioned(
+                              top: 45,
+                              right: -10,
+                              child: IconButton(
+                                  onPressed: pickImage,
+                                  icon: Image.asset(
+                                      width: 30,
+                                      height: 30,
+                                      "asset/camera.png")))
+                        ]),
                         SizedBox(
                           width: width * 0.08,
                         ),
@@ -293,7 +292,7 @@ Future<void> pickImage() async {
                                   ),
                                 ),
                               ),
-                            NewSkill(),
+                              NewSkill(),
                             ],
                           ),
                           Container(
@@ -354,7 +353,6 @@ Future<void> pickImage() async {
                                             return GestureDetector(
                                               onTap: () {
                                                 showDialog(
-                                                  
                                                     context: context,
                                                     builder:
                                                         (BuildContext context) {
@@ -478,9 +476,8 @@ Future<void> pickImage() async {
                                   child: Text(userdata['Github']),
                                 ),
                               ),
-                            //  SizedBox(width: width*0.5,),
-                               GitEdit(userdata['Github'])
-                              
+                              //  SizedBox(width: width*0.5,),
+                              GitEdit(userdata['Github'])
                             ],
                           )
                         : Container(),
@@ -529,7 +526,6 @@ Future<void> pickImage() async {
                               ),
                             ),
                           ),
-
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -602,4 +598,3 @@ Future<void> pickImage() async {
     }
   }
 }
-
