@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:skillswap/Front/forgetpassword.dart';
 import 'package:skillswap/Front/signup.dart';
 import 'package:skillswap/Datas/projectcontroller.dart';
 import 'package:skillswap/Datas/userdata.dart';
@@ -105,7 +106,12 @@ class SignInPageState extends State<SignInPage> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ForgetPasswordPage()));
+                      },
                       child: const Text(
                         "Forget your password?",
                       )),
@@ -183,13 +189,13 @@ class SignInPageState extends State<SignInPage> {
       await usercontroller.initializeuser(user.uid);
       await projectController
           .initializeProjects(usercontroller.userdata['MyProjects']);
-      
-        await Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => Homepage(user.uid)),
-          (route) => false,
-        );
-        _showSnackBar("User is successfully Sign in");
+
+      await Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => Homepage(user.uid)),
+        (route) => false,
+      );
+      _showSnackBar("User is successfully Sign in");
     } else {
       _showSnackBar("Some error happend on Signing in user");
     }
