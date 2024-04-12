@@ -38,6 +38,7 @@ class _MultiSelectState extends State<MultiSelect> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Colors.white,
       title: const Text('Select'),
       content: SingleChildScrollView(
         child: ListBody(
@@ -59,10 +60,7 @@ class _MultiSelectState extends State<MultiSelect> {
             style: TextStyle(color: Colors.black),
           ),
         ),
-        ElevatedButton(
-          onPressed: _submit,
-          child: const Text('Submit', style: TextStyle(color: Colors.black)),
-        ),
+        ButtonTwo("Submit", Colors.white, Color(0XFF2E307A), 25, 35, 12, _submit)
       ],
     );
   }

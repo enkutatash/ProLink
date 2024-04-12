@@ -4,6 +4,7 @@ import 'package:skillswap/Front/recruiterORuser.dart';
 import 'package:skillswap/Request/requestui.dart';
 import 'package:skillswap/firebase/firebase_options.dart';
 import 'package:skillswap/Front/onboarding1.dart';
+import 'package:skillswap/homepageCandidate/home/Job/jobdetail.dart';
 import 'package:skillswap/homepageCandidate/home/filter.dart';
 
 
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           scaffoldBackgroundColor: Colors.white, ),
       debugShowCheckedModeBanner: false,
-      home:WelcomePage(),
+      home:JobDetail(),
     );
   }
 }
