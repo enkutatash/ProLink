@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillswap/Front/signin.dart';
 import 'package:skillswap/Datas/projectcontroller.dart';
+import 'package:skillswap/Message/chatDetailPage.dart';
 import 'package:skillswap/Request/completedProjects.dart';
 // import 'package:skillswap/homepageCandidate/homepage.dart';
 import 'package:skillswap/homepageCandidate/newskill.dart';
@@ -21,6 +23,34 @@ class PersonalDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+         final FirebaseAuth _authentication = FirebaseAuth.instance;
+
+Future<String?> fetchOrCreateChatRoomId(String uid1, String uid2) async {
+    List<String> participantUids = [uid1, uid2];
+    participantUids.sort(); // Ensure consistent order of participants
+
+    DocumentReference chatRoomRef = FirebaseFirestore.instance
+        .collection('ChatRooms')
+        .doc('${participantUids[0]}_${participantUids[1]}');
+
+    DocumentSnapshot snapshot = await chatRoomRef.get();
+
+    if (snapshot.exists) {
+      return chatRoomRef.id;
+    } else {
+      try {
+        await chatRoomRef.set({
+          'participants': participantUids,
+          // Add any other fields you want to initialize for the chat room
+        });
+        return chatRoomRef.id;
+      } catch (e) {
+        print('Error creating chat room: $e');
+        return null;
+      }
+    }
+  }
+
 
  Future<Widget> completedProject(String projectid, int rate) async {
   DocumentSnapshot snapshot = await FirebaseFirestore.instance
@@ -375,6 +405,36 @@ class PersonalDetail extends StatelessWidget {
                 ),
               ),
               SizedBox(height: height * 0.03),
+              InkWell(
+                onTap: () async {
+                      String? chatRoomId =
+                          await fetchOrCreateChatRoomId(userid,  _authentication.currentUser!.uid);
+                      if (chatRoomId != null) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChatDetailPage(
+                              currentUserUid:  _authentication.currentUser!.uid,
+                              chatRoomId: chatRoomId,
+                              recipientUid: userid,
+                            ),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Error creating or fetching chat room!'),
+                          ),
+                        );
+                      }
+                    },
+                child: Row(
+                  children: [
+                         Image.asset(width: width * 0.12, height: height * 0.04, "asset/send.png"),
+                        Text("Chat"),
+                  ],
+                ),
+              ),
               userdata['Linkedin'] != null && userdata['Linkedin'] != ''
                   ? Row(
                       children: [
@@ -399,6 +459,7 @@ class PersonalDetail extends StatelessWidget {
                       ],
                     )
                   : Container(),
+
               SizedBox(height: height * 0.03),
               userdata['Github'] != null && userdata['Github'] != ''
                   ? Row(
