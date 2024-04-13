@@ -318,7 +318,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         backgroundColor: Colors.white,
                         pinned: true,
                         expandedHeight:height * 0.1,
-                        flexibleSpace: FlexibleSpaceBar(
                           title: SizedBox(
                             height: height*0.07,
                             child: ListView.builder(
@@ -362,7 +361,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           item,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                            fontSize: 10,
+                                            fontSize: 15,
                                             color: isSelected
                                                 ? Colors.white
                                                 : Colors.black,
@@ -375,7 +374,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                             ),
                           ),
-                        ),
+                        
                       ),
                       SliverFixedExtentList(
                         itemExtent: height*0.45,
