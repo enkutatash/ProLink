@@ -12,6 +12,7 @@ import 'package:skillswap/homepageCandidate/home/Job/post.dart';
 import 'package:skillswap/widgets/buttons.dart';
 
 List<String> items = [
+  "Add",
   'Flutter',
   'Node.js',
   'React Native',
@@ -25,7 +26,7 @@ List<String> items = [
   "Artificial Intelligence",
   "Competitive Programming",
   "Project Management",
-  "Add"
+  
 ];
 
 class HomeScreen extends StatefulWidget {
@@ -44,7 +45,6 @@ class _HomeScreenState extends State<HomeScreen> {
   DocumentSnapshot? lastDocument;
   List<String> selectedItems = [];
   TextEditingController skillController = TextEditingController();
-
 
   allproject() async {
     setState(() {
@@ -335,40 +335,45 @@ class _HomeScreenState extends State<HomeScreen> {
                                 onTap: () {
                                   if (isAddIcon) {
                                     showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                backgroundColor: Colors.white,
-                title: Text('Preference'),
-                content: StatefulBuilder(builder: (context, setState) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      CustomTextFormField(
-                        width: width,
-                        height: height * 0.07,
-                        hintText: 'Skill',
-                        controller: skillController,
-                      ),
-                    ],
-                  );
-                }),
-                actions: [
-                  TextButton(
-                    onPressed: () async {
-                      if (!skillController.text.isEmpty) {    
-
-                        skillController.text = '';
-                      }
-                      Navigator.pop(context);
-                    },
-                    child: Text('OK'),
-                  ),
-                ],
-              );
-            },
-          );
-        
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          backgroundColor: Colors.white,
+                                          title: Text('Preference'),
+                                          content: StatefulBuilder(
+                                              builder: (context, setState) {
+                                            return Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                CustomTextFormField(
+                                                  width: width,
+                                                  height: height * 0.07,
+                                                  hintText: 'Skill',
+                                                  controller: skillController,
+                                                ),
+                                              ],
+                                            );
+                                          }),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () async {
+                                                if (!skillController
+                                                    .text.isEmpty) {
+                                                  items.add(
+                                                      skillController.text);
+                                                      setState(() {
+                                                       selectedItems.remove(item);  
+                                                      });
+                                                  skillController.text = '';
+                                                }
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text('OK'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
                                   }
                                   setState(() {
                                     if (isSelected) {
