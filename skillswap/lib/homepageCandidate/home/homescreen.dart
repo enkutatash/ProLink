@@ -173,57 +173,57 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            SizedBox(
-              height: height * 0.07,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: items.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final item = items[index];
-                  final isSelected = selectedItems.contains(item);
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (isSelected) {
-                          selectedItems.remove(item);
-                        } else {
-                          selectedItems.add(item);
-                        }
-                        // searchResult();
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: width * 0.2 + item.length * 3,
-                        height: height * 0.03,
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: isSelected
-                                ? Color(0XFF2E307A)
-                                : Colors.transparent,
-                          ),
-                          color: isSelected
-                              ? Color(0XFF2E307A)
-                              : Color.fromARGB(255, 237, 241, 245),
-                        ),
-                        child: Center(
-                          child: Text(
-                            item,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: isSelected ? Colors.white : Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
+            // SizedBox(
+            //   height: height * 0.07,
+            //   child: ListView.builder(
+            //     scrollDirection: Axis.horizontal,
+            //     itemCount: items.length,
+            //     itemBuilder: (BuildContext context, int index) {
+            //       final item = items[index];
+            //       final isSelected = selectedItems.contains(item);
+            //       return GestureDetector(
+            //         onTap: () {
+            //           setState(() {
+            //             if (isSelected) {
+            //               selectedItems.remove(item);
+            //             } else {
+            //               selectedItems.add(item);
+            //             }
+            //             // searchResult();
+            //           });
+            //         },
+            //         child: Padding(
+            //           padding: const EdgeInsets.all(8.0),
+            //           child: Container(
+            //             width: width * 0.2 + item.length * 3,
+            //             height: height * 0.03,
+            //             padding: EdgeInsets.all(5),
+            //             decoration: BoxDecoration(
+            //               borderRadius: BorderRadius.circular(20),
+            //               border: Border.all(
+            //                 color: isSelected
+            //                     ? Color(0XFF2E307A)
+            //                     : Colors.transparent,
+            //               ),
+            //               color: isSelected
+            //                   ? Color(0XFF2E307A)
+            //                   : Color.fromARGB(255, 237, 241, 245),
+            //             ),
+            //             child: Center(
+            //               child: Text(
+            //                 item,
+            //                 overflow: TextOverflow.ellipsis,
+            //                 style: TextStyle(
+            //                   color: isSelected ? Colors.white : Colors.black,
+            //                 ),
+            //               ),
+            //             ),
+            //           ),
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
             // Expanded(
             //   child: _Project.isEmpty
             //           ? Center(
@@ -274,7 +274,60 @@ class _HomeScreenState extends State<HomeScreen> {
                   for (var skill in selectedItems) {
                     filter.add(skill.toLowerCase());
                   }
-                  List<Widget> projectlist = [Jobs()];
+                  List<Widget> projectlist = [
+                  SizedBox(
+              height: height * 0.07,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: items.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final item = items[index];
+                  final isSelected = selectedItems.contains(item);
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (isSelected) {
+                          selectedItems.remove(item);
+                        } else {
+                          selectedItems.add(item);
+                        }
+                        // searchResult();
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: width * 0.2 + item.length * 3,
+                        height: height * 0.03,
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: isSelected
+                                ? Color(0XFF2E307A)
+                                : Colors.transparent,
+                          ),
+                          color: isSelected
+                              ? Color(0XFF2E307A)
+                              : Color.fromARGB(255, 237, 241, 245),
+                        ),
+                        child: Center(
+                          child: Text(
+                            item,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: isSelected ? Colors.white : Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+                  Jobs(),
+                  ];
                   final projects = snapshot.data!.docs.toList();
                   for (var pro in projects) {
                     Map<String, dynamic> projectData = pro.data() as Map<String, dynamic>;
