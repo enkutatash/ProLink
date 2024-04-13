@@ -3,11 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillswap/Datas/userdata.dart';
+import 'package:skillswap/homepageCandidate/ProjectPer/editor.dart';
 import 'package:skillswap/homepageCandidate/Search/projectsearch.dart';
 import 'package:skillswap/homepageCandidate/Search/search.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:skillswap/homepageCandidate/home/Job/post.dart';
+import 'package:skillswap/widgets/buttons.dart';
 
 List<String> items = [
   'Flutter',
@@ -23,6 +25,7 @@ List<String> items = [
   "Artificial Intelligence",
   "Competitive Programming",
   "Project Management",
+  "Add"
 ];
 
 class HomeScreen extends StatefulWidget {
@@ -40,6 +43,8 @@ class _HomeScreenState extends State<HomeScreen> {
   int fetchedCount = 0;
   DocumentSnapshot? lastDocument;
   List<String> selectedItems = [];
+  TextEditingController skillController = TextEditingController();
+
 
   allproject() async {
     setState(() {
@@ -276,8 +281,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   for (var skill in selectedItems) {
                     filter.add(skill.toLowerCase());
                   }
-                  List<Widget> projectlist = [
-                  ];
+                  List<Widget> projectlist = [];
                   final projects = snapshot.data!.docs.toList();
                   for (var pro in projects) {
                     Map<String, dynamic> projectData =
@@ -304,80 +308,115 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   return CustomScrollView(
                     slivers: <Widget>[
-
                       SliverFixedExtentList(
-                        itemExtent:  height * 0.25,
+                        itemExtent: height * 0.25,
                         delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) {
                             return Jobs();
                           },
-                          childCount:1,
+                          childCount: 1,
                         ),
                       ),
                       SliverAppBar(
                         backgroundColor: Colors.white,
                         pinned: true,
-                        expandedHeight:height * 0.1,
-                          title: SizedBox(
-                            height: height*0.07,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: items.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                final item = items[index];
-                                final isSelected = selectedItems.contains(item);
-                                return GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      if (isSelected) {
-                                        selectedItems.remove(item);
-                                      } else {
-                                        selectedItems.add(item);
-                                      }
-                                      // searchResult();
-                                    });
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                      width: width * 0.2 + item.length * 3,
-                                      height: height * 0.03,
-                                      padding: EdgeInsets.all(5),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                        border: Border.all(
-                                          color: isSelected
-                                              ? Color(0XFF2E307A)
-                                              : Colors.transparent,
-                                        ),
+                        expandedHeight: height * 0.1,
+                        title: SizedBox(
+                          height: height * 0.07,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: items.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final item = items[index];
+
+                              final isAddIcon = item == "Add";
+                              final isSelected = selectedItems.contains(item);
+                              return GestureDetector(
+                                onTap: () {
+                                  if (isAddIcon) {
+                                    showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                backgroundColor: Colors.white,
+                title: Text('Preference'),
+                content: StatefulBuilder(builder: (context, setState) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CustomTextFormField(
+                        width: width,
+                        height: height * 0.07,
+                        hintText: 'Skill',
+                        controller: skillController,
+                      ),
+                    ],
+                  );
+                }),
+                actions: [
+                  TextButton(
+                    onPressed: () async {
+                      if (!skillController.text.isEmpty) {    
+
+                        skillController.text = '';
+                      }
+                      Navigator.pop(context);
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        
+                                  }
+                                  setState(() {
+                                    if (isSelected) {
+                                      selectedItems.remove(item);
+                                    } else {
+                                      selectedItems.add(item);
+                                    }
+                                    // searchResult();
+                                  });
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    width: width * 0.2 + item.length * 3,
+                                    height: height * 0.03,
+                                    padding: EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      border: Border.all(
                                         color: isSelected
                                             ? Color(0XFF2E307A)
-                                            : Color.fromARGB(
-                                                255, 237, 241, 245),
+                                            : Colors.transparent,
                                       ),
-                                      child: Center(
-                                        child: Text(
-                                          
-                                          item,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            color: isSelected
-                                                ? Colors.white
-                                                : Colors.black,
-                                          ),
+                                      color: isSelected
+                                          ? Color(0XFF2E307A)
+                                          : Color.fromARGB(255, 237, 241, 245),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        item,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          color: isSelected
+                                              ? Colors.white
+                                              : Colors.black,
                                         ),
                                       ),
                                     ),
                                   ),
-                                );
-                              },
-                            ),
+                                ),
+                              );
+                            },
                           ),
-                        
+                        ),
                       ),
                       SliverFixedExtentList(
-                        itemExtent: height*0.45,
+                        itemExtent: height * 0.45,
                         delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) {
                             return projectlist[index];
