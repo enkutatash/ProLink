@@ -108,6 +108,7 @@ class SignUpPageState extends State<SignUpPage> {
                     child: Stack(children: [
                       CircleAvatar(
                         radius: 40.0,
+                         backgroundColor: Colors.white, 
                         backgroundImage: imagePath != null
                             ? FileImage(File(imagePath!))
                             : null,
