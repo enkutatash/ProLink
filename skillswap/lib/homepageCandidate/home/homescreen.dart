@@ -266,92 +266,131 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   }
-              
+
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator()); // Or any loading indicator
+                    return Center(
+                        child:
+                            CircularProgressIndicator()); // Or any loading indicator
                   }
                   List<String> filter = [];
                   for (var skill in selectedItems) {
                     filter.add(skill.toLowerCase());
                   }
                   List<Widget> projectlist = [
-                  SizedBox(
-              height: height * 0.07,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: items.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final item = items[index];
-                  final isSelected = selectedItems.contains(item);
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (isSelected) {
-                          selectedItems.remove(item);
-                        } else {
-                          selectedItems.add(item);
-                        }
-                        // searchResult();
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: width * 0.2 + item.length * 3,
-                        height: height * 0.03,
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: isSelected
-                                ? Color(0XFF2E307A)
-                                : Colors.transparent,
-                          ),
-                          color: isSelected
-                              ? Color(0XFF2E307A)
-                              : Color.fromARGB(255, 237, 241, 245),
+                  ];
+                  final projects = snapshot.data!.docs.toList();
+                  for (var pro in projects) {
+                    Map<String, dynamic> projectData =
+                        pro.data() as Map<String, dynamic>;
+                    final projectId = pro.id;
+                    List<String> skills =
+                        List<String>.from(projectData['SkillReq'] ?? []);
+                    List<String> skillNames = [];
+
+                    for (var skill in skills) {
+                      skillNames.add(skill.toLowerCase());
+                    }
+
+                    if (filter.every((skill) =>
+                            skillNames.contains(skill.toLowerCase())) &&
+                        !userController.userdata['MyProjects']
+                            .contains(projectId) &&
+                        !userController.userdata['WorkingOnPro']
+                            .contains(projectId)) {
+                      final oneProject = ProjectSearch(projectData, projectId);
+                      projectlist.add(oneProject);
+                    }
+                  }
+
+                  return CustomScrollView(
+                    slivers: <Widget>[
+
+                      SliverFixedExtentList(
+                        itemExtent:  height * 0.25,
+                        delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) {
+                            return Jobs();
+                          },
+                          childCount:1,
                         ),
-                        child: Center(
-                          child: Text(
-                            item,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: isSelected ? Colors.white : Colors.black,
+                      ),
+                      SliverAppBar(
+                        backgroundColor: Colors.white,
+                        pinned: true,
+                        expandedHeight:height * 0.1,
+                        flexibleSpace: FlexibleSpaceBar(
+                          title: SizedBox(
+                            height: height*0.07,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: items.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final item = items[index];
+                                final isSelected = selectedItems.contains(item);
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      if (isSelected) {
+                                        selectedItems.remove(item);
+                                      } else {
+                                        selectedItems.add(item);
+                                      }
+                                      // searchResult();
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      width: width * 0.2 + item.length * 3,
+                                      height: height * 0.03,
+                                      padding: EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        border: Border.all(
+                                          color: isSelected
+                                              ? Color(0XFF2E307A)
+                                              : Colors.transparent,
+                                        ),
+                                        color: isSelected
+                                            ? Color(0XFF2E307A)
+                                            : Color.fromARGB(
+                                                255, 237, 241, 245),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          
+                                          item,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            color: isSelected
+                                                ? Colors.white
+                                                : Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
-            ),
-                  Jobs(),
-                  ];
-                  final projects = snapshot.data!.docs.toList();
-                  for (var pro in projects) {
-                    Map<String, dynamic> projectData = pro.data() as Map<String, dynamic>;
-                    final projectId = pro.id;
-                    List<String> skills = List<String>.from(projectData['SkillReq'] ?? []);
-                    List<String> skillNames = [];
-
-                      for (var skill in skills) {
-                        skillNames.add(skill.toLowerCase());
-                      }
-
-                      if (filter.every((skill) => skillNames.contains(skill.toLowerCase())) && !userController.userdata['MyProjects'].contains(projectId)&& !userController.userdata['WorkingOnPro'].contains(projectId)) {
-                    final oneProject = ProjectSearch(projectData, projectId);
-                    projectlist.add(oneProject);
-                      }
-                  }
-              
-                  return ListView(
-                    children: projectlist,
+                      SliverFixedExtentList(
+                        itemExtent: height*0.45,
+                        delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) {
+                            return projectlist[index];
+                          },
+                          childCount: projectlist.length,
+                        ),
+                      ),
+                    ],
                   );
                 },
               ),
             )
-
           ],
         ),
       ),
