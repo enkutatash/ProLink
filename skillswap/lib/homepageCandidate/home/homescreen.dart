@@ -26,7 +26,6 @@ List<String> items = [
   "Artificial Intelligence",
   "Competitive Programming",
   "Project Management",
-  
 ];
 
 class HomeScreen extends StatefulWidget {
@@ -328,12 +327,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             itemCount: items.length,
                             itemBuilder: (BuildContext context, int index) {
                               final item = items[index];
-
-                              final isAddIcon = item == "Add";
                               final isSelected = selectedItems.contains(item);
-                              return GestureDetector(
-                                onTap: () {
-                                  if (isAddIcon) {
+                              if (index == 0) {
+                                return GestureDetector(
+                                  onTap: (){
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
@@ -359,11 +356,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                               onPressed: () async {
                                                 if (!skillController
                                                     .text.isEmpty) {
-                                                  items.add(
-                                                      skillController.text);
-                                                      setState(() {
-                                                       selectedItems.remove(item);  
-                                                      });
+                                                 items.insert(1, skillController.text);
+                                                  setState(() {
+                                                  });
                                                   skillController.text = '';
                                                 }
                                                 Navigator.pop(context);
@@ -375,6 +370,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                       },
                                     );
                                   }
+                                  ,child: Icon(Icons.add,size: 30,));
+                              }
+                              return GestureDetector(
+                                onLongPress: () {
+                                  setState(() {
+                                    items.remove(item);
+                                  });
+                                },
+                                onTap: () {
+                                  
                                   setState(() {
                                     if (isSelected) {
                                       selectedItems.remove(item);
