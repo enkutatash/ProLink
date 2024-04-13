@@ -162,7 +162,7 @@ class RequestDetail extends StatelessWidget {
                       ),
                     ),
                     const Text(
-                      "letter",
+                      "Apllication letter",
                       style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.bold,
@@ -176,34 +176,39 @@ class RequestDetail extends StatelessWidget {
                 ),
               ),
               SizedBox(height: height * 0.03),
-               IconButton(
-                      onPressed: () async {
-                        String? chatRoomId = await fetchOrCreateChatRoomId(
-                            data['senderId'],
-                            _authentication.currentUser!.uid);
-                        if (chatRoomId != null) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ChatDetailPage(
-                                currentUserUid:
-                                    _authentication.currentUser!.uid,
-                                chatRoomId: chatRoomId,
-                                recipientUid: data['senderId'],
-                              ),
-                            ),
-                          );
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                  'Error creating or fetching chat room!'),
-                            ),
-                          );
-                        }
-                      },
-                      icon: Image.asset(
-                          width: 30, height: 30, "asset/send.png")),
+               Row(
+                 children: [
+                   IconButton(
+                          onPressed: () async {
+                            String? chatRoomId = await fetchOrCreateChatRoomId(
+                                data['senderId'],
+                                _authentication.currentUser!.uid);
+                            if (chatRoomId != null) {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ChatDetailPage(
+                                    currentUserUid:
+                                        _authentication.currentUser!.uid,
+                                    chatRoomId: chatRoomId,
+                                    recipientUid: data['senderId'],
+                                  ),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      'Error creating or fetching chat room!'),
+                                ),
+                              );
+                            }
+                          },
+                          icon: Image.asset(
+                              width: 30, height: 30, "asset/send.png")),
+                              Text("Contact")
+                 ],
+               ),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -256,7 +261,7 @@ class RequestDetail extends StatelessWidget {
                     icon: Icon(
                       CupertinoIcons.clear_circled,
                       size: 70,
-                      color: Colors.red,
+                      color: Color.fromARGB(255, 237, 124, 116),
                     ),
                   ),
                   SizedBox(width: 8.0),
@@ -308,7 +313,7 @@ class RequestDetail extends StatelessWidget {
                     icon: Icon(
                       CupertinoIcons.check_mark_circled,
                       size: 70,
-                      color: Colors.green,
+                      color: const Color.fromARGB(255, 156, 247, 159),
                     ),
                   ),
                  

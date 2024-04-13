@@ -3,8 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-
-
 class Firebase_Service {
   FirebaseAuth _auth = FirebaseAuth.instance;
   final CollectionReference dbrefuser =
@@ -39,13 +37,14 @@ class Firebase_Service {
       String linkedin,
       String github,
       String bio,
-      List<String> skills) async {
+      List<String> skills,
+      {bool isRecruiter = false}) async {
     try {
       UserCredential user = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       String? userid = user.user?.uid;
       adduser(userid!, firstName, lastName, email, profilePic, linkedin, github,
-          bio, skills);
+          bio, skills, isRecruiter);
       return user.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
@@ -67,13 +66,15 @@ class Firebase_Service {
       String profilePic,
       String linkedin,
       String companyName,
-      List<String> skills) async {
+      List<String> skills,
+      {bool isRecruiter = true}) async {
     try {
       UserCredential user = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       String? userid = user.user?.uid;
+
       addREC(userid!, firstName, lastName, email, profilePic, linkedin,
-          companyName, skills);
+          companyName, skills, isRecruiter);
       return user.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
@@ -87,7 +88,7 @@ class Firebase_Service {
     return null;
   }
 
-  Future addREC(
+  Future<void> addREC(
       String userid,
       String firstName,
       String lastName,
@@ -95,7 +96,8 @@ class Firebase_Service {
       String profilePic,
       String linkedin,
       String companyName,
-      List<String> skills) {
+      List<String> skills,
+      bool isRecruiter) {
     List<Map<String, String>> skillsWithLevel =
         skills.map((skill) => {'skill': skill, 'level': 'Beginner'}).toList();
     return dbrefREC.doc(userid).set({
@@ -105,7 +107,8 @@ class Firebase_Service {
       'profilePic': profilePic,
       'Skills': skillsWithLevel,
       'Linkedin': linkedin,
-      'CompanyName': companyName
+      'CompanyName': companyName,
+      'isRecruiter': isRecruiter
     });
   }
 
@@ -118,7 +121,8 @@ class Firebase_Service {
       String linkedin,
       String github,
       String bio,
-      List<String> skills) {
+      List<String> skills,
+      bool isRecruiter) {
     List<Map<String, String>> skillsWithLevel =
         skills.map((skill) => {'skill': skill, 'level': 'Beginner'}).toList();
     return dbrefuser.doc(userid).set({
@@ -133,16 +137,16 @@ class Firebase_Service {
       'MyProjects': [],
       'WorkingOnPro': [],
       'Star':[],
-      'CompletedProject':[]
+      'CompletedProject':[],
+      'isRecruiter': isRecruiter
     });
   }
 
   Future createProject(
-    String projectUid,
+      String projectUid,
       String projectimg,
       String projectTitle,
       String projectDescription,
-     Map<String, dynamic> userdata,
       String userid,
       List<String> skillReq,
       List<String> teams) async {
@@ -153,8 +157,7 @@ class Firebase_Service {
       'Projectimg': projectimg,
       'ProjectTitle': projectTitle,
       'ProjectDes': projectDescription,
-      'Owner': userdata,
-      'userid':userid,
+      'userid': userid,
       'SkillReq': skillReq,
       'Teams': teams,
       'TimeStamp': formattedDate
@@ -203,28 +206,26 @@ class Firebase_Service {
     }
   }
 
-  
- Future<Map<String, dynamic>> userdataTwo(String docid) async {
-  try {
-    DocumentSnapshot snapshot = await dbrefuser.doc(docid).get();
-    if (snapshot.exists) {
-      Map<String, dynamic> userData = {
-        'First': snapshot.get('First'),
-        'Last': snapshot.get('Last'),
-        'profilePic': snapshot.get('profilePic'),
-      };
-      return userData;
-    } else {
-      return {}; // Return empty map if the document doesn't exist
+  Future<Map<String, dynamic>> userdataTwo(String docid) async {
+    try {
+      DocumentSnapshot snapshot = await dbrefuser.doc(docid).get();
+      if (snapshot.exists) {
+        Map<String, dynamic> userData = {
+          'First': snapshot.get('First'),
+          'Last': snapshot.get('Last'),
+          'profilePic': snapshot.get('profilePic'),
+        };
+        return userData;
+      } else {
+        return {}; // Return empty map if the document doesn't exist
+      }
+    } catch (e) {
+      print("Error fetching user data: $e");
+      return {}; // Return empty map if there's an error
     }
-  } catch (e) {
-    print("Error fetching user data: $e");
-    return {}; // Return empty map if there's an error
   }
-}
 
-
-    Future<Map<String, dynamic>> ProjectData(String docid) async {
+  Future<Map<String, dynamic>> ProjectData(String docid) async {
     try {
       DocumentSnapshot snapshot = await dbrefproject.doc(docid).get();
       if (snapshot.exists) {
@@ -263,8 +264,6 @@ class Firebase_Service {
       throw Exception('User document not found');
     }
   }
-
-  
 
   void signout() {
     FirebaseAuth.instance.signOut();

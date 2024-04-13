@@ -431,7 +431,7 @@ Future<String?> fetchOrCreateChatRoomId(String uid1, String uid2) async {
                 child: Row(
                   children: [
                          Image.asset(width: width * 0.12, height: height * 0.04, "asset/send.png"),
-                        Text("Chat"),
+                        Text("Contact"),
                   ],
                 ),
               ),

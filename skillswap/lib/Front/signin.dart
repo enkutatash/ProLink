@@ -47,8 +47,10 @@ class SignInPageState extends State<SignInPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                SizedBox(height: height*0.03,),
                 SizedBox(
                   height: height * 0.2,
+                  child: Image.asset("asset/logoP.png"),
                 ),
                 const Text(
                   "SkillSwap",
@@ -106,12 +108,7 @@ class SignInPageState extends State<SignInPage> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ForgetPasswordPage()));
-                      },
+                      onTap: () {},
                       child: const Text(
                         "Forget your password?",
                       )),
@@ -185,19 +182,24 @@ class SignInPageState extends State<SignInPage> {
     User? user = await _auth.signInWithEmailAndPassword(Email, Password);
 
     if (user != null) {
-      // await _fetchUserData(user.uid);
-      await usercontroller.initializeuser(user.uid);
-      await projectController
-          .initializeProjects(usercontroller.userdata['MyProjects']);
+      Map<String, dynamic> userData = await _auth.userData(user.uid);
 
-      await Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => Homepage(user.uid)),
-        (route) => false,
-      );
-      _showSnackBar("User is successfully Sign in");
+      if (userData.containsKey('isRecruiter') &&
+          userData['isRecruiter'] == false) {
+        await usercontroller.initializeuser(user.uid);
+        await projectController
+            .initializeProjects(usercontroller.userdata['MyProjects']);
+
+        await Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => Homepage(user.uid)),
+          (route) => false,
+        );
+      } else {
+        _showSnackBar("Only users can sign in using this page");
+      }
     } else {
-      _showSnackBar("Some error happend on Signing in user");
+      _showSnackBar("Some error occured on Signing in user");
     }
     setState(() {
       _isLoading = false;

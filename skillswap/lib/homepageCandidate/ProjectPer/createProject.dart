@@ -13,7 +13,6 @@ import 'package:skillswap/widgets/skillsdropdown.dart';
 import 'package:random_string/random_string.dart';
 
 class CreateProjectPage extends StatefulWidget {
- 
   CreateProjectPage({Key? key}) : super(key: key);
 
   @override
@@ -164,38 +163,57 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
       bottomNavigationBar: Container(
         padding: EdgeInsets.all(20.0),
         child: SizedBox(
-          width: double.infinity,
-          height: 50,
-          child: ButtonTwo("Create Project", Colors.white, Color(0XFF2E307A), width*0.9, height*0.06, 15,  () {
-            String projectUid = randomAlphaNumeric(10);
-              _auth.createProject(
-                projectUid,
-                downloadUrl!,
-                _titleController.text,
-                _descriptionController.text,
-                userController.userdata,
-                userController.userid,
-                _requiredSkills,
-                [],
-              );
-              projectController.addProject(
-                  downloadUrl!,
-                  _titleController.text,
-                  _descriptionController.text,
-                  userController.userid,
-                  _requiredSkills,
-                  []);
-          userController.userdata['MyProjects'].add(projectUid);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Project Created!'),
-                        duration: Duration(seconds: 2), // Adjust the duration as needed
-                      ),
-                    );
-                
-              Navigator.pop(context);
-            },)
-        ),
+            width: double.infinity,
+            height: 50,
+            child: ButtonTwo(
+              "Create Project",
+              Colors.white,
+              Color(0XFF2E307A),
+              width * 0.9,
+              height * 0.06,
+              15,
+              () {
+                String projectUid = randomAlphaNumeric(10);
+                if (_titleController.text.isEmpty ||
+                    _descriptionController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Please Fill The forms!'),
+                      duration:
+                          Duration(seconds: 2), // Adjust the duration as needed
+                    ),
+                  );
+                } else {
+                       downloadUrl ??=  "https://firebasestorage.googleapis.com/v0/b/skillswap-ad93c.appspot.com/o/images%2F2024-04-13%2016%3A24%3A57.976252.jpg?alt=media&token=e606f205-f72a-4ab5-b759-60e19f44b5c0";
+
+                  _auth.createProject(
+                    projectUid,
+                    downloadUrl!,
+                    _titleController.text,
+                    _descriptionController.text,
+                    userController.userid,
+                    _requiredSkills,
+                    [],
+                  );
+                  projectController.addProject(
+                      downloadUrl!,
+                      _titleController.text,
+                      _descriptionController.text,
+                      userController.userid,
+                      _requiredSkills, []);
+                  userController.userdata['MyProjects'].add(projectUid);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Project Created!'),
+                      duration:
+                          Duration(seconds: 2), // Adjust the duration as needed
+                    ),
+                  );
+
+                  Navigator.pop(context);
+                }
+              },
+            )),
       ),
     );
   }

@@ -171,23 +171,6 @@ class ProjectEdit extends StatelessWidget {
                       SizedBox(
                         height: height * 0.03,
                       ),
-                      Center(
-                        child: ButtonTwo(
-                            "Complete",
-                            Colors.white,
-                            Color(0XFF2E307A),
-                            width * 0.7,
-                            height * 0.07,
-                            20, () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CompleteProject(
-                                      projectdata['ProjectTitle'],
-                                      projectdata['Teams'],
-                                      projectid)));
-                        }),
-                      ),
                     ])),
           );
         });

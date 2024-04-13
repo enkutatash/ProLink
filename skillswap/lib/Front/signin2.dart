@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:skillswap/Front/signup.dart';
-import 'package:skillswap/Front/signup2.dart';
 import 'package:skillswap/Datas/projectcontroller.dart';
 import 'package:skillswap/Datas/userdata.dart';
+import 'package:skillswap/Front/signup.dart';
+import 'package:skillswap/Front/signup2.dart';
+
 import 'package:skillswap/firebase/firebase.dart';
 import 'package:skillswap/homepageRec/homepagerec.dart';
 import 'package:skillswap/widgets/buttons.dart';
@@ -46,8 +47,10 @@ class SignInPage2State extends State<SignInPage2> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                SizedBox(height: height*0.03,),
                 SizedBox(
                   height: height * 0.2,
+                  child: Image.asset("asset/logoP.png"),
                 ),
                 const Text(
                   "SkillSwap",
@@ -173,24 +176,28 @@ class SignInPage2State extends State<SignInPage2> {
     setState(() {
       _isLoading = true;
     });
-    String Email = _emailController.text;
-    String Password = _passwordController.text;
+    String email = _emailController.text;
+    String password = _passwordController.text;
 
-    User? user = await _auth.signInWithEmailAndPassword(Email, Password);
+    User? user = await _auth.signInWithEmailAndPassword(email, password);
 
     if (user != null) {
-      // await _fetchUserData(user.uid);
-      
-      await usercontroller.initializeRec(user.uid);
-      print(usercontroller.userdata['First']);
-      await Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => HomepageREC(user.uid)),
-        (route) => false,
-      );
-      _showSnackBar("Recruiter is successfully Sign in");
+      Map<String, dynamic> userData = await _auth.userData(user.uid);
+
+      if (userData.containsKey('isRecruiter') &&
+          userData['isRecruiter'] == true) {
+        await usercontroller.initializeRec(user.uid);
+        await Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => HomepageREC(user.uid)),
+          (route) => false,
+        );
+        _showSnackBar("Recruiter successfully signed in");
+      } else {
+        _showSnackBar("Only recruiters can sign in using this page");
+      }
     } else {
-      _showSnackBar("Some error happend on Signing in user");
+      _showSnackBar("Error signing in");
     }
     setState(() {
       _isLoading = false;

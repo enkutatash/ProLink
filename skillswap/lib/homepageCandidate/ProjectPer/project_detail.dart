@@ -53,7 +53,7 @@ class ProjectDetailPage extends StatelessWidget {
                           MaterialPageRoute(
                               builder: (context) =>
                                   ProjectEdit(projectid: projectid,)));
-                    } else if (value == 'Delete') {}
+                    } 
                   },
                   itemBuilder: (BuildContext context) =>
                       <PopupMenuEntry<String>>[
@@ -61,10 +61,7 @@ class ProjectDetailPage extends StatelessWidget {
                       value: 'edit',
                       child: Text('Edit'),
                     ),
-                    const PopupMenuItem<String>(
-                      value: 'Delete',
-                      child: Text('Delete'),
-                    ),
+                    
                     // Add more PopupMenuItems as needed
                   ],
                   icon: Icon(CupertinoIcons.ellipsis_vertical),

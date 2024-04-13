@@ -185,7 +185,7 @@ class _ChatPageState extends State<ChatPage> {
                               icon: Icon(
                                 CupertinoIcons.clear_circled,
                                 size: 45,
-                                color: Colors.red,
+                                color: Color.fromARGB(255, 237, 124, 116),
                               ),
                             ),
                             SizedBox(width: 8.0),
@@ -255,7 +255,7 @@ class _ChatPageState extends State<ChatPage> {
                               icon: Icon(
                                 CupertinoIcons.check_mark_circled,
                                 size: 45,
-                                color: Colors.green,
+                                color:Color.fromARGB(255, 146, 248, 150),
                               ),
                             )
                           ],
