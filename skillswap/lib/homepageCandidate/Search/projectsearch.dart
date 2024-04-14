@@ -70,7 +70,7 @@ class ProjectSearch extends StatelessWidget {
                               Text(
                                 '${projectdata['ProjectTitle']}',
                                 style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
+                                    fontSize: 20, fontWeight: FontWeight.bold,overflow: TextOverflow.ellipsis),
                               ),
                               SizedBox(
                                 height: height * 0.02,

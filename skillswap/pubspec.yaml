@@ -113,6 +113,6 @@ flutter:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: "AppIcon"
-  image_path: "asset/logoP.png"
+  image_path: "asset/logo2.png"
   min_sdk_android: 21
   remove_alpha_ios: true

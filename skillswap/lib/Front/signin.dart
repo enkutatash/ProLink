@@ -47,7 +47,9 @@ class SignInPageState extends State<SignInPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: height*0.03,),
+                SizedBox(
+                  height: height * 0.03,
+                ),
                 SizedBox(
                   height: height * 0.2,
                   child: Image.asset("asset/logo2.png"),
@@ -108,7 +110,12 @@ class SignInPageState extends State<SignInPage> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ForgetPasswordPage()));
+                      },
                       child: const Text(
                         "Forget your password?",
                       )),

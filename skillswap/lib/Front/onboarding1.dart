@@ -28,8 +28,8 @@ class _SplashScreenState extends State<SplashScreen> {
         child: // Replace with your desired splash screen image/widget
             Image.asset(
           'asset/logo2.jpg',
-          width: 100,
-          height: 100,
+          width: 300,
+          height: 300,
         ),
       ),
     );

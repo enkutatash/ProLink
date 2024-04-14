@@ -107,6 +107,7 @@ class _JobDetailState extends State<JobDetail> {
           ),
           SizedBox(
             height: height * 0.45,
+            width: width*0.8,
             child: Expanded(
               child: PageView(
                 controller: _pageController,
@@ -118,7 +119,7 @@ class _JobDetailState extends State<JobDetail> {
                   });
                 },
                 children: [
-                  buildDescription(),
+                  SizedBox(width: width*0.8,child: buildDescription()),
                   buildRequirement(),
                 ],
               ),
@@ -170,6 +171,7 @@ class _JobDetailState extends State<JobDetail> {
                   SizedBox(
                     width: width * 0.05,
                   ),
+                
                   Text(
                     "${widget.jobdata['location']}",
                     style: TextStyle(
@@ -215,26 +217,17 @@ class _JobDetailState extends State<JobDetail> {
             SizedBox(
               height: height * 0.02,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20.0),
-              child: Row(
-                children: [
-                  const CircleAvatar(
-                    backgroundColor:
-                        Colors.black, // Customize bullet color here
-                    radius: 4, // Adjust bullet size as needed
+            SizedBox(
+              width: width*0.8,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20.0),
+                child: Text(
+                  "${widget.jobdata['description']}",
+                  style: TextStyle(
+                    fontSize: 15,
                   ),
-                  SizedBox(
-                    width: width * 0.05,
-                  ),
-                  Text(
-                    "${widget.jobdata['description']}",
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                    softWrap: true,
-                  ),
-                ],
+                  softWrap: true,
+                ),
               ),
             ),
           ],

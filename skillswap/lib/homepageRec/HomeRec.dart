@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:skillswap/Datas/userdata.dart';
 import 'package:skillswap/homepageRec/searchrec.dart';
+import 'package:skillswap/homepageRec/udetail.dart';
 import '../Message/chatDetailPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -169,15 +170,17 @@ class _HomeRecruiterState extends State<HomeRecruiter> {
     );
   }
 
-  Widget _buildUserRow(String? profileImage, String? username,
+Widget _buildUserRow(String? profileImage, String? username,
       String? skillDescription, BuildContext context, String? recipientUid) {
-    print('Profile Image: $profileImage');
-    print('Username: $username');
-    print('Skill Description: $skillDescription');
-    print('Recipient UID: $recipientUid');
-    return InkWell(
-      onTap: (){
-        // Navigator.push(context, MaterialPageRoute(builder: (context)=>));
+   
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => UserDetailPage(recipientUid!),
+          ),
+        );
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),

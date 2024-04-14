@@ -155,11 +155,12 @@ class _PostJobFormState extends State<PostJobForm> {
                   text: "Job Description",
                   alignment: Alignment.centerLeft,
                 ),
-                CustomTextFormField(
+                CustomTextFormFieldTwo(
                   width: width * 0.9,
                   height: height * 0.06,
                   hintText: "Job Description",
                   controller: _jobdescriptionController,
+                  maxLine: null,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your Job Description';

@@ -64,9 +64,12 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Image.asset('asset/1.json'),
+                  SizedBox(
+          height: height * 0.2,
+          child: Image.asset("asset/logo2.png"),
+                ),
             SizedBox(
-                  height: height * 0.2,
+                  height: height * 0.1,
                 ),
             const Text(
               'Forget Password?',

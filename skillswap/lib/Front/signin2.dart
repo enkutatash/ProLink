@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillswap/Datas/projectcontroller.dart';
 import 'package:skillswap/Datas/userdata.dart';
+import 'package:skillswap/Front/forgetpassword.dart';
 import 'package:skillswap/Front/signup.dart';
 import 'package:skillswap/Front/signup2.dart';
 
@@ -108,7 +109,12 @@ class SignInPage2State extends State<SignInPage2> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                         Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ForgetPasswordPage()));
+                      },
                       child: const Text(
                         "Forget your password?",
                       )),
