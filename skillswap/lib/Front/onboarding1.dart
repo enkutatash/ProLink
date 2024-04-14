@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: // Replace with your desired splash screen image/widget
             Image.asset(
-          'asset/logoP.png',
+          'asset/logo2.jpg',
           width: 100,
           height: 100,
         ),

@@ -50,7 +50,7 @@ class SignInPageState extends State<SignInPage> {
                 SizedBox(height: height*0.03,),
                 SizedBox(
                   height: height * 0.2,
-                  child: Image.asset("asset/logoP.png"),
+                  child: Image.asset("asset/logo2.png"),
                 ),
                 const Text(
                   "ProLink",

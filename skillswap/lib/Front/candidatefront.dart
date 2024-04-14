@@ -65,13 +65,7 @@ class FrontPage extends StatelessWidget {
                 SizedBox(
                   height: height * 0.02,
                 ),
-                GestureDetector(
-                  onTap: () {},
-                  child: const Text(
-                    "Explore as a guest",
-                    style: TextStyle( color: Color(0XFF2E307A),fontSize: 17),
-                  ),
-                )
+               
               ],
             ),
           ),

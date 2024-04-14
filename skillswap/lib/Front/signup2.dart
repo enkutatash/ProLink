@@ -91,7 +91,7 @@ class SignUpRecPageState extends State<SignUpRecPage> {
                   SizedBox(height: height*0.03,),
                 SizedBox(
                   height: height * 0.2,
-                  child: Image.asset("asset/logoP.png"),
+                  child: Image.asset("asset/logo2.png"),
                 ),
                   const Text(
                     "ProLink",
@@ -108,6 +108,7 @@ class SignUpRecPageState extends State<SignUpRecPage> {
                     child: Stack(children: [
                       CircleAvatar(
                         radius: 40.0,
+                        backgroundColor: Colors.white,
                         backgroundImage: imagePath != null
                             ? FileImage(File(imagePath!))
                             : null,

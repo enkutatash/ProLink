@@ -249,7 +249,7 @@ class _ChatPageState extends State<ChatPage> {
                             "Failed to add element to the working list: $error");
                       });
 
-                                sendMessage("I hope this letter finds you well. I want to extend my sincere gratitude for your interest in collaborating with me on ${data['Title']} Project. I have carefully reviewed your proposal and deliberated on the potential synergies that could arise from such a collaboration.\After thoughtful consideration, however, I regret to inform you that I am unable to accept your request for collaboration at this time.", chatRoomId!);
+                                sendMessage("I am delighted to accept your invitation to collaborate on ${data['Title']} Project. It is truly an honor to have the opportunity to work together and contribute to the success of this initiative.", chatRoomId!);
                                 //  Navigator.pop(context);
                               },
                               icon: Icon(

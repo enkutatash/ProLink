@@ -235,7 +235,7 @@ class JobAppDetail extends StatelessWidget {
                       // _chat.sendmessage(
                       //     data['senderId'], "User request has rejected",chatRoomId!);
                       sendMessage(
-                          "I hope this letter finds you well. I want to extend my sincere gratitude for your interest in collaborating with me on ${data['Title']} Project. I have carefully reviewed your proposal and deliberated on the potential synergies that could arise from such a collaboration.\After thoughtful consideration, however, I regret to inform you that I am unable to accept your request for collaboration at this time.",
+                          "Thank you for your interest in the [Job Title] position. After careful consideration, we regret to inform you that we have chosen to pursue other candidates whose qualifications more closely align with our current needs.",
                           chatRoomId!);
                       Navigator.pop(context);
                     },
@@ -260,7 +260,7 @@ class JobAppDetail extends StatelessWidget {
                       // _chat.sendmessage(data['senderId'],
                       //     "User request has Accepted", chatRoomId!);
                       sendMessage(
-                          "I am delighted to accept your invitation to collaborate on ${data['Title']} Project. It is truly an honor to have the opportunity to work together and contribute to the success of this initiative.",
+                          "I am delighted to inform you that your application for the [Job Title] position has been successful! We are excited to welcome you to our team and look forward to your valuable contributions. Please find attached the necessary details for your upcoming role.",
                           chatRoomId!);
                       // add project to working on projects
                      

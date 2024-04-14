@@ -3,6 +3,7 @@ import 'package:lottie/lottie.dart';
 import 'package:skillswap/Front/candidatefront.dart';
 import 'package:skillswap/Front/recruiterfront.dart';
 import 'package:skillswap/Front/signin.dart';
+import 'package:skillswap/Front/signin2.dart';
 import 'package:skillswap/Front/signup.dart';
 import 'package:skillswap/Front/signup2.dart';
 import 'package:skillswap/widgets/buttons.dart';
@@ -56,12 +57,12 @@ class WelcomePage extends StatelessWidget {
                   children: [
                    ButtonTwo("Recruiter",  Color(0XFF2E307A), Colors.white, width*0.8,height*0.07,16,() {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => SignUpRecPage()));
+                          MaterialPageRoute(builder: (context) => SignInPage2()));
                     }),
                     SizedBox(height: height*0.02,),
                    ButtonOne("Collaborator", Colors.white, Color(0XFF2E307A),width*0.8,height*0.07, 16,() {
                        Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => SignUpPage()));
+                          MaterialPageRoute(builder: (context) =>SignInPage ()));
                     }),
                   ],
                 ),

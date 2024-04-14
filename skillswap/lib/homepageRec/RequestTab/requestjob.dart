@@ -181,7 +181,7 @@ class _JobApplicationTabState extends State<JobApplicationTab> {
                                 // send rejection message
                                 // _chat.sendmessage(data['senderId'],
                                 //     "User request has rejected");
-                                sendMessage("I hope this letter finds you well. I want to extend my sincere gratitude for your interest in This Job. I have carefully reviewed your proposal and deliberated on the potential synergies that could arise from such a collaboration.\After thoughtful consideration, however, I regret to inform you that I am unable to accept your request for This Job", chatRoomId!);
+                                sendMessage("Thank you for your interest in the [Job Title] position. After careful consideration, we regret to inform you that we have chosen to pursue other candidates whose qualifications more closely align with our current needs.", chatRoomId!);
                                 // Navigator.pop(context);
                               },
                               icon: Icon(
@@ -209,7 +209,7 @@ class _JobApplicationTabState extends State<JobApplicationTab> {
                              
 
 
-                                sendMessage("I hope this letter finds you well. I want to extend my sincere gratitude for your interest in this job. I have carefully reviewed your proposal and deliberated on the potential synergies that could arise from such a collaboration.\After thoughtful consideration, I accept Ypur Application ", chatRoomId!);
+                                sendMessage("I am delighted to inform you that your application for the [Job Title] position has been successful! We are excited to welcome you to our team and look forward to your valuable contributions. Please find attached the necessary details for your upcoming role.", chatRoomId!);
                                 //  Navigator.pop(context);
                               },
                               icon: Icon(
