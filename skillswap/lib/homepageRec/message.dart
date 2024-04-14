@@ -1,310 +1,172 @@
 import 'package:flutter/material.dart';
-// import 'package:skillswap/homepageCandidate/chatDetailPage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:skillswap/Message/chatDetailPage.dart';
+import 'package:skillswap/Message/chatRoomTab.dart';
 
-List<Map<String, dynamic>> messages = [
-  {
-    'avatar': 'assets/avatar.png',
-    'name': 'John Doe',
-    'message': 'Hello, how are you doing?',
-    'timestamp': '12:00 PM',
-    'online': true,
-  },
-  {
-    'avatar': 'assets/avatar2.png',
-    'name': 'Jane Smith',
-    'message': 'Can we meet tomorrow?',
-    'timestamp': '10:00 AM',
-    'online': false,
-  },
-];
+class ChatRoomTabRec extends StatefulWidget {
+  final String currentUserUid;
 
-class  MessageRec extends StatefulWidget {
+  ChatRoomTabRec({required this.currentUserUid});
+
   @override
-  _MessageRecState createState() => _MessageRecState();
+  _ChatRoomTabStateRec createState() => _ChatRoomTabStateRec();
 }
 
-class _MessageRecState extends State< MessageRec> {
-  // Function to handle message deletion
-  void deleteMessage(int index) {
-    setState(() {
-      messages.removeAt(index);
-    });
-  }
-
+class _ChatRoomTabStateRec extends State<ChatRoomTab> {
   @override
   Widget build(BuildContext context) {
-    int collaborationRequestsCount = 1;
-    int incomingMessagesCount = messages.length;
+    return Scaffold(
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('ChatRooms')
+            .where('participants', arrayContains: widget.currentUserUid)
+            .snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return Center(
+              child: Text('No chat rooms found.'),
+            );
+          }
 
-    int totalNotifications = collaborationRequestsCount + incomingMessagesCount;
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 10,
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              size: 20,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                'Messages',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                ),
-              ),
-              Stack(
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.notifications,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {},
-                  ),
-                  Positioned(
-                    top: 8,
-                    right: 8,
-                    child: Container(
-                      padding: EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Text(
-                        totalNotifications.toString(),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        body: Container(
-          padding: EdgeInsets.all(16.0),
-          color: Colors.white,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Collaboration Requests',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              SizedBox(height: 16.0),
-              Container(
-                padding: EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(10.0),
-                  boxShadow: [
-                    BoxShadow(color: Colors.black, offset: Offset(1.0, 1.0))
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'John Doe',
-                              textAlign: TextAlign.start,
+          return ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+              var chatRoom = snapshot.data!.docs[index];
+              var participants = chatRoom['participants'] as List?;
+              if (participants == null || participants.isEmpty) {
+                return Container();
+              }
+
+              var recipientUid = participants.firstWhere(
+                (uid) => uid != widget.currentUserUid,
+                orElse: () => null,
+              );
+
+              if (recipientUid == null) {
+                return Container();
+              }
+
+              var chatRoomId = chatRoom.id;
+
+              return FutureBuilder(
+                future: FirebaseFirestore.instance
+                    .collection('ChatRooms')
+                    .doc(chatRoomId)
+                    .collection('Messages')
+                    .orderBy('timestamp', descending: true)
+                    .limit(1)
+                    .get(),
+                builder:
+                    (context, AsyncSnapshot<QuerySnapshot> messageSnapshot) {
+                  if (messageSnapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return Container();
+                  }
+                  if (!messageSnapshot.hasData ||
+                      messageSnapshot.data!.docs.isEmpty) {
+                    return Container();
+                  }
+
+                  var lastMessage = messageSnapshot.data!.docs.first;
+                  var messageText = lastMessage['message'];
+
+                  bool isCurrentUserMessage =
+                      lastMessage['sender_uid'] == widget.currentUserUid;
+
+                  return FutureBuilder(
+                    future: FirebaseFirestore.instance
+                        .collection('Users')
+                        .doc(recipientUid)
+                        .get(),
+                    builder: (context,
+                        AsyncSnapshot<DocumentSnapshot> userSnapshot) {
+                      if (userSnapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return Container();
+                      }
+                      if (!userSnapshot.hasData || userSnapshot.data == null) {
+                        return Container();
+                      }
+
+                      var userData = userSnapshot.data!.data();
+                      if (userData is Map<String, dynamic>) {
+                        var recipientName =
+                            '${userData['First'] ?? ''} ${userData['Last'] ?? ''}';
+                        var recipientProfilePic = userData['profilePic'] ?? '';
+
+                        return Card(
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(recipientProfilePic),
+                            ),
+                            title: Text(
+                              recipientName,
                               style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
+                                  fontWeight: isCurrentUserMessage
+                                      ? FontWeight.normal
+                                      : FontWeight.bold),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                            subtitle: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                MaterialButton(
-                                  color: Colors.black,
-                                  onPressed: () {},
+                                Expanded(
                                   child: Text(
-                                    'Accept',
+                                    messageText,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.white,
+                                      fontWeight: isCurrentUserMessage
+                                          ? FontWeight.normal
+                                          : FontWeight.bold,
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 8.0),
-                                MaterialButton(
-                                  color: Colors.black,
-                                  onPressed: () {},
-                                  child: Text(
-                                    'Decline',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8.0),
-                        Text(
-                          'Can we collaborate on web design?',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 16.0),
-              Text(
-                'Incoming Messages',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              SizedBox(height: 16.0),
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: messages.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => ChatDetailPage(
-                      //       avatar: messages[index]['avatar'] ?? 'Unknown',
-                      //       name: messages[index]['name'] ?? 'Unknown',
-                      //       message: messages[index]['message'] ?? 'Unknown',
-                      //       timestamp:
-                      //           messages[index]['timestamp'] ?? 'Unknown',
-                      //       isOnline: messages[index]['online'] ?? false,
-                      //     ),
-                      //   ),
-                      // ).then((value) {
-                      //   deleteMessage(index);
-                      // });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Container(
-                        width: width*0.9,
-                        padding: EdgeInsets.all(16.0),
-                        height: height*0.12,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(10.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color.fromARGB(255, 71, 67, 67),
-                              offset: Offset(1.0, 1.0),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Stack(
-                              children: [
-                                CircleAvatar(
-                                  radius: 32.0,
-                                  // image: AssetImage('assets/avatar1.png'),
-                                ),
-                                Positioned(
-                                  bottom: 0,
-                                  right: 0,
-                                  child: Container(
-                                    width: 12,
-                                    height: 12,
+                                if (!isCurrentUserMessage)
+                                  Container(
+                                    width: 10,
+                                    height: 10,
+                                    margin: EdgeInsets.only(right: 8),
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: messages[index]['online']
-                                          ? Colors.green
-                                          : Colors.grey,
-                                      border: Border.all(
-                                        color: Colors.white,
-                                        width: 2,
-                                      ),
+                                      color: Colors.green,
                                     ),
                                   ),
-                                ),
                               ],
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  messages[index]['name'] ?? 'Unknown',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ChatDetailPage(
+                                    currentUserUid: widget.currentUserUid,
+                                    chatRoomId: chatRoomId,
+                                    recipientUid: recipientUid,
                                   ),
                                 ),
-                                SizedBox(height: 4.0),
-                                Text(
-                                  messages[index]['message'] ?? '',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                    
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: Text(
-                                messages[index]['timestamp'] ?? '12:00 PM',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                              ).then((_) {
+                                setState(() {
+                                  isCurrentUserMessage = true;
+                                });
+                              });
+                            },
+                          ),
+                        );
+                      } else {
+                        return Container();
+                      }
+                    },
                   );
                 },
-              ),
-            ],
-          ),
-        ),
+              );
+            },
+          );
+        },
       ),
     );
   }

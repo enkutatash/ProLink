@@ -106,6 +106,62 @@ Future<void> initializeRec(String userid) async {
     }
   }
 
+
+  Future<List<Map<String, dynamic>>> fetchUsersWithMatchingSkills(
+      String recruiterEmail) async {
+    List<Map<String, dynamic>> usersWithMatchingSkills = [];
+    Set<String> uniqueUserIds = Set<String>();
+
+    try {
+      // Fetch recruiter document
+      QuerySnapshot recruiterSnapshot =
+          await dbrefREC.where('Email', isEqualTo: recruiterEmail).get();
+
+      // Check if there are any documents in the snapshot
+      if (recruiterSnapshot.docs.isEmpty) {
+        return usersWithMatchingSkills;
+      }
+
+      // Get recruiter's skills
+      final firstDocData =
+          recruiterSnapshot.docs[0].data() as Map<String, dynamic>?;
+      if (firstDocData == null || !firstDocData.containsKey('Skills')) {
+        return usersWithMatchingSkills;
+      }
+
+      List<dynamic> recruiterSkills = firstDocData['Skills'];
+
+      // Query users collection for users with similar skills
+      QuerySnapshot usersSnapshot = await dbrefuser.get();
+      usersSnapshot.docs.forEach((userDoc) {
+        Map<String, dynamic> userData = userDoc.data()
+            as Map<String, dynamic>; // Cast to Map<String, dynamic>
+
+        // Add 'uid' field to userData
+        userData['uid'] = userDoc.id;
+
+        if (userData.containsKey('Skills') && userData['Skills'].isNotEmpty) {
+          // Check if user has at least one skill similar to the recruiter
+          List<dynamic> userSkills = userData['Skills'];
+          userSkills.forEach((userSkill) {
+            recruiterSkills.forEach((recruiterSkill) {
+              if (userSkill['skill'] == recruiterSkill['skill'] &&
+                  !uniqueUserIds.contains(userData['uid'])) {
+                usersWithMatchingSkills.add(userData);
+                uniqueUserIds.add(userData['uid']);
+              }
+            });
+          });
+        }
+      });
+
+      return usersWithMatchingSkills;
+    } catch (error) {
+      print('Error fetching users with matching skills: $error');
+      return usersWithMatchingSkills;
+    }
+  }
+
   void clear() {
     _user.clear();
     _userid = '';
