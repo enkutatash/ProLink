@@ -150,6 +150,7 @@ class _HomeRecruiterState extends State<HomeRecruiter> {
                       shrinkWrap: true,
                       itemCount: usersWithMatchingSkills.length,
                       itemBuilder: (context, index) {
+                        
                         return _buildUserRow(
                           usersWithMatchingSkills[index]['profilePic'],
                           usersWithMatchingSkills[index]['First'] +
@@ -174,73 +175,78 @@ class _HomeRecruiterState extends State<HomeRecruiter> {
     print('Username: $username');
     print('Skill Description: $skillDescription');
     print('Recipient UID: $recipientUid');
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              CircleAvatar(
-                backgroundImage:
-                    profileImage != null ? NetworkImage(profileImage) : null,
-                radius: 25,
-              ),
-              const SizedBox(width: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    username ?? 'Unknown',
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                  Container(
-                    width: 130,
-                    child: Text(
-                      skillDescription ?? 'No description',
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 14),
+    return InkWell(
+      onTap: (){
+        // Navigator.push(context, MaterialPageRoute(builder: (context)=>));
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                CircleAvatar(
+                  backgroundImage:
+                      profileImage != null ? NetworkImage(profileImage) : null,
+                  radius: 25,
+                ),
+                const SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      username ?? 'Unknown',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16),
                     ),
-                  )
-                ],
-              ),
-            ],
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              print("Button pressed");
-              String? chatRoomId = await fetchOrCreateChatRoomId(
-                  _authentication.currentUser!.uid, recipientUid!);
-              print(_authentication.currentUser!.uid);
-              print(recipientUid!);
-              if (chatRoomId != null) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChatDetailPage(
-                      currentUserUid: _authentication.currentUser!.uid,
-                      chatRoomId: chatRoomId,
-                      recipientUid: recipientUid,
-                    ),
-                  ),
-                );
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Error creating or fetching chat room!'),
-                  ),
-                );
-              }
-            },
-            style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateProperty.all<Color>(Color(0XFF2E307A)),
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                    Container(
+                      width: 130,
+                      child: Text(
+                        skillDescription ?? 'No description',
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                    )
+                  ],
+                ),
+              ],
             ),
-            child: const Text('Contact'),
-          ),
-        ],
+            ElevatedButton(
+              onPressed: () async {
+                print("Button pressed");
+                String? chatRoomId = await fetchOrCreateChatRoomId(
+                    _authentication.currentUser!.uid, recipientUid!);
+                print(_authentication.currentUser!.uid);
+                print(recipientUid!);
+                if (chatRoomId != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChatDetailPage(
+                        currentUserUid: _authentication.currentUser!.uid,
+                        chatRoomId: chatRoomId,
+                        recipientUid: recipientUid,
+                      ),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Error creating or fetching chat room!'),
+                    ),
+                  );
+                }
+              },
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Color(0XFF2E307A)),
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              ),
+              child: const Text('Contact'),
+            ),
+          ],
+        ),
       ),
     );
   }
