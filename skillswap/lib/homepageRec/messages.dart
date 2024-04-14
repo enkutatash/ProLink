@@ -27,7 +27,7 @@ class _MessagePageState extends State<MessagePage> {
     // Retrieve collaboration requests count
     QuerySnapshot collaborationRequestsSnapshot = await FirebaseFirestore
         .instance
-        .collection('CollaborationRequests')
+        .collection('JobApplication')
         .where('recipientUid', isEqualTo: widget.currentUserUid)
         .get();
     setState(() {
@@ -121,7 +121,7 @@ class _MessagePageState extends State<MessagePage> {
               child: TabBarView(
                 children: [
                   //  Requests Tab
-
+                 
                   // Chat Rooms Tab
                   ChatRoomTab(currentUserUid: widget.currentUserUid),
                 ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:skillswap/Message/chatRoomTab.dart';
+import 'package:skillswap/Message/jobtab.dart';
 import 'package:skillswap/Message/message.dart';
 import 'package:skillswap/Request/message.dart';
 
@@ -115,6 +116,7 @@ class _MessagePageState extends State<MessagePage> {
                 tabs: [
                   Tab(text: 'Collaboration Requests'),
                   Tab(text: 'Chat Rooms'),
+                  Tab(text:"Job" ,)
                 ],
               ),
             ),
@@ -123,9 +125,9 @@ class _MessagePageState extends State<MessagePage> {
                 children: [
                   // Collaboration Requests Tab
                   ChatPage(),
-
                   // Chat Rooms Tab
                   ChatRoomTab(currentUserUid: widget.currentUserUid),
+                 JobTab(currentUserUid: widget.currentUserUid),
                 ],
               ),
             ),

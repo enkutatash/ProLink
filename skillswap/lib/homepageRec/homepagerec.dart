@@ -8,7 +8,6 @@ import 'package:skillswap/homepageCandidate/Search/search.dart';
 import 'package:skillswap/homepageCandidate/home/sidebar.dart';
 
 import 'package:skillswap/homepageRec/HomeRec.dart';
-import 'package:skillswap/homepageRec/message.dart';
 import 'package:skillswap/homepageRec/messages.dart';
 import 'package:skillswap/homepageRec/myjobs.dart';
 import 'package:skillswap/homepageRec/postjobform.dart';

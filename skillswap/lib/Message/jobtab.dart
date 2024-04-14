@@ -3,16 +3,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:skillswap/Message/chatDetailPage.dart';
 import 'package:skillswap/Message/chatRoomTab.dart';
 
-class ChatRoomTabRec extends StatefulWidget {
+
+class JobTab extends StatefulWidget {
   final String currentUserUid;
 
-  ChatRoomTabRec({required this.currentUserUid});
+  JobTab({required this.currentUserUid});
 
   @override
-  _ChatRoomTabStateRec createState() => _ChatRoomTabStateRec();
+  _JobTabState createState() => _JobTabState();
 }
 
-class _ChatRoomTabStateRec extends State<ChatRoomTab> {
+class _JobTabState extends State<JobTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,7 +81,7 @@ class _ChatRoomTabStateRec extends State<ChatRoomTab> {
 
                   return FutureBuilder(
                     future: FirebaseFirestore.instance
-                        .collection('Users')
+                        .collection('Recruiter')
                         .doc(recipientUid)
                         .get(),
                     builder: (context,
