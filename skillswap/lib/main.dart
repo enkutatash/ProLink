@@ -6,6 +6,7 @@ import 'package:skillswap/firebase/firebase_options.dart';
 import 'package:skillswap/Front/onboarding1.dart';
 import 'package:skillswap/homepageCandidate/home/Job/jobdetail.dart';
 import 'package:skillswap/homepageCandidate/home/filter.dart';
+import 'package:skillswap/homepageRec/postjobform.dart';
 
 
 
@@ -25,8 +26,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           scaffoldBackgroundColor: Colors.white, ),
       debugShowCheckedModeBanner: false,
-      home:SplashScreen(),
-      // home: JobDetail(),
+      // home:SplashScreen(),
+      home: PostJobForm(),
     );
   }
 }

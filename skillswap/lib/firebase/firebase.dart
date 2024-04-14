@@ -11,6 +11,8 @@ class Firebase_Service {
       FirebaseFirestore.instance.collection('Recruiter');
   final CollectionReference dbrefproject =
       FirebaseFirestore.instance.collection('Project');
+  final CollectionReference dbrefJobPosts =
+      FirebaseFirestore.instance.collection('JobPosts');
   late BuildContext _context;
 
   Firebase_Service(BuildContext context) {
@@ -264,6 +266,52 @@ class Firebase_Service {
       throw Exception('User document not found');
     }
   }
+
+  Future<List<Map<String, dynamic>>> fetchUsersWithMatchingSkills(
+      String recruiterId) async {
+    try {
+      DocumentSnapshot recruiterSnapshot =
+          await dbrefREC.doc(recruiterId).get();
+      if (!recruiterSnapshot.exists) {
+        print('Recruiter not found');
+        return [];
+      }
+      List<String> recruiterSkills = List<String>.from(
+          recruiterSnapshot.get('Skills').map((skill) => skill['skill']));
+      QuerySnapshot usersSnapshot =
+          await dbrefuser.where('Skills.skill', whereIn: recruiterSkills).get();
+      return usersSnapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
+    } catch (e) {
+      print("Error fetching users with matching skills: $e");
+      return [];
+    }
+  }
+
+
+ Future<void> addJobPost(
+      String title,
+      String description,
+      List<Map<String,dynamic>> requirements,
+      String location,
+      String salaryRange,
+      String imageUrl,
+      String userId,
+      String companyName) {
+    return dbrefJobPosts.add({
+      'title': title,
+      'description': description,
+      'requirements': requirements,
+      'location': location,
+      'salaryRange': salaryRange,
+      'imageUrl': imageUrl,
+      'userId': userId,
+      'companyName': companyName,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+  }
+
 
   void signout() {
     FirebaseAuth.instance.signOut();
