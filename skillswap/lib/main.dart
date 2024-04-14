@@ -25,8 +25,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           scaffoldBackgroundColor: Colors.white, ),
       debugShowCheckedModeBanner: false,
-      // home:SplashScreen(),
-      home: JobDetail(),
+      home:SplashScreen(),
+      // home: JobDetail(),
     );
   }
 }

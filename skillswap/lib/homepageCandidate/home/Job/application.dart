@@ -15,26 +15,25 @@ import 'package:skillswap/widgets/buttons.dart';
 import 'package:file_picker/file_picker.dart';
 
 class JobApplication extends StatefulWidget {
-  // Map<String, dynamic> jobdata;
-  // String projectid;
-  // JobApplication(this.jobdata, this.projectid, {super.key});
-  JobApplication({super.key});
+  Map<String, dynamic> jobdata;
+
+  JobApplication(this.jobdata, {super.key});
+  // JobApplication({super.key});
 
   @override
   State<JobApplication> createState() => _JobApplicationState();
 }
 
 class _JobApplicationState extends State<JobApplication> {
-   final FirebaseAuth _authentication = FirebaseAuth.instance;
+  final FirebaseAuth _authentication = FirebaseAuth.instance;
   // final UserController userController = Get.find();
-  List<String> selectedSkills = [];
-  UploadTask? uploadTask;
   RequestSend request = RequestSend();
 
-  // void sendrequest(String recieverid, String message, String projectid,String title,
-  //     List<String> skill) async {
-  //   await request.sendrequest(recieverid, projectid, message,userController.userdata,title,skill);
-  // }
+  void Apply(String recieverid, String message, String projectid,
+     ) async {
+    await request.sendApplication(widget.jobdata['userId'],
+        widget.jobdata['JOB'], message);
+  }
 
   TextEditingController message = TextEditingController();
   @override
@@ -43,7 +42,6 @@ class _JobApplicationState extends State<JobApplication> {
     double height = MediaQuery.of(context).size.height;
     final String senderid = _authentication.currentUser!.uid;
 
-    
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -79,25 +77,36 @@ class _JobApplicationState extends State<JobApplication> {
               controller: message,
               maxLine: null,
             ),
-         
             SizedBox(height: 10),
             Align(
               alignment: Alignment.bottomCenter,
               child: ButtonTwo("Send", Colors.white, Color(0XFF2E307A),
                   width * 0.45, height * 0.05, 17, () {
-                // sendrequest(widget.jobdata['userid'], message.text,
-                //     widget.projectid, widget.jobdata['ProjectTitle'],selectedSkills);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Application sent!'),
-                        duration: Duration(seconds: 2), // Adjust the duration as needed
-                      ),
-                    );
+                    if(!message.text.isEmpty)
+                {
+                  Apply(widget.jobdata['userId'],message.text,widget.jobdata['JOB']);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Application sent!'),
+                    duration:
+                        Duration(seconds: 2), // Adjust the duration as needed
+                  ),
+                );
                 Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => Homepage(senderid)),
-          (route) => false,
-        );
+                  context,
+                  MaterialPageRoute(builder: (context) => Homepage(senderid)),
+                  (route) => false,
+                );
+                }else{
+                  ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Please fill the Application Form!'),
+                    duration:
+                        Duration(seconds: 2), // Adjust the duration as needed
+                  ),
+                );
+
+                }
               }),
             )
           ],

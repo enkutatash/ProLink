@@ -27,6 +27,37 @@ class RequestSend extends ChangeNotifier {
         .add(newrequest.tomap());
   }
 
+  //send application
+
+  Future<void> sendApplication(String recieverid, String jobid, String message,
+      ) async {
+    final String senderid = _authentication.currentUser!.uid;
+    final Timestamp timestamp = Timestamp.now();
+    ApplicationTemp newrequest = ApplicationTemp(
+        sendId: senderid,
+        receiverId: recieverid,
+        jobid: jobid,
+        message: message,
+        timestamp: timestamp,
+        );
+    await _firestore
+        .collection("JobApplication")
+        .doc(recieverid)
+        .collection('messages')
+        .add(newrequest.tomap());
+  }
+
+//get application
+ Stream<QuerySnapshot> getApplication(String recieverid) {
+    return _firestore
+        .collection("JobApplication")
+        .doc(recieverid)
+        .collection('messages')
+        .orderBy('timestamp', descending: true)
+        .snapshots();
+  }
+
+
   // read from db
 
   Stream<QuerySnapshot> getrequest(String recieverid) {
@@ -37,6 +68,4 @@ class RequestSend extends ChangeNotifier {
         .orderBy('timestamp', descending: true)
         .snapshots();
   }
-
-
 }

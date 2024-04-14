@@ -33,3 +33,30 @@ class RequestTemp {
     };
   }
 }
+
+
+class ApplicationTemp {
+  final String sendId;
+  final String receiverId;
+  final String jobid;
+  final String message;
+  final Timestamp timestamp;
+  
+
+  ApplicationTemp({
+    required this.sendId,
+    required this.receiverId,
+    required this.jobid,
+    required this.message,
+    required this.timestamp,
+  });
+  Map<String, dynamic> tomap() {
+    return {
+      'senderId': sendId,
+      'receiverId': receiverId,
+      'jobId': jobid,
+      'message': message,
+      'timestamp': timestamp,
+    };
+  }
+}
