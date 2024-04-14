@@ -8,6 +8,7 @@ import 'package:skillswap/homepageCandidate/Search/projectsearch.dart';
 import 'package:skillswap/homepageCandidate/Search/search.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:skillswap/homepageCandidate/Search/search2.dart';
 import 'package:skillswap/homepageCandidate/home/Job/post.dart';
 import 'package:skillswap/widgets/buttons.dart';
 
