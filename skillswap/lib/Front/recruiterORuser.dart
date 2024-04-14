@@ -54,12 +54,12 @@ class WelcomePage extends StatelessWidget {
                 ),
                 Column(
                   children: [
-                   ButtonTwo("Find Talent",  Color(0XFF2E307A), Colors.white, width*0.8,height*0.07,16,() {
+                   ButtonTwo("Recruiter",  Color(0XFF2E307A), Colors.white, width*0.8,height*0.07,16,() {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => SignUpRecPage()));
                     }),
                     SizedBox(height: height*0.02,),
-                   ButtonOne("Join as Collaborators", Colors.white, Color(0XFF2E307A),width*0.8,height*0.07, 16,() {
+                   ButtonOne("Collaborator", Colors.white, Color(0XFF2E307A),width*0.8,height*0.07, 16,() {
                        Navigator.push(context,
                           MaterialPageRoute(builder: (context) => SignUpPage()));
                     }),

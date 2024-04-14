@@ -62,15 +62,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
     SlideModel(
         imagePath: 'asset/animation.json',
         text:
-            'Combine your unique skills and perspectives to achieve a common goal.'),
+            'Welcome to ProLink!\nProLink serves as a dynamic platform connecting recruiters with individuals possessing various talents, as well as facilitating collaborations for those seeking project partners.'),
     SlideModel(
         imagePath: 'asset/animation.json',
         text:
-            'We foster creativity and innovation by bringing together diverse ideas and experiences.'),
+            'The recruiter \nRecruiter page acts as a tool to assist recruiters in connecting with individuals who possess a diverse range of talents, enabling them to find the ideal candidates for their needs.'),
     SlideModel(
         imagePath: 'asset/animation.json',
         text:
-            'Enhance your team work and communication skills, lead more efficient problem solving and decision making.'),
+            'The Collaborator\nUser page serves as a gateway for users to connect with potential collaborators for a wide array of projects, fostering partnerships across various fields and endeavors.'),
   ];
 
   void _handlePreviousSlide() {
