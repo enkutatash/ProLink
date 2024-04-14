@@ -14,7 +14,7 @@ class _UpdatesState extends State<Jobs> {
   int _currentPage = 0;
 
   // Data for each page
-  final List<Map<String, dynamic>> pagesData = [];
+  final List<dynamic> pagesData = [];
 
   Future<void> allJobs() async {
     QuerySnapshot snapshot = await FirebaseFirestore.instance
@@ -30,6 +30,7 @@ class _UpdatesState extends State<Jobs> {
       // Add fetched job data to pagesData
       for (var job in jobs) {
         Map<String, dynamic> jobData = job.data() as Map<String, dynamic>;
+
         jobData['JOB'] = job.id;
         pagesData.add(jobData);
       }
@@ -64,6 +65,9 @@ class _UpdatesState extends State<Jobs> {
             itemBuilder: (BuildContext context, int index) {
               return InkWell(
                 onTap: () {
+                  print(pagesData[index].runtimeType);
+                  //print(pagesData[index]);
+
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -94,9 +98,9 @@ class _UpdatesState extends State<Jobs> {
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold),
                             ),
-                            Text(pagesData[index]['requirements'],
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 20)),
+                            // Text(pagesData[index]['requirements'],
+                            //     style: const TextStyle(
+                            //         color: Colors.white, fontSize: 20)),
                           ],
                         ),
                         // Image.asset(

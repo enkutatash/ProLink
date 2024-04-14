@@ -5,6 +5,7 @@ import 'package:iconify_flutter/icons/zondicons.dart';
 import 'package:skillswap/Datas/userdata.dart';
 
 import 'package:skillswap/homepageCandidate/Search/search.dart';
+import 'package:skillswap/homepageCandidate/home/sidebar.dart';
 
 import 'package:skillswap/homepageRec/HomeRec.dart';
 import 'package:skillswap/homepageRec/message.dart';
@@ -14,6 +15,7 @@ import 'package:skillswap/homepageRec/postjobform.dart';
 import 'package:skillswap/homepageRec/profile.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:colorful_iconify_flutter/icons/emojione.dart';
+import 'package:skillswap/homepageRec/sidebar2.dart';
 
 
 class HomepageREC extends StatefulWidget {
@@ -52,7 +54,7 @@ class _HomepageRECState extends State<HomepageREC> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // drawer: SideBar(),
+      drawer: SideBar2(),
       body: SafeArea(
         bottom: false,
         child: PageView(

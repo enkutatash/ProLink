@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:skillswap/Datas/userdata.dart';
+import 'package:skillswap/homepageRec/searchrec.dart';
 import '../Message/chatDetailPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -71,25 +73,25 @@ class _HomeRecruiterState extends State<HomeRecruiter> {
               const SizedBox(height: 20),
               Row(
                 children: [
-                  Builder(
-                    builder: (BuildContext context) {
-                      return GestureDetector(
-                        onTap: () {
-                          Scaffold.of(context).openDrawer();
-                        },
-                        child: Icon(
-                          Icons.menu,
-                          size: 30,
-                        ),
-                      );
-                    },
-                  ),
+                  GestureDetector(
+                      onTap: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                      child: Icon(
+                        CupertinoIcons.text_justify,
+                        size: 30,
+                      )),
                   SizedBox(
                     width: 10,
                   ),
                   Expanded(
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SearchUser_Screen()));
+                      },
                       child: Container(
                         padding: EdgeInsets.all(8),
                         height: height * 0.06,

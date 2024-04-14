@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
+import 'package:skillswap/homepageRec/edit.dart';
 import 'package:skillswap/homepageRec/postjobform.dart';
 
 class RecruiterJobs extends StatefulWidget {
@@ -99,6 +100,9 @@ class _RecruiterJobsState extends State<RecruiterJobs> {
               children: documentsToShow.map((DocumentSnapshot document) {
                 Map<String, dynamic> data =
                     document.data() as Map<String, dynamic>;
+                print("data");
+                print(data);
+                print(data['requirements']);
                 return DataContainer(
                   documentId: document.id,
                   projectTitle: data['title'],
@@ -132,7 +136,7 @@ class DataContainer extends StatelessWidget {
   final String location;
   final String postedDate;
   final String imageUrl;
-  final String requirements;
+  final List<dynamic> requirements;
   final String salaryRange;
 
   DataContainer({
@@ -176,20 +180,14 @@ class DataContainer extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.edit),
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => PostJobForm(
-                  //       initialId: documentId,
-                  //       initialImage: imageUrl,
-                  //       initialTitle: projectTitle,
-                  //       initialDescription: description,
-                  //       initialLocation: location,
-                  //       initialRequirements: requirements,
-                  //       initialSalaryRange: salaryRange,
-                  //     ),
-                  //   ),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PostJobFormEdit(
+                        initialId: documentId,
+                      ),
+                    ),
+                  );
                 },
               ),
               IconButton(

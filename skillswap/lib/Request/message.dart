@@ -121,7 +121,7 @@ class _ChatPageState extends State<ChatPage> {
           },
           child: Container(
             width: width * 0.9,
-            height: height * 0.15,
+            height: height * 0.18,
             padding: EdgeInsets.all(16.0),
             decoration: BoxDecoration(
               color: Colors.white,

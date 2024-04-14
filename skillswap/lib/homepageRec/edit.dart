@@ -1,94 +1,115 @@
 import 'dart:io';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:skillswap/Datas/projectcontroller.dart';
-import 'package:skillswap/Datas/userdata.dart';
-import 'package:skillswap/homepageCandidate/home/newskill.dart';
-import '../firebase/firebase.dart';
+import 'package:skillswap/widgets/buttons.dart';
+import 'package:get/get.dart';
 
-import '../widgets/buttons.dart';
-
-class PostJobForm extends StatefulWidget {
-  const PostJobForm({Key? key}) : super(key: key);
+class PostJobFormEdit extends StatefulWidget {
+  final String initialId;
+  const PostJobFormEdit({
+    Key? key,
+    required this.initialId,
+  }) : super(key: key);
 
   @override
-  State<PostJobForm> createState() => _PostJobFormState();
+  State<PostJobFormEdit> createState() => _PostJobFormEditState();
 }
 
-class _PostJobFormState extends State<PostJobForm> {
-  final FirebaseAuth _authentication = FirebaseAuth.instance;
-  final _jobtitleController = TextEditingController();
-  final _jobdescriptionController = TextEditingController();
-  final _requirementcontroller = TextEditingController();
-  final _locationcontroller = TextEditingController();
-  final _salaryrangecontroller = TextEditingController();
-  late final UserController usercontroller;
-  late final ProjectController projectController;
-  late final Firebase_Service _auth;
-  List<Map<String,dynamic>> _requirements = [];
-  bool _isLoading = false;
-
-  bool _obscureText = true;
+class _PostJobFormEditState extends State<PostJobFormEdit> {
+  ProjectController projectController = Get.put(ProjectController());
   String? imagePath;
   File? _image;
   String? downloadUrl;
+  List<dynamic> _requiredSkills = [];
+  bool _isLoading = false;
+  String? downImage;
+
+  final _jobtitleController = TextEditingController();
+  final _jobdescriptionController = TextEditingController();
+  final _locationcontroller = TextEditingController();
+  final _salaryrangecontroller = TextEditingController();
+  List<dynamic> _requirements = [];
+
+  final _formKey = GlobalKey<FormState>();
+
+  jobData(String docid) async {
+    try {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('JobPosts')
+          .doc(docid)
+          .get();
+      if (snapshot.exists) {
+        Map<String, dynamic> jobdata = snapshot.data() as Map<String, dynamic>;
+
+        downImage = jobdata['imageUrl'];
+        _jobtitleController.text = jobdata['title'];
+        _jobdescriptionController.text = jobdata['description'];
+        _locationcontroller.text = jobdata['location'];
+        _salaryrangecontroller.text = jobdata['salaryRange'];
+        _requirements = jobdata['requirements'];
+      }
+    } catch (e) {
+      print("Error fetching user data: $e");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeJobData();
+  }
+
+  Future<void> _initializeJobData() async {
+    await jobData(widget.initialId);
+    setState(() {
+      _requirements;
+    });
+  }
 
   Future<void> pickImage() async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (image == null) return;
-    // For mobile platforms, set the image directly
+
     final imageTemp = File(image.path);
     setState(() {
-      imagePath = imageTemp.path;
       _image = imageTemp;
     });
+
     final Reference storageReference = FirebaseStorage.instance
         .ref()
         .child('images')
         .child('${DateTime.now()}.jpg');
 
     try {
-      // Upload the image to Firebase Storage
       await storageReference.putFile(_image!);
-
-      // Retrieve the download URL of the uploaded image
       downloadUrl = await storageReference.getDownloadURL();
+
+      print('Download URL: $downloadUrl');
     } catch (e) {
-      // Handle any errors that occur during the upload process
       print('Error uploading image: $e');
     }
-  }
-
-  final _formKey = GlobalKey<FormState>();
-
-  @override
-  void initState() {
-    _auth = Firebase_Service(context);
-    usercontroller = Get.put(UserController());
-    projectController = Get.put(ProjectController());
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16),
           child: Form(
-            key: _formKey,
+            key: _formKey, // Added key for form validation
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  'Create Job Posting',
+                const Text(
+                  'Edit Job Post Detail',
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
@@ -99,43 +120,33 @@ class _PostJobFormState extends State<PostJobForm> {
                   height: height * 0.03,
                 ),
                 Center(
-                  child: Stack(
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: Colors.white,
-                        radius: 40.0,
-                        backgroundImage: imagePath != null
-                            ? FileImage(File(imagePath!))
-                            : null,
-                        child: imagePath == null
-                            ? Icon(
-                                Icons.person,
-                                size: 50,
-                              )
-                            : null,
-                      ),
-                      Positioned(
-                        top: 45,
-                        right: -10,
-                        child: IconButton(
-                          onPressed: pickImage,
-                          icon: Image.asset(
-                            "asset/camera.png",
-                            width: 30,
-                            height: 30,
-                          ),
+                  child: Stack(children: [
+                    CircleAvatar(
+                      radius: 40.0,
+                      backgroundImage: _image != null
+                          ? FileImage(_image!)
+                          : (downImage != null
+                              ? NetworkImage(downImage!)
+                              : null),
+                    ),
+                    Positioned(
+                      top: 45,
+                      right: -10,
+                      child: IconButton(
+                        onPressed: pickImage,
+                        icon: Icon(
+                          Icons.camera_alt,
+                          size: 30,
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    )
+                  ]),
                 ),
                 SizedBox(
                   height: height * 0.02,
                 ),
                 const FormText(
-                  text: "Job Title",
-                  alignment: Alignment.centerLeft,
-                ),
+                    text: "Job Title", alignment: Alignment.centerLeft),
                 CustomTextFormField(
                   width: width * 0.9,
                   height: height * 0.06,
@@ -152,9 +163,7 @@ class _PostJobFormState extends State<PostJobForm> {
                   height: height * 0.02,
                 ),
                 const FormText(
-                  text: "Job Description",
-                  alignment: Alignment.centerLeft,
-                ),
+                    text: "Job Description", alignment: Alignment.centerLeft),
                 CustomTextFormField(
                   width: width * 0.9,
                   height: height * 0.06,
@@ -170,14 +179,8 @@ class _PostJobFormState extends State<PostJobForm> {
                 SizedBox(
                   height: height * 0.02,
                 ),
-               
-                SizedBox(
-                  height: height * 0.02,
-                ),
                 const FormText(
-                  text: "Location",
-                  alignment: Alignment.centerLeft,
-                ),
+                    text: "Location", alignment: Alignment.centerLeft),
                 CustomTextFormField(
                   width: width * 0.9,
                   height: height * 0.06,
@@ -194,9 +197,7 @@ class _PostJobFormState extends State<PostJobForm> {
                   height: height * 0.02,
                 ),
                 const FormText(
-                  text: "Salary Range",
-                  alignment: Alignment.centerLeft,
-                ),
+                    text: "Salary Range", alignment: Alignment.centerLeft),
                 CustomTextFormField(
                   width: width * 0.9,
                   height: height * 0.06,
@@ -209,7 +210,7 @@ class _PostJobFormState extends State<PostJobForm> {
                     return null;
                   },
                 ),
-                 Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const FormText(
@@ -220,7 +221,7 @@ class _PostJobFormState extends State<PostJobForm> {
                   ],
                 ),
                 SizedBox(
-                  height: height*0.2,
+                  height: height * 0.2,
                   child: ListView.builder(
                     itemCount: _requirements.length,
                     itemBuilder: (BuildContext context, int index) {
@@ -229,34 +230,27 @@ class _PostJobFormState extends State<PostJobForm> {
                         children: [
                           Text(_requirements[index]['name']),
                           Text(_requirements[index]['level']),
-                         IconButton(onPressed: (){
-                        setState(() {
-                           _requirements.removeAt(index);
-                        });
-                         }, icon: Icon(Icons.remove))
+                          IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _requirements.removeAt(index);
+                                });
+                              },
+                              icon: Icon(Icons.remove))
                         ],
-                      ) ;
+                      );
                     },
                   ),
                 ),
                 SizedBox(
                   height: 40,
                 ),
-                ButtonTwoLoading(
-                  "Post",
-                  Colors.white,
-                  Color(0XFF2E307A),
-                  width * 0.8,
-                  height * 0.07,
-                  16,
-                  () {
-                    if (_formKey.currentState!.validate() && !_isLoading) {
-                      // form is valid, submit the form
-                      _postJob();
-                    }
-                  },
-                  _isLoading,
-                ),
+                ButtonTwoLoading("Update", Colors.white, Color(0XFF2E307A),
+                    width * 0.8, height * 0.07, 16, () {
+                  if (_formKey.currentState!.validate()) {
+                    _postJob();
+                  }
+                }, _isLoading),
               ],
             ),
           ),
@@ -265,82 +259,55 @@ class _PostJobFormState extends State<PostJobForm> {
     );
   }
 
-  void _postJob() async {
-    setState(() {
-      _isLoading = true;
-    });
+  void _postJob() {
+    // Update Firestore document with new values
 
-    try {
-      
-      // Get the current user's ID
-      String userId = _authentication.currentUser!.uid;
-
-      // Fetch user data from Firestore
-      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-          .collection('Recruiter')
-          .doc(userId)
-          .get();
-
-      // Extract the company name from the user data
-      String companyName = userSnapshot.get('CompanyName');
-
-      // Add the job post to Firestore, including the user's ID and company name
-      await _auth.addJobPost(
-        _jobtitleController.text,
-        _jobdescriptionController.text,
-        _requirements,
-        _locationcontroller.text,
-        _salaryrangecontroller.text,
-        downloadUrl ??=  "https://firebasestorage.googleapis.com/v0/b/skillswap-ad93c.appspot.com/o/images%2F2024-04-13%2016%3A24%3A57.976252.jpg?alt=media&token=e606f205-f72a-4ab5-b759-60e19f44b5c0", // Use the downloadUrl of the uploaded image
-        userId, // Pass the user's ID
-        companyName, // Pass the company name
-      );
-
-      // Reset the form and loading state
-      _formKey.currentState!.reset();
-      setState(() {
-        _isLoading = false;
-        imagePath = null;
-        _image = null;
-        downloadUrl = null;
-      });
-
+    FirebaseFirestore.instance
+        .collection('JobPosts')
+        .doc(widget.initialId)
+        .update({
+      'imageUrl': downloadUrl ?? downImage,
+      'description': _jobdescriptionController.text,
+      'location': _locationcontroller.text,
+      'salaryRange': _salaryrangecontroller.text,
+      'title': _jobtitleController.text,
+      'requirements': _requirements,
+    }).then((_) {
       // Show success message
       showDialog(
         context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Success'),
-            content: Text('Job post created successfully'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); // Close the dialog
-                  Navigator.of(context).pop(); // Pop the page
-                },
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    } catch (e) {
-      // Handle errors
-      print('Error posting job: $e');
-
-      // Show error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error posting job. Please try again.'),
-          duration: Duration(seconds: 2),
+        builder: (context) => AlertDialog(
+          title: Text('Success'),
+          content: Text('Job post updated successfully.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
         ),
       );
-
-      // Reset loading state
-      setState(() {
-        _isLoading = false;
-      });
-    }
+    }).catchError((error) {
+      // Show error message
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Error'),
+          content: Text('Failed to update job post: $error'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   Widget AddReq() {
@@ -402,13 +369,10 @@ class _PostJobFormState extends State<PostJobForm> {
                   TextButton(
                     onPressed: () async {
                       if (!newskill.text.isEmpty) {
-                      setState(() {
-                     _requirements.add({
-                        'name': newskill.text,
-                        'level': level,
-                      });
-
-                    });
+                        setState(() {
+                          _requirements
+                              .add({'name': newskill.text, 'level': level});
+                        });
                         newskill.text = '';
                         level = "Beginner";
                       }

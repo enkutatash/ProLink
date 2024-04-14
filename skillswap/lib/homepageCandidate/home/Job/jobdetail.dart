@@ -119,7 +119,7 @@ class _JobDetailState extends State<JobDetail> {
                 },
                 children: [
                   buildDescription(),
-                  buildRequirement("requirement"),
+                  buildRequirement(),
                 ],
               ),
             ),
@@ -243,22 +243,43 @@ class _JobDetailState extends State<JobDetail> {
     );
   }
 
-  Widget buildRequirement(String requirement) {
+  Widget buildRequirement() {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    print(widget.jobdata['requirements']);
     return Expanded(
       child: Container(
         //  height:MediaQuery.of(context).size.height*0.6 ,
-        child: Center(child: ListView.builder(
-          itemCount: widget.jobdata['requirements'],
-          itemBuilder: (context, index) {
-          return Row(
-            children: [
-              widget.jobdata['requirements'][index]['name'],
-               widget.jobdata['requirements'][index]['level'],
-            ],
-          );
-        })),
+        child: Center(
+            child: ListView.builder(
+                itemCount: widget.jobdata['requirements'].length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 20.0,top: 20),
+                    child: Row(
+                      children: [
+                        const CircleAvatar(
+                          backgroundColor:
+                              Colors.black, // Customize bullet color here
+                          radius: 4, // Adjust bullet size as needed
+                        ),
+                        SizedBox(
+                          width: width * 0.05,
+                        ),
+                       Text("${widget.jobdata['requirements'][index]['name']}",softWrap: true,style: TextStyle(
+                      fontSize: 15,
+                    ),),
+                       SizedBox(
+                          width: width * 0.05,
+                        ),
+                        Text("${widget.jobdata['requirements'][index]['level']}",softWrap: true,style: TextStyle(
+                      fontSize: 15,
+                    ),),
+                      ],
+                    ),
+                  );
+                  
+                })),
       ),
     );
   }
