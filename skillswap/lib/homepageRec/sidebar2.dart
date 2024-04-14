@@ -7,8 +7,11 @@ import 'package:get/get.dart';
 import 'package:skillswap/Front/recruiterORuser.dart';
 import 'package:skillswap/Datas/projectcontroller.dart';
 import 'package:skillswap/Datas/userdata.dart';
+import 'package:skillswap/Message/chatRoomTab.dart';
 import 'package:skillswap/pages/contact.dart';
 import 'package:skillswap/pages/setting.dart';
+import 'package:skillswap/homepageRec/messages.dart';
+
 
 class SideBar2 extends StatelessWidget {
   SideBar2({Key? key}) : super(key: key);
@@ -99,6 +102,20 @@ class SideBar2 extends StatelessWidget {
                       ),
                       ListTile(
                         leading: Icon(
+                          CupertinoIcons.phone,
+                          size: 30,
+                        ),
+                        title: Text('Contact'),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              
+                              MaterialPageRoute(
+                                  builder: (context) => MessagePage(currentUserUid:_authentication.currentUser!.uid),));
+                        },
+                      ),
+                      ListTile(
+                        leading: Icon(
                           CupertinoIcons.gear,
                           size: 30,
                         ),
@@ -112,19 +129,7 @@ class SideBar2 extends StatelessWidget {
                           );
                         },
                       ),
-                      ListTile(
-                        leading: Icon(
-                          CupertinoIcons.phone,
-                          size: 30,
-                        ),
-                        title: Text('Contact'),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ContactPage()));
-                        },
-                      ),
+                      
                     ],
                   ),
                 ),

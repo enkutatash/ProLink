@@ -80,10 +80,7 @@ class SettingsPage extends StatelessWidget {
                 width: 390,
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ProfilePage()),
-                    );
+                    
                   },
                   child: Container(
                     decoration: BoxDecoration(

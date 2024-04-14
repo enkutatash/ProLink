@@ -21,7 +21,7 @@ class AboutUs extends StatelessWidget {
   final List<TeamMember> teamMembers = [
     TeamMember(
       name: 'Enkutatash',
-      profilePhotoPath: AssetImage('assets/enkutatash.jpg'),
+      profilePhotoPath: AssetImage('asset/enkutatash.jpg'),
       bio:
           "I am 3rd year software engineering student,A2Svian,and flutter developer.",
       email: "enkutatasheshetu96@gmail.com",
@@ -29,14 +29,14 @@ class AboutUs extends StatelessWidget {
     ),
     TeamMember(
       name: 'Samiya M.',
-      profilePhotoPath: AssetImage('assets/samiyaM.jpg'),
+      profilePhotoPath: AssetImage('asset/samiyaM.jpg'),
       bio: "I am 4th year software engineering student, flutter developer.",
       email: "samiyamo1118@gmail.com",
       linkedin: "https://www.linkedin.com/in/samiya-mohammedawol-42064b297/",
     ),
     TeamMember(
       name: 'Yetnayet',
-      profilePhotoPath: AssetImage('assets/yeti.jpg'),
+      profilePhotoPath: AssetImage('asset/yeti.jpg'),
       bio:
           "I am 3rd year software engineering student,A2Svian,and flutter developer.",
       email: "lakewyetnayet93@gmail.com",
@@ -44,7 +44,7 @@ class AboutUs extends StatelessWidget {
     ),
     TeamMember(
       name: 'Sumeya',
-      profilePhotoPath: AssetImage('assets/sumaya.jpg'),
+      profilePhotoPath: AssetImage('asset/sumaya.jpg'),
       bio: "I am 4th year software engineering student, flutter developer.",
       email: "somalistiniyah@gmail.com",
       linkedin:
@@ -52,14 +52,14 @@ class AboutUs extends StatelessWidget {
     ),
     TeamMember(
       name: 'Elsabeth',
-      profilePhotoPath: AssetImage('assets/elsa.jpg'),
+      profilePhotoPath: AssetImage('asset/elsa.jpg'),
       bio: "I am 4th year,software engineering student,flutter developer.",
       email: "elsabethzeleke1000@gmail.com",
       linkedin: "https://www.linkedin.com/in/elsabeth-zeleke/",
     ),
     TeamMember(
       name: 'Samiya Y.',
-      profilePhotoPath: AssetImage('assets/samiyaY.jpg'),
+      profilePhotoPath: AssetImage('asset/samiyaY.jpg'),
       bio:
           "I am 3rd year,software engineering student,full stack developer and flutter developer",
       email: "sammysamutii@gmail.com",
@@ -67,7 +67,7 @@ class AboutUs extends StatelessWidget {
     ),
     TeamMember(
       name: 'Samrawit',
-      profilePhotoPath: AssetImage('assets/samri.jpg'),
+      profilePhotoPath: AssetImage('asset/samri.jpg'),
       bio: "I am 3rd year, elecrtical engineering student, flutter developer",
       email: "samrawitsissayg.michael@gmail.com",
       linkedin:
@@ -80,6 +80,7 @@ class AboutUs extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('About Us'),
+        backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -91,6 +92,8 @@ class AboutUs extends StatelessWidget {
                   border: Border.all(color: Colors.grey[200]!),
                 ),
                 child: Card(
+                  
+                  color: Color.fromARGB(255, 237, 241, 245),
                   elevation: 4.0,
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -104,7 +107,7 @@ class AboutUs extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 16.0),
+                       SizedBox(height: 5,),
                         GridView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
@@ -112,7 +115,7 @@ class AboutUs extends StatelessWidget {
                               SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3,
                             crossAxisSpacing: 8.0,
-                            mainAxisSpacing: 8.0,
+                            mainAxisSpacing: 15.0,
                           ),
                           itemCount: teamMembers.length,
                           itemBuilder: (BuildContext context, int index) {
@@ -129,15 +132,14 @@ class AboutUs extends StatelessWidget {
                                     radius: 30.0,
                                   ),
                                 ),
-                                SizedBox(height: 5.0),
-                                TextButton(
-                                  onPressed: () {
-                                    _showProfileDialog(
+                                // SizedBox(height: 2.0),
+
+                               InkWell(
+                                onTap: (){
+                                   _showProfileDialog(
                                         context, teamMembers[index]);
-                                  },
-                                  child: Text("See Profile"),
-                                ),
-                                SizedBox(height: 5.0),
+                                },child: Text("${teamMembers[index].name}"),
+                               ),
                               ],
                             );
                           },
@@ -184,6 +186,7 @@ class AboutUs extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           title: Center(child: Text("Profile")),
           content: Column(
             mainAxisSize: MainAxisSize.min,

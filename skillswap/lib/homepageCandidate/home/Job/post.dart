@@ -65,7 +65,7 @@ class _UpdatesState extends State<Jobs> {
             itemBuilder: (BuildContext context, int index) {
               return InkWell(
                 onTap: () {
-                  print(pagesData[index].runtimeType);
+                  // print(pagesData[index].runtimeType);
                   //print(pagesData[index]);
 
                   Navigator.push(
@@ -80,35 +80,32 @@ class _UpdatesState extends State<Jobs> {
                       borderRadius: BorderRadius.circular(20),
                       color: const Color(0XFF2E307A),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              pagesData[index]['companyName'],
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 20),
-                            ),
-                            Text(
-                              pagesData[index]['title'],
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            // Text(pagesData[index]['requirements'],
-                            //     style: const TextStyle(
-                            //         color: Colors.white, fontSize: 20)),
-                          ],
+                       
+                        Text(
+                          pagesData[index]['companyName'],
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 20),
                         ),
-                        // Image.asset(
-                        //   pagesData[index]['imagePath'],
-                        //   height: height * 0.18,
-                        //   width: width*0.4,
-                        //   fit: BoxFit.cover,
-                        // ),
+                        Text(
+                          pagesData[index]['title'],
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                       
+                         Padding(
+                           padding: const EdgeInsets.all(8.0),
+                           child: Align(
+                                alignment: Alignment.bottomRight,
+                                child: Text("See details",style: TextStyle(color: Colors.white),)),
+                         ),
+                        // Text(pagesData[index]['requirements'],
+                        //     style: const TextStyle(
+                        //         color: Colors.white, fontSize: 20)),
                       ],
                     ),
                   ),
