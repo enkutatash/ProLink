@@ -53,7 +53,7 @@ class SignInPage2State extends State<SignInPage2> {
                   child: Image.asset("asset/logoP.png"),
                 ),
                 const Text(
-                  "SkillSwap",
+                  "ProLink",
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,

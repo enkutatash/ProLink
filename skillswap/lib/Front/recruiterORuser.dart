@@ -27,7 +27,7 @@ class WelcomePage extends StatelessWidget {
                   height: height * 0.1,
                 ),
                 const Text(
-                  "Welcome to Skill Swap ",
+                  "Welcome to ProLink ",
                   style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold),
@@ -37,7 +37,7 @@ class WelcomePage extends StatelessWidget {
                   child: Lottie.asset('asset/animation.json'),
                 ),
                 
-               SizedBox(height: height*0.08,),
+               SizedBox(height: height*0.1,),
                 const Text(
                   "Discover,Connect,Exchange skills effortlessly",
                   style: TextStyle(
@@ -68,13 +68,7 @@ class WelcomePage extends StatelessWidget {
                 SizedBox(
                   height: height * 0.02,
                 ),
-                GestureDetector(
-                  onTap: () {},
-                  child: const Text(
-                    "Explore as a guest",
-                    style: TextStyle(color: Color(0XFF2E307A), fontSize: 16),
-                  ),
-                )
+                
               ],
             ),
           ),

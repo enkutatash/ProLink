@@ -94,7 +94,7 @@ class SignUpRecPageState extends State<SignUpRecPage> {
                   child: Image.asset("asset/logoP.png"),
                 ),
                   const Text(
-                    "SkillSwap",
+                    "ProLink",
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -309,6 +309,7 @@ class SignUpRecPageState extends State<SignUpRecPage> {
     String lastName = _lastnameController.text;
     String linkedin = _linkedincontroller.text;
     String companyName = _companynamecontroller.text;
+    downloadUrl ??= "https://firebasestorage.googleapis.com/v0/b/skillswap-ad93c.appspot.com/o/images%2F2024-04-13%2015%3A36%3A50.046625.jpg?alt=media&token=2c1c5ed6-7304-41cd-9e71-c75d77c5a7df";
 
     User? user = await _auth.signUpWithEmailAndPasswordREC(
       firstName,

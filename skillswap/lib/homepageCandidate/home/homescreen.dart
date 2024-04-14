@@ -320,111 +320,112 @@ class _HomeScreenState extends State<HomeScreen> {
                         backgroundColor: Colors.white,
                         pinned: true,
                         expandedHeight: height * 0.1,
-                        title: SizedBox(
-                          height: height * 0.07,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: items.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              final item = items[index];
-                              final isSelected = selectedItems.contains(item);
-                              if (index == 0) {
-                                return GestureDetector(
-                                  onTap: (){
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          backgroundColor: Colors.white,
-                                          title: Text('Preference'),
-                                          content: StatefulBuilder(
-                                              builder: (context, setState) {
-                                            return Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                CustomTextFormField(
-                                                  width: width,
-                                                  height: height * 0.07,
-                                                  hintText: 'Skill',
-                                                  controller: skillController,
-                                                ),
-                                              ],
-                                            );
-                                          }),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () async {
-                                                if (!skillController
-                                                    .text.isEmpty) {
-                                                 items.insert(1, skillController.text);
-                                                  setState(() {
-                                                  });
-                                                  skillController.text = '';
-                                                }
-                                                Navigator.pop(context);
-                                              },
-                                              child: Text('OK'),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  }
-                                  ,child: Icon(Icons.add,size: 30,));
-                              }
-                              return GestureDetector(
-                                onLongPress: () {
-                                  setState(() {
-                                    items.remove(item);
-                                  });
-                                },
-                                onTap: () {
-                                  
-                                  setState(() {
-                                    if (isSelected) {
-                                      selectedItems.remove(item);
-                                    } else {
-                                      selectedItems.add(item);
+                          title: SizedBox(
+                            height: height * 0.07,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: items.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final item = items[index];
+                                final isSelected = selectedItems.contains(item);
+                                if (index == 0) {
+                                  return GestureDetector(
+                                    onTap: (){
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            backgroundColor: Colors.white,
+                                            title: Text('Preference'),
+                                            content: StatefulBuilder(
+                                                builder: (context, setState) {
+                                              return Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  CustomTextFormField(
+                                                    width: width,
+                                                    height: height * 0.07,
+                                                    hintText: 'Skill',
+                                                    controller: skillController,
+                                                  ),
+                                                ],
+                                              );
+                                            }),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () async {
+                                                  if (!skillController
+                                                      .text.isEmpty) {
+                                                   items.insert(1, skillController.text);
+                                                    setState(() {
+                                                    });
+                                                    skillController.text = '';
+                                                  }
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Text('OK'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
                                     }
-                                    // searchResult();
-                                  });
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    width: width * 0.2 + item.length * 3,
-                                    height: height * 0.03,
-                                    padding: EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      border: Border.all(
+                                    ,child: Icon(Icons.add,size: 30,));
+                                }
+                                return GestureDetector(
+                                  onLongPress: () {
+                                    setState(() {
+                                      items.remove(item);
+                                    });
+                                  },
+                                  onTap: () {
+                                    
+                                    setState(() {
+                                      if (isSelected) {
+                                        selectedItems.remove(item);
+                                      } else {
+                                        selectedItems.add(item);
+                                      }
+                                      // searchResult();
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      width: width * 0.2 + item.length * 3,
+                                      height: height * 0.03,
+                                      padding: EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        border: Border.all(
+                                          color: isSelected
+                                              ? Color(0XFF2E307A)
+                                              : Colors.transparent,
+                                        ),
                                         color: isSelected
                                             ? Color(0XFF2E307A)
-                                            : Colors.transparent,
+                                            : Color.fromARGB(255, 237, 241, 245),
                                       ),
-                                      color: isSelected
-                                          ? Color(0XFF2E307A)
-                                          : Color.fromARGB(255, 237, 241, 245),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        item,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: isSelected
-                                              ? Colors.white
-                                              : Colors.black,
+                                      child: Center(
+                                        child: Text(
+                                          item,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: isSelected
+                                                ? Colors.white
+                                                : Colors.black,
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              );
-                            },
+                                );
+                              },
+                            ),
                           ),
+                          
                         ),
-                      ),
                       SliverFixedExtentList(
                         itemExtent: height * 0.45,
                         delegate: SliverChildBuilderDelegate(
