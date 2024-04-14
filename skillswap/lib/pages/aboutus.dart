@@ -130,6 +130,7 @@ class AboutUs extends StatelessWidget {
                                     backgroundImage:
                                         teamMembers[index].profilePhotoPath,
                                     radius: 30.0,
+                                    
                                   ),
                                 ),
                                 // SizedBox(height: 2.0),
