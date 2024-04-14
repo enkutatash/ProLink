@@ -37,9 +37,12 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         await firestore.collection('Users').doc(widget.recipientUid).get();
 
     setState(() {
-      recipientName = (recipientDoc['First'] ?? '') +
-          ' ' +
-          (recipientDoc['Last'] ?? ''); // Assuming name is stored in Firestore
+      if (widget.recipientUid == widget.currentUserUid) {
+        recipientName = "Saved Messages";
+      } else {
+        recipientName =
+            (recipientDoc['First'] ?? '') + ' ' + (recipientDoc['Last'] ?? '');
+      } // Assuming name is stored in Firestore
     });
 
     // Fetch profile image URL from Firestore
@@ -61,14 +64,13 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           onPressed: () {
             Navigator.pop(context);
           },
-          
         ),
         title: Row(
           children: [
             CircleAvatar(
               backgroundImage: recipientProfileImageURL != null
                   ? NetworkImage(recipientProfileImageURL!)
-                  : AssetImage('../../asset/profile_img.jpg'),
+                  : AssetImage('asset/profile.png'),
             ),
             SizedBox(width: 8),
             Text(

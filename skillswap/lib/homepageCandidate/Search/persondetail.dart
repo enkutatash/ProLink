@@ -7,6 +7,7 @@ import 'package:skillswap/Front/signin.dart';
 import 'package:skillswap/Datas/projectcontroller.dart';
 import 'package:skillswap/Message/chatDetailPage.dart';
 import 'package:skillswap/Request/completedProjects.dart';
+import 'package:skillswap/Request/workingonprodetail.dart';
 // import 'package:skillswap/homepageCandidate/homepage.dart';
 import 'package:skillswap/homepageCandidate/newskill.dart';
 import 'package:skillswap/widgets/skillimg.dart';
@@ -123,30 +124,37 @@ Future<String?> fetchOrCreateChatRoomId(String uid1, String uid2) async {
           await projectController.ProjectData(projectid);
       final height = MediaQuery.of(context).size.height;
       final width = MediaQuery.of(context).size.width;
-      return Container(
-        width: width * 0.4,
-        height: height * 0.1,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            CachedNetworkImage(
-              imageUrl: projectdata['Projectimg'],
-              imageBuilder: (context, imageProvider) => Container(
-                width: 70.0,
-                height: 70.0,
-                decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  image:
-                      DecorationImage(image: imageProvider, fit: BoxFit.cover),
+      return InkWell(
+        onTap:  () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => WorkingOnProDetail(projectdata)));},
+        child: Container(
+          width: width * 0.4,
+          height: height * 0.1,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              CachedNetworkImage(
+                imageUrl: projectdata['Projectimg'],
+                imageBuilder: (context, imageProvider) => Container(
+                  width: 70.0,
+                  height: 70.0,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    image:
+                        DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                  ),
                 ),
+                errorWidget: (context, url, error) => Icon(Icons.error),
               ),
-              errorWidget: (context, url, error) => Icon(Icons.error),
-            ),
-            Text(
-              projectdata['ProjectTitle'],
-              style: TextStyle(fontSize: 20),
-            ),
-          ],
+              Text(
+                projectdata['ProjectTitle'],
+                style: TextStyle(fontSize: 20),
+              ),
+            ],
+          ),
         ),
       );
     }

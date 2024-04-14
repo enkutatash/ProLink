@@ -25,6 +25,18 @@ class _UpdatesState extends State<Jobs> {
       'description': "Apply",
       
     },
+     {
+      'title': "New Job Post",
+      'subtitle': "React",
+      'description': "Apply",
+      
+    },
+    {
+      'title': "New Job Post",
+      'subtitle': "Django",
+      'description': "Apply",
+      
+    },
     // Add more pages as needed
   ];
 

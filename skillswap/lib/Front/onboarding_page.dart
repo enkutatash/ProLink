@@ -38,7 +38,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   void startTimer() {
     timer =
-        Timer.periodic(Duration(seconds: 4), (timer) => _handleSlideChange());
+        Timer.periodic(Duration(seconds: 20), (timer) => _handleSlideChange());
   }
 
  void _handleSlideChange() {
