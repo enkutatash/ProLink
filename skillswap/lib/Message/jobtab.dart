@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:skillswap/Message/chatDetailPage.dart';
 import 'package:skillswap/Message/chatRoomTab.dart';
+import 'package:skillswap/Message/chatdetailrec.dart';
 
 
 class JobTab extends StatefulWidget {
@@ -144,7 +145,7 @@ class _JobTabState extends State<JobTab> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ChatDetailPage(
+                                  builder: (context) => ChatDetailPageRec(
                                     currentUserUid: widget.currentUserUid,
                                     chatRoomId: chatRoomId,
                                     recipientUid: recipientUid,

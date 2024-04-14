@@ -26,15 +26,12 @@ class JobApplication extends StatefulWidget {
 
 class _JobApplicationState extends State<JobApplication> {
   final FirebaseAuth _authentication = FirebaseAuth.instance;
-  // final UserController userController = Get.find();
+  final UserController userController = Get.find();
   RequestSend request = RequestSend();
-
-  void Apply(String recieverid, String message, String projectid,
+  void Apply(String recieverid, String message, String projectid,String title,
      ) async {
-    await request.sendApplication(widget.jobdata['userId'],
-        widget.jobdata['JOB'], message);
+    await request.sendApplication(recieverid, projectid, message,userController.userdata,title);
   }
-
   TextEditingController message = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -84,7 +81,8 @@ class _JobApplicationState extends State<JobApplication> {
                   width * 0.45, height * 0.05, 17, () {
                     if(!message.text.isEmpty)
                 {
-                  Apply(widget.jobdata['userId'],message.text,widget.jobdata['JOB']);
+                
+                  Apply(widget.jobdata['userId'],message.text,widget.jobdata['JOB'],widget.jobdata['title']);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text('Application sent!'),

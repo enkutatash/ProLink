@@ -7,13 +7,14 @@ import 'package:skillswap/Chat/chat.dart';
 import 'package:skillswap/Request/requestdetail.dart';
 import 'package:skillswap/Request/requestui.dart';
 import 'package:skillswap/Request/sendrequest.dart';
+import 'package:skillswap/homepageRec/RequestTab/jobreqdetail.dart';
 
-class ChatPage extends StatefulWidget {
+class JobApplicationTab extends StatefulWidget {
   @override
-  _ChatPageState createState() => _ChatPageState();
+  _JobApplicationTabState createState() => _JobApplicationTabState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _JobApplicationTabState extends State<JobApplicationTab> {
   RequestSend _request = RequestSend();
   // final Chat _chat = Chat();
   final FirebaseAuth _authentication = FirebaseAuth.instance;
@@ -58,6 +59,12 @@ class _ChatPageState extends State<ChatPage> {
     double height = MediaQuery.of(context).size.height;
     String requestId = document.id;
 
+
+    // void removeRequest() async {
+    //   print("start");
+    //   await _request.removeRequest(_authentication.currentUser!.uid, requestId);
+    //   print("end");
+    // }
 
     Future<String?> fetchOrCreateChatRoomId(String uid1, String uid2) async {
       String currentUid = _authentication.currentUser!.uid;
@@ -112,7 +119,7 @@ class _ChatPageState extends State<ChatPage> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => RequestDetail(data, requestId)));
+                    builder: (context) => JobAppDetail(data, requestId)));
           },
           child: Container(
             width: width * 0.9,
@@ -164,9 +171,9 @@ class _ChatPageState extends State<ChatPage> {
                               onPressed: () async{
                                 String? chatRoomId = await fetchOrCreateChatRoomId(
                           data['senderId'], _authentication.currentUser!.uid);
-                                print(document.id);
+                                
                                 FirebaseFirestore.instance
-                                    .collection("Requests")
+                                    .collection("JobApplication")
                                     .doc(_authentication.currentUser!.uid)
                                     .collection('messages')
                                     .doc(requestId)
@@ -174,7 +181,7 @@ class _ChatPageState extends State<ChatPage> {
                                 // send rejection message
                                 // _chat.sendmessage(data['senderId'],
                                 //     "User request has rejected");
-                                sendMessage("I hope this letter finds you well. I want to extend my sincere gratitude for your interest in collaborating with me on ${data['Title']} Project. I have carefully reviewed your proposal and deliberated on the potential synergies that could arise from such a collaboration.\After thoughtful consideration, however, I regret to inform you that I am unable to accept your request for collaboration at this time.", chatRoomId!);
+                                sendMessage("I hope this letter finds you well. I want to extend my sincere gratitude for your interest in This Job. I have carefully reviewed your proposal and deliberated on the potential synergies that could arise from such a collaboration.\After thoughtful consideration, however, I regret to inform you that I am unable to accept your request for This Job", chatRoomId!);
                                 // Navigator.pop(context);
                               },
                               icon: Icon(
@@ -189,62 +196,20 @@ class _ChatPageState extends State<ChatPage> {
                                  String? chatRoomId = await fetchOrCreateChatRoomId(
                           data['senderId'], _authentication.currentUser!.uid);
                                 FirebaseFirestore.instance
-                                    .collection("Requests")
+                                    .collection("JobApplication")
                                     .doc(_authentication.currentUser!.uid)
                                     .collection('messages')
                                     .doc(requestId)
                                     .delete();
-                                FirebaseFirestore.instance
-                                    .collection("Requests")
-                                    .doc(_authentication.currentUser!.uid)
-                                    .collection('messages')
-                                    .doc(requestId)
-                                    .delete();
+                                
                                 // send rejection message
                                 // _chat.sendmessage(data['senderId'],
                                 //     "User request has Accepted");
                                 // add project to working on projects
-                                FirebaseFirestore.instance
-                                    .collection("Users")
-                                    .doc(data['senderId'])
-                                    .update({
-                                  'WorkingOnPro':
-                                      FieldValue.arrayUnion([data['projectId']])
-                                }).then((value) {
-                                  print(
-                                      "Element added to the working list successfully.");
-                                }).catchError((error) {
-                                  print(
-                                      "Failed to add element to the working list: $error");
-                                });
-                                 FirebaseFirestore.instance
-                            .collection("Project")
-                            .doc(data['projectId'])
-                            .update({
-                          'Teams': FieldValue.arrayUnion([data['senderId']])
-                        }).then((value) {
-                          print(
-                              "Element added to the Myproject teams list successfully.");
-                        }).catchError((error) {
-                          print(
-                              "Failed to add element to the working list: $error");
-                        });
+                             
 
-                              FirebaseFirestore.instance
-                          .collection("Users")
-                          .doc( _authentication.currentUser!.uid)
-                          .update({
-                        'Teams':
-                            FieldValue.arrayUnion([data['senderId']])
-                      }).then((value) {
-                        print(
-                            "Element added to the Myproject teams list successfully.");
-                      }).catchError((error) {
-                        print(
-                            "Failed to add element to the working list: $error");
-                      });
 
-                                sendMessage("I hope this letter finds you well. I want to extend my sincere gratitude for your interest in collaborating with me on ${data['Title']} Project. I have carefully reviewed your proposal and deliberated on the potential synergies that could arise from such a collaboration.\After thoughtful consideration, however, I regret to inform you that I am unable to accept your request for collaboration at this time.", chatRoomId!);
+                                sendMessage("I hope this letter finds you well. I want to extend my sincere gratitude for your interest in this job. I have carefully reviewed your proposal and deliberated on the potential synergies that could arise from such a collaboration.\After thoughtful consideration, I accept Ypur Application ", chatRoomId!);
                                 //  Navigator.pop(context);
                               },
                               icon: Icon(

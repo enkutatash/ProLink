@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:skillswap/Message/chatRoomTab.dart';
 import 'package:skillswap/Message/message.dart';
+import 'package:skillswap/homepageRec/RequestTab/requestjob.dart';
 
 class MessagePage extends StatefulWidget {
   final String currentUserUid;
@@ -121,7 +122,7 @@ class _MessagePageState extends State<MessagePage> {
               child: TabBarView(
                 children: [
                   //  Requests Tab
-                 
+                 JobApplicationTab(),
                   // Chat Rooms Tab
                   ChatRoomTab(currentUserUid: widget.currentUserUid),
                 ],

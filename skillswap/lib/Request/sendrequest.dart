@@ -30,7 +30,7 @@ class RequestSend extends ChangeNotifier {
   //send application
 
   Future<void> sendApplication(String recieverid, String jobid, String message,
-      ) async {
+      Map<String, dynamic> userdata, String title) async {
     final String senderid = _authentication.currentUser!.uid;
     final Timestamp timestamp = Timestamp.now();
     ApplicationTemp newrequest = ApplicationTemp(
@@ -39,6 +39,8 @@ class RequestSend extends ChangeNotifier {
         jobid: jobid,
         message: message,
         timestamp: timestamp,
+        userdata: userdata,
+        projectTitle: title
         );
     await _firestore
         .collection("JobApplication")

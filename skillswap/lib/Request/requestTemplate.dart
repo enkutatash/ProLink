@@ -41,7 +41,8 @@ class ApplicationTemp {
   final String jobid;
   final String message;
   final Timestamp timestamp;
-  
+  final String projectTitle;
+  Map<String, dynamic> userdata;
 
   ApplicationTemp({
     required this.sendId,
@@ -49,6 +50,9 @@ class ApplicationTemp {
     required this.jobid,
     required this.message,
     required this.timestamp,
+    required this.userdata,
+    required this.projectTitle,
+   
   });
   Map<String, dynamic> tomap() {
     return {
@@ -57,6 +61,8 @@ class ApplicationTemp {
       'jobId': jobid,
       'message': message,
       'timestamp': timestamp,
+      'UserData':userdata,
+      'Title':projectTitle,
     };
   }
 }
