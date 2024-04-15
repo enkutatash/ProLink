@@ -67,7 +67,7 @@ class _SearchUser_ScreenState extends State<SearchUser_Screen> {
           break;
         }
       }
-      showResult = List.from(_allUser);
+
     }else {
       // Reset search result based on current search mode
       showResult =
