@@ -132,7 +132,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                           padding: const EdgeInsets.symmetric(
                               vertical: 4.0, horizontal: 8.0),
                           child: Container(
-                            constraints: BoxConstraints(maxWidth: 220),
+                            constraints: BoxConstraints(maxWidth: 300),
                             child: Container(
                               padding: EdgeInsets.all(8.0),
                               decoration: BoxDecoration(
@@ -154,9 +154,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
-                                    constraints: BoxConstraints(
-                                      maxWidth: 250,
-                                    ),
                                     child: Text(
                                       message['message'],
                                       style: TextStyle(
@@ -168,11 +165,11 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                                   SizedBox(height: 4),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
+                                    mainAxisSize: MainAxisSize
+                                        .min, // Set mainAxisSize to min
+
                                     children: [
                                       Container(
-                                        constraints: BoxConstraints(
-                                          maxWidth: 300,
-                                        ),
                                         child: Text(
                                           _formatTimestamp(
                                               message['timestamp']),

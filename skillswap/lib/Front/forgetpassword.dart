@@ -59,48 +59,50 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-                  SizedBox(
-          height: height * 0.2,
-          child: Image.asset("asset/logo2.png"),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+                    SizedBox(
+            height: height * 0.2,
+            child: Image.asset("asset/logo2.png"),
+                  ),
+              SizedBox(
+                    height: height * 0.1,
+                  ),
+              const Text(
+                'Forget Password?',
+                style: TextStyle(
+                  fontSize: 35,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
                 ),
-            SizedBox(
-                  height: height * 0.1,
+              ),
+              FormText(text: "Email", alignment: Alignment.topLeft),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                child: CustomTextFormField(
+                  width: width * 0.9,
+                  height: height * 0.06,
+                  hintText: "abc@gmail.com",
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    return null;
+                  },
                 ),
-            const Text(
-              'Forget Password?',
-              style: TextStyle(
-                fontSize: 35,
-                fontWeight: FontWeight.w600,
-                color: Colors.black,
               ),
-            ),
-            FormText(text: "Email", alignment: Alignment.topLeft),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-              child: CustomTextFormField(
-                width: width * 0.9,
-                height: height * 0.06,
-                hintText: "abc@gmail.com",
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
-                  }
-                  return null;
-                },
+              SizedBox(
+                height: 10,
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            ButtonTwo("Reset", Colors.white,  Color(0XFF2E307A), width*0.8 , height*0.07, 16, passwordReset),
-          ],
+              ButtonTwo("Reset", Colors.white,  Color(0XFF2E307A), width*0.8 , height*0.07, 16, passwordReset),
+            ],
+          ),
         ),
       ),
     );
