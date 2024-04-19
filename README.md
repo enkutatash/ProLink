@@ -1,4 +1,9 @@
 ## ProLink
+Our Collaborative skill-based networking App aims to bridge the gap between students seeking collaboration opportunities. It will empower students to discover potential collaborators, fostering teamwork and enhancing project outcomes and forming acquaintances. Ultimately, this app can contribute to a more collaborative and productive learning environment.
+
+This app is also expected to equip students with confidence that they have built projects to showcase their skills and have a presentable portfolio. This can also help recruiters recruit the best-suited intern or employee based on the specific skill tags as well as provable project-based experience.
+
+
 ![photo_1_2024-04-19_13-23-41](https://github.com/enkutatash/ProLink/assets/112767747/d2806576-f96a-4678-9b4f-4cad7df5cb06)
 ![photo_2_2024-04-19_13-23-41](https://github.com/enkutatash/ProLink/assets/112767747/6256c304-b157-4914-9049-d73bfc67089c)
 ![photo_3_2024-04-19_13-23-41](https://github.com/enkutatash/ProLink/assets/112767747/97c20eab-59c5-4500-81bd-be8cd799aedb)
